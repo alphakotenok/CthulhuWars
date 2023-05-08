@@ -15,65 +15,86 @@ import javafx.stage.Stage;
 
 public class App extends Application {
     public Boolean zoogCheck = false;
+    Screen screen = Screen.getPrimary();
+    Rectangle2D bounds = screen.getVisualBounds();
+    final double screenWidth = bounds.getWidth();
+    final double screenHeight = bounds.getHeight();
+    final double procent = 0.8;
+    Group root = new Group();
+    double height;
 
-    @Override
-    public void start(Stage primaryStage) throws FileNotFoundException {
-        Screen screen = Screen.getPrimary();
-        Rectangle2D bounds = screen.getVisualBounds();
-        final double screenWidth = bounds.getWidth();
-        final double screenHeight = bounds.getHeight();
-        final double procent = 0.8;
+    public ImageView mapInitialization(int countOfPlayers) throws Exception {
+        String mapName = "error.png";
 
-        Button btnZoog = new Button();
-        btnZoog.setText("Zoog");
-        btnZoog.setLayoutX(10);
-        btnZoog.setLayoutY(10);
-        btnZoog.setPrefWidth(200);
-        btnZoog.setPrefHeight(100);
+        if (countOfPlayers == 2 || countOfPlayers == 3) {
+            mapName = "images/maps/map2_3.jpg";
+        } else if (countOfPlayers <= 6 && countOfPlayers >= 1) {
+            mapName = "images/maps/map" + countOfPlayers + ".jpg";
+        } else {
+            throw new Exception("too many players");
+        }
 
-        FileInputStream inputstream = new FileInputStream("C:/Users/Julia Tatarinova/Desktop/java/map.png");
-        Image map = new Image(inputstream);
-        final double mapRatio = map.getWidth() / map.getHeight();
+        FileInputStream inputStream = new FileInputStream(mapName);
+        Image map = new Image(inputStream);
+        double mapRatio = map.getWidth() / map.getHeight();
 
         ImageView mapView = new ImageView(map);
-        mapView.setY((screenHeight - screenWidth * procent / mapRatio) / 2);
+        height = (screenHeight - screenWidth * procent / mapRatio);
+        mapView.setY(height / 2);
         mapView.setFitHeight((screenWidth / 2) * procent);
         mapView.setPreserveRatio(true);
 
-        Group root = new Group();
-        root.getChildren().add(mapView);
-        root.getChildren().add(btnZoog);
+        return mapView;
+    }
 
-        FileInputStream inputstream1 = new FileInputStream("C:/Users/Julia Tatarinova/Desktop/java/zoog.png");
+    public void buttons(int countOfPlayers) throws FileNotFoundException {
+        FileInputStream inputstream1 = new FileInputStream("Zoog.png");
         Image zoog = new Image(inputstream1);
         ImageView zoogView = new ImageView(zoog);
         zoogView.setX(200);
 
-        btnZoog.setOnAction(new EventHandler<ActionEvent>() {
+        Button[] btn = new Button[countOfPlayers];
+        double weight = screenWidth * procent / countOfPlayers;
+        for (int i = 0; i < countOfPlayers; i++) {
+            btn[i] = new Button();
+            btn[i].setText("Player" + i);
+            btn[i].setPrefHeight(height / 2);
+            btn[i].setLayoutX(i * weight);
+            btn[i].setPrefWidth(weight);
+            root.getChildren().add(btn[i]);
 
-            @Override
-            public void handle(ActionEvent event) {
+            btn[i].setOnAction(new EventHandler<ActionEvent>() {
 
-                if (!zoogCheck) {
-                    root.getChildren().add(zoogView);
-                } else {
-                    root.getChildren().remove(zoogView);
+                @Override
+                public void handle(ActionEvent event) {
+
+                    System.out.println("Hello");
+                    if (!zoogCheck) {
+                        root.getChildren().add(zoogView);
+                    } else {
+                        root.getChildren().remove(zoogView);
+                    }
+                    zoogCheck = !zoogCheck;
+
                 }
-                zoogCheck = !zoogCheck;
+            });
+        }
+    }
 
-            }
-        });
+    @Override
+    public void start(Stage primaryStage) throws Exception {
 
-        /*
-         * Parent root = FXMLLoader.load(getClass().getResource("MainScene.fxml"));
-         * Scene scene = new Scene(root);
-         */
-
-        Scene scene = new Scene(root, Color.GREY);
-        primaryStage.setTitle("Hello World!");
-        primaryStage.setScene(scene);
-        primaryStage.setMaximized(true);
-        primaryStage.show();
+        try {
+            root.getChildren().add(mapInitialization(4));
+            buttons(4);
+            Scene scene = new Scene(root, Color.GREY);
+            primaryStage.setTitle("CthulhuWars");
+            primaryStage.setScene(scene);
+            primaryStage.setMaximized(true);
+            primaryStage.show();
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     public static void main(String[] args) {
