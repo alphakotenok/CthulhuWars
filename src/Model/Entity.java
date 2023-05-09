@@ -1,7 +1,7 @@
 package Model;
 
 public class Entity {
-    enum EntityType {
+    public static enum EntityType {
         cultist, monster, GOO
     };
 
