@@ -2,9 +2,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -22,6 +20,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class App extends Application {
+
     public Boolean zoogCheck = false;
     Screen screen = Screen.getPrimary();
     Rectangle2D bounds = screen.getVisualBounds();
@@ -33,6 +32,11 @@ public class App extends Application {
     final int NUMBER_OF_FRACTIONS = 7;
     Group root = new Group();
     double height;
+
+    final String[] NAME_OF_FRACTIONS = { "GreatCthulhu", "CrawlingChaos", "BlackGoat", "YellowSign", "OpenerOfTheWay",
+            "Sleeper", "Windwalker" };
+    final Color[] COLOR_OF_FRACTIONS = { Color.GREEN, Color.BLUE, Color.MAROON, Color.GOLD, Color.PURPLE,
+            Color.DARKORANGE, Color.DARKGREY };
 
     public ImageView mapInitialization(int countOfPlayers) throws Exception {
         String mapName = "error.png";
@@ -65,7 +69,7 @@ public class App extends Application {
         zoogView.setX(200);
 
         Button[] gameButton = new Button[countOfPlayers];
-        double weight = SCREEN_HEIGHT * PROCENT / countOfPlayers;
+        double weight = SCREEN_WIDTH * PROCENT / countOfPlayers;
         for (int i = 0; i < countOfPlayers; i++) {
             gameButton[i] = new Button();
             gameButton[i].setText("Player" + i);
@@ -219,7 +223,9 @@ public class App extends Application {
 
             for (int fractionId = 0; fractionId < NUMBER_OF_FRACTIONS; fractionId++) {
                 fractionPickButtons[fractionId] = new Button();
-                fractionPickButtons[fractionId].setText("Fraction " + fractionId);
+                fractionPickButtons[fractionId].setTextFill(COLOR_OF_FRACTIONS[fractionId]);
+                fractionPickButtons[fractionId].setText(NAME_OF_FRACTIONS[fractionId]);
+                fractionPickButtons[fractionId].setFont(Font.font("Arial", 40));
                 fractionPickButtons[fractionId].setPrefHeight(thisHeight);
                 fractionPickButtons[fractionId].setLayoutY((fractionId + 1) * thisHeight);
                 fractionPickButtons[fractionId].setPrefWidth(SCREEN_WIDTH);
