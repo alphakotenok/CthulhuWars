@@ -7,18 +7,14 @@ import javafx.scene.image.Image;
 public class GameMap {
 
     ArrayList<Location> locations;
-    public Image mapIcon;
+    Image mapIcon;
+    static int maxNumOfPlayer = 2;
+    static int minNumOfPlayers = 6;
 
     GameMap(int numOfPlayers) {
-        if (numOfPlayers < 2 || numOfPlayers > 6)
+        if (numOfPlayers == 2) {
             return;
-        // TODO: init locations
-    }
-
-    public static class Location {
-        public String name;
-        public ArrayList<Location> adj;
-        public ArrayList<Entity> entityList;
+        }
     }
 
     ArrayList<Entity> getEntityListInLocation(Location location) {
