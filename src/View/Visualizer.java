@@ -4,7 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-import Model.GameMap;
+import Model.Location;
 import Model.Variables;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -82,7 +82,7 @@ public class Visualizer {
 
     public static void continentsButtons() {
         ArrayList<String> continent = new ArrayList<>();
-        for (GameMap.Location location : Variables.core.getLocationsList()) {
+        for (Location location : Variables.core.getLocationsList()) {
             continent.add(location.name);
         }
 
@@ -96,6 +96,7 @@ public class Visualizer {
             continentsButton[continentID].setPrefHeight(height);
             continentsButton[continentID].setLayoutY(continentID * height);
             continentsButton[continentID].setPrefWidth(300);
+            continentsButton[continentID].setText(continent[continentID]);
             continentsButton[continentID].setLayoutX(Variables.SCREEN_WIDTH - 300);
 
             continentsButton[continentID]

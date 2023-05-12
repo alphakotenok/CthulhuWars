@@ -11,13 +11,13 @@ import Model.Core.InvalidFactionsSetException;
 import Model.Core.InvalidNumOfPlayersException;
 import Model.Faction.FactionType;
 
-public class FractionPickButtonActionHandler implements EventHandler<ActionEvent> {
+public class FractionPickButton implements EventHandler<ActionEvent> {
     private int numberOfPlayers;
     public int playerID;
     public int fractionID;
     static ArrayList<FactionType> FactionList = new ArrayList<>();
     
-    public FractionPickButtonActionHandler(int numberOfPlayers, int fractionID, int playerID) {
+    public FractionPickButton(int numberOfPlayers, int fractionID, int playerID) {
         this.numberOfPlayers = numberOfPlayers;
         this.playerID = playerID;
         this.fractionID = fractionID;
@@ -31,7 +31,7 @@ public class FractionPickButtonActionHandler implements EventHandler<ActionEvent
         FactionList.add(Misc.getFactionByID(fractionID));
 
         if (playerID + 1 == numberOfPlayers) {
-            Misc.removeButtons(FractionPickButtonActionHandler.class);
+            Misc.removeButtons(FractionPickButton.class);
             Misc.removeLabel("player " + numberOfPlayers);
             try {
                 Variables.core = new Core(numberOfPlayers, FactionList);

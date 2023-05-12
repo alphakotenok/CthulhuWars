@@ -3,6 +3,8 @@ package View;
 import java.util.ArrayList;
 import java.util.List;
 
+import Model.Entity;
+import Model.Location;
 import Model.Variables;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -20,11 +22,11 @@ public class ButtonVisualizer {
         for (Node node : Variables.root.getChildren()) {
             if (node instanceof Button) {
                 EventHandler<ActionEvent> onAction = ((Button) node).getOnAction();
-                if (onAction != null && onAction instanceof FractionPickButtonActionHandler) {
+                if (onAction != null && onAction instanceof FractionPickButton) {
                     nodeList.add(node);
-                    if (((FractionPickButtonActionHandler) onAction).fractionID != choosenFraction)
+                    if (((FractionPickButton) onAction).fractionID != choosenFraction)
                         buttonList.add((Button) node);
-                    playerID = ((FractionPickButtonActionHandler) onAction).playerID;
+                    playerID = ((FractionPickButton) onAction).playerID;
                 }
             }
         }
@@ -36,7 +38,7 @@ public class ButtonVisualizer {
         int fractionId = 0;
 
         for (Button fractionPickButton : buttonList) {
-            FractionPickButtonActionHandler onAction = (FractionPickButtonActionHandler) fractionPickButton
+            FractionPickButton onAction = (FractionPickButton) fractionPickButton
                     .getOnAction();
             onAction.nextPlayer();
 
@@ -65,9 +67,28 @@ public class ButtonVisualizer {
                     .setLayoutY((countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS) * thisHeight);
             btnCountOfPlyers[countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS].setPrefWidth(Variables.SCREEN_WIDTH);
             btnCountOfPlyers[countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS]
-                    .setOnAction(new MenuButtonActionHandler(countOfPlayers));
+                    .setOnAction(new MenuButton(countOfPlayers));
 
             Variables.root.getChildren().add(btnCountOfPlyers[countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS]);
+        }
+    }
+    static void rebuildEntityButtons(Location continent){
+        ArrayList<Entity> nameOfEntity = Variables.core.getEntityListInLocation(continent);
+        int numberEntity = nameOfEntity.size();
+        double height = Variables.SCREEN_HEIGHT / (numberEntity + 1);
+
+        Button[] entityButton = new Button[numberEntity];
+
+        for (int entityID = 0; entityID < numberEntity; entityID++) {
+            entityButton[entityID] = new Button();
+            entityButton[entityID].setPrefHeight(height);
+            entityButton[entityID].setLayoutY((entityID + 1) * height);
+            entityButton[entityID].setPrefWidth(300);
+            entityButton[entityID].setText(nameOfEntity.get(entityID).name);
+            entityButton[entityID].setLayoutX(Variables.SCREEN_WIDTH - 300);
+
+            entityButton[entityID].setOnAction(new EntityButton(nameOfEntity.get(entityID),continent));
+            Variables.root.getChildren().add(entityButton[entityID]);
         }
     }
 }

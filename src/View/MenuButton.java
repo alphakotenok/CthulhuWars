@@ -8,16 +8,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 
-public class MenuButtonActionHandler implements EventHandler<ActionEvent> {
+public class MenuButton implements EventHandler<ActionEvent> {
     private int numberOfPlayers;
 
-    public MenuButtonActionHandler(int value) {
+    public MenuButton(int value) {
         numberOfPlayers = value;
     }
 
     @Override
     public void handle(ActionEvent event) {
-        Misc.removeButtons(MenuButtonActionHandler.class);
+        Misc.removeButtons(MenuButton.class);
 
         Button[] fractionPickButtons = new Button[Variables.NUMBER_OF_FRACTIONS + 1];
         double thisHeight = Variables.SCREEN_HEIGHT / (Variables.NUMBER_OF_FRACTIONS + 1);
@@ -38,7 +38,7 @@ public class MenuButtonActionHandler implements EventHandler<ActionEvent> {
             fractionPickButtons[fractionId].setLayoutY((fractionId + 1) * thisHeight);
             fractionPickButtons[fractionId].setPrefWidth(Variables.SCREEN_WIDTH);
             fractionPickButtons[fractionId]
-                    .setOnAction(new FractionPickButtonActionHandler(numberOfPlayers, fractionId, 0));
+                    .setOnAction(new FractionPickButton(numberOfPlayers, fractionId, 0));
 
             Variables.root.getChildren().add(fractionPickButtons[fractionId]);
         }

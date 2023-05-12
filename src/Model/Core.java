@@ -11,20 +11,20 @@ public class Core {
     int numOfPlayers;
     ArrayList<FactionType> factionsList;
 
-    class InvalidNumOfPlayersException extends Exception {
+    public class InvalidNumOfPlayersException extends Exception {
 
     }
 
-    class InvalidFactionsSetException extends Exception {
+    public class InvalidFactionsSetException extends Exception {
 
     }
 
-    public Core(int numOfPlayers, FactionType[] factions)
+    public Core(int numOfPlayers, ArrayList<FactionType> factions)
             throws InvalidNumOfPlayersException, InvalidFactionsSetException {
         if (numOfPlayers > GameMap.maxNumOfPlayer || numOfPlayers < GameMap.minNumOfPlayers) {
             throw new InvalidNumOfPlayersException();
         }
-        if (factions.length != numOfPlayers) {
+        if (factions.size() != numOfPlayers) {
             throw new InvalidFactionsSetException();
         }
         for (FactionType factionType : factions) {
@@ -61,11 +61,11 @@ public class Core {
         return map.getEntityListInLocation(location);
     }
 
-    public void deleteEntity(Location location, Entity entity) {
+    public void addEntity(Location location, Entity entity) {
         location.entityList.add(entity);
     }
 
-    public void addEntity(Location location, Entity entity) {
+    public void deleteEntity(Location location, Entity entity) {
         location.entityList.remove(entity);
     }
 
