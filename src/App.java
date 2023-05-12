@@ -2,6 +2,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+
+import Model.Core;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -69,13 +71,21 @@ public class App extends Application {
         zoogView.setX(200);
 
         Button[] gameButton = new Button[countOfPlayers];
-        double weight = SCREEN_WIDTH * PROCENT / countOfPlayers;
+        double width = SCREEN_WIDTH * PROCENT / countOfPlayers;
         for (int i = 0; i < countOfPlayers; i++) {
             gameButton[i] = new Button();
-            gameButton[i].setText("Player" + i);
             gameButton[i].setPrefHeight(height / 2);
-            gameButton[i].setLayoutX(i * weight);
-            gameButton[i].setPrefWidth(weight);
+            gameButton[i].setLayoutX(i * width);
+            gameButton[i].setPrefWidth(width);
+
+            String logoName = "images/logo/Faction_" + NAME_OF_FRACTIONS[i] + ".png";
+            FileInputStream inputStream = new FileInputStream(logoName);
+            Image logo = new Image(inputStream);
+            ImageView logoView = new ImageView(logo);
+            logoView.setFitHeight(height / 2);
+            logoView.setFitWidth(height / 2);
+            gameButton[i].setGraphic(logoView);
+
             gameButton[i].setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -286,6 +296,9 @@ public class App extends Application {
         root.getChildren().add(finishButton);
     }
 
+    // public void buttonsOfContinents(){
+    // ArrayList <String> continents = Core.getLocationsList(
+    // }
     @Override
     public void start(Stage primaryStage) throws Exception {
 
