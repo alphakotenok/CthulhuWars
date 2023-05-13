@@ -16,7 +16,7 @@ public class FractionPickButton implements EventHandler<ActionEvent> {
     public int playerID;
     public int fractionID;
     static ArrayList<FactionType> FactionList = new ArrayList<>();
-    
+
     public FractionPickButton(int numberOfPlayers, int fractionID, int playerID) {
         this.numberOfPlayers = numberOfPlayers;
         this.playerID = playerID;

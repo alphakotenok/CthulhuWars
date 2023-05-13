@@ -14,7 +14,6 @@ import javafx.scene.image.ImageView;
 
 public class Visualizer {
     static Boolean zoogCheck = false;
-    static double mapRatio;
 
     public static ImageView mapInitialization(int countOfPlayers) throws Exception {
         String mapName = "error.png";
@@ -30,12 +29,12 @@ public class Visualizer {
 
         FileInputStream inputStream = new FileInputStream(mapName);
         Image map = new Image(inputStream);
-        mapRatio = map.getWidth() / map.getHeight();
+        Variables.mapRatio = map.getWidth() / map.getHeight();
 
         ImageView mapView = new ImageView(map);
-        double height = (Variables.SCREEN_HEIGHT - Variables.SCREEN_WIDTH * Variables.PROCENT / mapRatio);
-        mapView.setY(height / 2);
-        mapView.setFitHeight((Variables.SCREEN_WIDTH / 2) * Variables.PROCENT);
+        double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
+        mapView.setY((Variables.SCREEN_HEIGHT - height) / 2);
+        mapView.setFitWidth(Variables.SCREEN_WIDTH * Variables.PROCENT);
         mapView.setPreserveRatio(true);
 
         return mapView;
@@ -49,10 +48,10 @@ public class Visualizer {
 
         Button[] gameButton = new Button[countOfPlayers];
         double weight = Variables.SCREEN_WIDTH * Variables.PROCENT / countOfPlayers;
-        double height = (Variables.SCREEN_HEIGHT - Variables.SCREEN_WIDTH * Variables.PROCENT / mapRatio);
+        double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
         for (int i = 0; i < countOfPlayers; i++) {
             gameButton[i] = new Button();
-            gameButton[i].setPrefHeight(height / 2);
+            gameButton[i].setPrefHeight((Variables.SCREEN_HEIGHT - height) / 2);
             gameButton[i].setLayoutX(i * weight);
             gameButton[i].setPrefWidth(weight);
 
@@ -60,8 +59,8 @@ public class Visualizer {
             FileInputStream inputStream = new FileInputStream(logoName);
             Image logo = new Image(inputStream);
             ImageView logoView = new ImageView(logo);
-            logoView.setFitHeight(height / 2);
-            logoView.setFitWidth(height / 2);
+            logoView.setFitHeight((Variables.SCREEN_HEIGHT - height) / 2);
+            logoView.setFitWidth((Variables.SCREEN_HEIGHT - height) / 2);
             gameButton[i].setGraphic(logoView);
 
             gameButton[i].setOnAction(new EventHandler<ActionEvent>() {
@@ -87,7 +86,6 @@ public class Visualizer {
         }
 
         int numberOfContinents = continent.size();
-
         double height = Variables.SCREEN_HEIGHT / numberOfContinents;
         Button[] continentsButton = new Button[numberOfContinents];
 
@@ -96,7 +94,7 @@ public class Visualizer {
             continentsButton[continentID].setPrefHeight(height);
             continentsButton[continentID].setLayoutY(continentID * height);
             continentsButton[continentID].setPrefWidth(300);
-            continentsButton[continentID].setText(continent[continentID]);
+            continentsButton[continentID].setText(continent.get(continentID));
             continentsButton[continentID].setLayoutX(Variables.SCREEN_WIDTH - 300);
 
             continentsButton[continentID]
@@ -122,10 +120,10 @@ public class Visualizer {
 
     public static void finishGame() {
         Button finishButton = new Button();
-        double height = (Variables.SCREEN_HEIGHT - Variables.SCREEN_WIDTH * Variables.PROCENT / mapRatio);
+        double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
         finishButton.setText("Finish game");
-        finishButton.setPrefHeight(height / 2);
-        finishButton.setLayoutY(Variables.SCREEN_HEIGHT - height / 2);
+        finishButton.setPrefHeight((Variables.SCREEN_HEIGHT - height) / 2);
+        finishButton.setLayoutY((Variables.SCREEN_HEIGHT - height) / 2 + height);
         finishButton.setPrefWidth(100);
 
         finishButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -143,6 +141,7 @@ public class Visualizer {
             Variables.root.getChildren().add(mapInitialization(numberOfPlayers));
             initializeGameButtons(numberOfPlayers);
             finishGame();
+            continentsButtons();
         } catch (Exception e) {
             throw e;
         }

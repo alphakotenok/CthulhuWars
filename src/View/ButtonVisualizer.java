@@ -58,7 +58,8 @@ public class ButtonVisualizer {
 
     static void chooseCountOfPlayers() {
         Button[] btnCountOfPlyers = new Button[Variables.MAX_COUNT_OF_PLAYERS - Variables.MIN_COUNT_OF_PLAYERS + 1];
-        double thisHeight = Variables.SCREEN_HEIGHT / (Variables.MAX_COUNT_OF_PLAYERS - Variables.MIN_COUNT_OF_PLAYERS + 1);
+        double thisHeight = Variables.SCREEN_HEIGHT
+                / (Variables.MAX_COUNT_OF_PLAYERS - Variables.MIN_COUNT_OF_PLAYERS + 1);
         for (int countOfPlayers = Variables.MIN_COUNT_OF_PLAYERS; countOfPlayers <= Variables.MAX_COUNT_OF_PLAYERS; countOfPlayers++) {
             btnCountOfPlyers[countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS] = new Button();
             btnCountOfPlyers[countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS].setText(countOfPlayers + " players");
@@ -72,22 +73,51 @@ public class ButtonVisualizer {
             Variables.root.getChildren().add(btnCountOfPlyers[countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS]);
         }
     }
-    static void rebuildEntityButtons(Location continent){
+
+    static void rebuildEntityDelButtons(Location continent) {
         ArrayList<Entity> nameOfEntity = Variables.core.getEntityListInLocation(continent);
         int numberEntity = nameOfEntity.size();
         double height = Variables.SCREEN_HEIGHT / (numberEntity + 1);
+
+        Button add = new Button();
+        add.setPrefHeight(Math.min(height, 300));
+        add.setPrefWidth(300);
+        add.setText("add");
+        add.setLayoutX(Variables.SCREEN_WIDTH - 300);
+        add.setOnAction(new EntityButton(continent));
+
+        Variables.root.getChildren().add(add);
+        Button[] entityButton = new Button[numberEntity];
+
+        for (int entityID = 0; entityID < numberEntity; entityID++) {
+            entityButton[entityID] = new Button();
+            entityButton[entityID].setPrefHeight(Math.min(height, 300));
+            entityButton[entityID].setLayoutY((entityID + 1) * Math.min(height, 300));
+            entityButton[entityID].setPrefWidth(300);
+            entityButton[entityID].setText(nameOfEntity.get(entityID).name);
+            entityButton[entityID].setLayoutX(Variables.SCREEN_WIDTH - 300);
+
+            entityButton[entityID].setOnAction(new EntityDeleteButton(nameOfEntity.get(entityID), continent));
+            Variables.root.getChildren().add(entityButton[entityID]);
+        }
+    }
+
+    static void rebuildEntityAddButtons(Location continent) {
+        ArrayList<Entity> nameOfEntity = Variables.core.getEntityList();
+        int numberEntity = nameOfEntity.size();
+        double height = Variables.SCREEN_HEIGHT / numberEntity;
 
         Button[] entityButton = new Button[numberEntity];
 
         for (int entityID = 0; entityID < numberEntity; entityID++) {
             entityButton[entityID] = new Button();
             entityButton[entityID].setPrefHeight(height);
-            entityButton[entityID].setLayoutY((entityID + 1) * height);
+            entityButton[entityID].setLayoutY(entityID * height);
             entityButton[entityID].setPrefWidth(300);
             entityButton[entityID].setText(nameOfEntity.get(entityID).name);
             entityButton[entityID].setLayoutX(Variables.SCREEN_WIDTH - 300);
 
-            entityButton[entityID].setOnAction(new EntityButton(nameOfEntity.get(entityID),continent));
+            entityButton[entityID].setOnAction(new EntityAddButton(nameOfEntity.get(entityID), continent));
             Variables.root.getChildren().add(entityButton[entityID]);
         }
     }

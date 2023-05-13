@@ -15,8 +15,7 @@ public class ContinentButton implements EventHandler<ActionEvent> {
     public void handle(ActionEvent arg0) {
         /// TODO: we have to do something here, don't we?
         Misc.removeButtons(ContinentButton.class);
-        ButtonVisualizer.rebuildEntityButtons(continent);
-
+        ButtonVisualizer.rebuildEntityDelButtons(continent);
         return;
     }
 }

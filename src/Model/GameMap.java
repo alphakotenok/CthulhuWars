@@ -9,8 +9,8 @@ public class GameMap {
 
     ArrayList<Location> locations;
     Image mapIcon;
-    static int maxNumOfPlayer = 2;
-    static int minNumOfPlayers = 6;
+    static int maxNumOfPlayers = 6;
+    static int minNumOfPlayers = 2;
     ArrayList<Segment> Antarctica = new ArrayList<>();
     ArrayList<Segment> SouthAtlantic = new ArrayList<>();
     ArrayList<Segment> SouthAmerica = new ArrayList<>();
@@ -44,7 +44,8 @@ public class GameMap {
     ArrayList<Segment> NorthAtlanticSmall = new ArrayList<>();
     ArrayList<Segment> ArcticOceanSmall = new ArrayList<>();
     ArrayList<Segment> BeringSea = new ArrayList<>();
-    public void fillArrays(){
+
+    public void fillArrays() {
         BeringSea.add(new Segment(10, 20, 420, 20));
         BeringSea.add(new Segment(20, 55, 385, 25));
         ArcticOceanSmall.add(new Segment(450, 15, 1120, 15));
@@ -151,6 +152,7 @@ public class GameMap {
         Antarctica.add(new Segment(600, 565, 755, 565));
         Antarctica.add(new Segment(585, 620, 1060, 620));
     }
+
     GameMap(int numOfPlayers) {
         fillArrays();
         locations = new ArrayList<>();

@@ -13,10 +13,11 @@ public class Variables {
         public static final int NUMBER_OF_FRACTIONS = 7;
         public static Group root = new Group();
         public static Core core;
+        public static double mapRatio;
         public final static String[] NAME_OF_FRACTIONS = { "GreatCthulhu", "CrawlingChaos", "BlackGoat", "YellowSign",
                         "OpenerOfTheWay",
                         "Sleeper", "Windwalker" };
         public final static Color[] COLOR_OF_FRACTIONS = { Color.GREEN, Color.BLUE, Color.MAROON, Color.GOLD,
                         Color.PURPLE,
-                        Color.DARKORANGE, Color.DARKGREY };
+                        Color.DARKORANGE, Color.DARKGREY};
 }

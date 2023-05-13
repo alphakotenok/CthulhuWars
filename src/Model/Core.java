@@ -21,15 +21,15 @@ public class Core {
 
     public Core(int numOfPlayers, ArrayList<FactionType> factions)
             throws InvalidNumOfPlayersException, InvalidFactionsSetException {
-        if (numOfPlayers > GameMap.maxNumOfPlayer || numOfPlayers < GameMap.minNumOfPlayers) {
+        if (numOfPlayers > GameMap.maxNumOfPlayers || numOfPlayers < GameMap.minNumOfPlayers) {
             throw new InvalidNumOfPlayersException();
         }
         if (factions.size() != numOfPlayers) {
             throw new InvalidFactionsSetException();
         }
-        for (FactionType factionType : factions) {
-            for (FactionType factionType2 : factions) {
-                if (factionType.equals(factionType2)) {
+        for (int i = 0; i < factions.size(); ++i) {
+            for (int j = i + 1; j < factions.size(); ++j) {
+                if (factions.get(i).equals(factions.get(j))) {
                     throw new InvalidFactionsSetException();
                 }
             }

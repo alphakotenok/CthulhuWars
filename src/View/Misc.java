@@ -63,8 +63,8 @@ public class Misc {
         for (Node node : Variables.root.getChildren()) {
             if (node instanceof Button) {
                 EventHandler<ActionEvent> onAction = ((Button) node).getOnAction();
-                if (onAction != null && onAction instanceof EntityButton) {
-                    if(entities.contains(((EntityButton)onAction).entity)){
+                if (onAction != null && onAction instanceof EntityDeleteButton) {
+                    if(entities.contains(((EntityDeleteButton)onAction).entity)){
                         buttonsToRemove.add(node);
                     }
                 }
