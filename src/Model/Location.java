@@ -44,21 +44,35 @@ public class Location {
     }
 
     public RatioCoordinates getEntityPosition(int entityNum) {
-        int entityTotal = entityList.size();
+        int entityTotal = entityList.size() + 1;
         int segTotal = segments.size();
-        int col = entityTotal / segTotal;
-        int ost = entityTotal % segTotal;
+        int lengthOfSegments[] = new int[segTotal];
+        int sumOfLength = 0;
+        for(int i = 0; i < segTotal; i ++){
+            lengthOfSegments[i] = (int)Math.sqrt((segments.get(i).left.x - segments.get(i).right.x ) * (segments.get(i).left.x - segments.get(i).right.x) + (segments.get(i).left.y - segments.get(i).right.y ) * (segments.get(i).left.y - segments.get(i).right.y) );
+            sumOfLength += lengthOfSegments[i];
+        }
+        int avLength = sumOfLength / entityTotal;
+        int colEnt[] = new int[segTotal];
+        for(int i = 0; i < segTotal; i ++){
+            colEnt[i] = (lengthOfSegments[i] + avLength / 2) / avLength;
+            entityTotal -= colEnt[i];
+        }
+        for(int i = 0; i < segTotal; i ++){
+            if(entityTotal > 0) colEnt[i] ++;
+            entityTotal--;
+        }
+        entityTotal = entityList.size();
         for (int i = 0; i < segTotal; i++) {
-            int curAmount = col;
-            if (i < ost)
-                curAmount++;
-            if (entityNum > col)
-                entityNum -= curAmount;
+            if (entityNum >= colEnt[i])
+                entityNum -= colEnt[i];
             else {
                 Point left = segments.get(i).left;
                 Point right = segments.get(i).right;
-                double xCoordinate = (left.x * (curAmount - entityNum) + right.x * entityNum) / curAmount;
-                double yCoordinate = (left.y * (curAmount - entityNum) + right.y * entityNum) / curAmount;
+                double perShift = 1.0 / colEnt[i];
+                double resPer = perShift * entityNum + perShift / 2;
+                double xCoordinate = left.x * resPer + right.x * (1 - resPer);
+                double yCoordinate = left.y * resPer + right.y * (1 - resPer);
                 xCoordinate /= 1280.0;
                 yCoordinate /= 638.0;
                 return new RatioCoordinates(xCoordinate, yCoordinate);
