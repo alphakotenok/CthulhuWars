@@ -1,13 +1,5 @@
 package Model;
 
-<<<<<<< HEAD
-class CommandTree {
-
-    public static class Node {
-
-    }
-
-=======
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -159,5 +151,4 @@ class CommandTree {
     static void chooseFactionPermutation(ArrayList<Integer> perm) {
 
     }
->>>>>>> 1fdfbbe095361dbf4c2338b2d016d340c1f84801
 }
