@@ -22,11 +22,8 @@ public class MapEntity {
             double y = (Variables.SCREEN_HEIGHT - height) / 2 + height * z.y;
             mapImageEntity.setLayoutX(x);
             mapImageEntity.setLayoutY(y);
-<<<<<<< HEAD
             mapImageEntity.setFitWidth(entity.icon.getWidth() * Variables.PROCENT * 0.7 * 0.5);
-=======
             mapImageEntity.setFitWidth(entity.icon.getWidth() * Variables.PROCENT / 2);
->>>>>>> 18b80a1865e89c399cbedae9e613b2b3fa5cc343
             mapImageEntity.setPreserveRatio(true);
             Variables.root.getChildren().add(mapImageEntity);
         }
