@@ -6,8 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import java.util.ArrayList;
-import java.util.List;
-
+import Controler.EntityDeleteButton;
 import Model.Entity;
 import Model.Variables;
 import Model.Entity.EntityType;
@@ -16,28 +15,21 @@ import javafx.event.ActionEvent;
 
 public class Misc {
     public static <T extends EventHandler<ActionEvent>> void removeButtons(Class<T> c) {
-        List<Node> buttonsToRemove = new ArrayList<>();
-        for (Node node : Variables.root.getChildren()) {
-            if (node instanceof Button) {
+        Variables.root.getChildren().removeIf(node -> {
+            if(node instanceof Button){
                 EventHandler<ActionEvent> onAction = ((Button) node).getOnAction();
                 if (onAction != null && c.isInstance(onAction)) {
-                    buttonsToRemove.add(node);
+                    return true;
                 }
             }
-        }
-        Variables.root.getChildren().removeAll(buttonsToRemove);
+            return false;
+        });
         return;
     }
     public static void removeLabel(String text) {
-        List<Node> labelsToRemove = new ArrayList<>();
-        for (Node node : Variables.root.getChildren()) {
-            if (node instanceof Label) {
-                if (((Label) node).getText().equals(text)) {
-                    labelsToRemove.add(node);
-                }
-            }
-        }
-        Variables.root.getChildren().removeAll(labelsToRemove);
+        Variables.root.getChildren().removeIf(node -> {
+            return node instanceof Label && ((Label) node).getText().equals(text);
+        });
         return;
     }
     public static void addButton(Button b){
@@ -59,18 +51,13 @@ public class Misc {
         return;
     }
     public static void removeButtons(ArrayList<Entity> entities){
-        List<Node> buttonsToRemove = new ArrayList<>();
-        for (Node node : Variables.root.getChildren()) {
+        Variables.root.getChildren().removeIf(node -> {
             if (node instanceof Button) {
                 EventHandler<ActionEvent> onAction = ((Button) node).getOnAction();
-                if (onAction != null && onAction instanceof EntityDeleteButton) {
-                    if(entities.contains(((EntityDeleteButton)onAction).entity)){
-                        buttonsToRemove.add(node);
-                    }
-                }
+                return onAction != null && onAction instanceof EntityDeleteButton && entities.contains(((EntityDeleteButton)onAction).entity);
             }
-        }
-        Variables.root.getChildren().removeAll(buttonsToRemove);
+            return false;
+        });
         return;
     }
     public static EntityType getEntityByID(int entityID){

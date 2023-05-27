@@ -3,6 +3,12 @@ package View;
 import java.util.ArrayList;
 import java.util.List;
 
+import Controler.ContinentButton;
+import Controler.EntityAddButton;
+import Controler.EntityButton;
+import Controler.EntityDeleteButton;
+import Controler.FactionPickButton;
+import Controler.MenuButton;
 import Model.Entity;
 import Model.Location;
 import Model.Variables;
@@ -15,36 +21,60 @@ import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 
 public class ButtonVisualizer {
-    static void rebuildFractionPickButtons(int choosenFraction) {
+    public static void displayContinentButtons() {
+        ArrayList<String> continent = new ArrayList<>();
+        for (Location location : Variables.core.getLocationsList()) {
+            continent.add(location.name);
+        }
+
+        int numberOfContinents = continent.size();
+        double height = Variables.SCREEN_HEIGHT / numberOfContinents;
+        Button[] continentsButton = new Button[numberOfContinents];
+
+        for (int continentID = 0; continentID < numberOfContinents; continentID++) {
+            continentsButton[continentID] = new Button();
+            continentsButton[continentID].setPrefHeight(height);
+            continentsButton[continentID].setLayoutY(continentID * height);
+            continentsButton[continentID].setPrefWidth(300);
+            continentsButton[continentID].setText(continent.get(continentID));
+            continentsButton[continentID].setLayoutX(Variables.SCREEN_WIDTH - 300);
+
+            continentsButton[continentID]
+                    .setOnAction(new ContinentButton(Variables.core.getLocationsList().get(continentID)));
+            Variables.root.getChildren().add(continentsButton[continentID]);
+        }
+    }
+    
+    public static void rebuildFactionPickButtons(int choosenFaction) {
         List<Node> nodeList = new ArrayList<>();
         List<Button> buttonList = new ArrayList<>();
         int playerID = 0;
         for (Node node : Variables.root.getChildren()) {
             if (node instanceof Button) {
                 EventHandler<ActionEvent> onAction = ((Button) node).getOnAction();
-                if (onAction != null && onAction instanceof FractionPickButton) {
+                if (onAction != null && onAction instanceof FactionPickButton) {
                     nodeList.add(node);
-                    if (((FractionPickButton) onAction).fractionID != choosenFraction)
+                    if (((FactionPickButton) onAction).factionID != choosenFaction)
                         buttonList.add((Button) node);
-                    playerID = ((FractionPickButton) onAction).playerID;
+                    playerID = ((FactionPickButton) onAction).playerID;
                 }
             }
         }
         Variables.root.getChildren().removeAll(nodeList);
-        double thisHeight = Variables.SCREEN_HEIGHT / (Variables.NUMBER_OF_FRACTIONS + 1);
+        double thisHeight = Variables.SCREEN_HEIGHT / (Variables.NUMBER_OF_FACTIONS + 1);
 
         Misc.removeLabel("player " + playerID);
 
-        int fractionId = 0;
+        int factionId = 0;
 
-        for (Button fractionPickButton : buttonList) {
-            FractionPickButton onAction = (FractionPickButton) fractionPickButton
+        for (Button FactionPickButton : buttonList) {
+            FactionPickButton onAction = (FactionPickButton) FactionPickButton
                     .getOnAction();
             onAction.nextPlayer();
 
-            fractionPickButton.setLayoutY((fractionId + 1) * thisHeight);
-            Variables.root.getChildren().add(fractionPickButton);
-            fractionId++;
+            FactionPickButton.setLayoutY((factionId + 1) * thisHeight);
+            Variables.root.getChildren().add(FactionPickButton);
+            factionId++;
         }
 
         Label label = new Label("player " + (playerID + 1));
@@ -56,7 +86,7 @@ public class ButtonVisualizer {
         return;
     }
 
-    static void chooseCountOfPlayers() {
+    public static void displayCountOfPlayersButtons() {
         Button[] btnCountOfPlyers = new Button[Variables.MAX_COUNT_OF_PLAYERS - Variables.MIN_COUNT_OF_PLAYERS + 1];
         double thisHeight = Variables.SCREEN_HEIGHT
                 / (Variables.MAX_COUNT_OF_PLAYERS - Variables.MIN_COUNT_OF_PLAYERS + 1);
@@ -74,7 +104,7 @@ public class ButtonVisualizer {
         }
     }
 
-    static void rebuildEntityDelButtons(Location continent) {
+    public static void rebuildEntityDelButtons(Location continent) {
         ArrayList<Entity> nameOfEntity = Variables.core.getEntityListInLocation(continent);
         int numberEntity = nameOfEntity.size();
         double height = Variables.SCREEN_HEIGHT / (numberEntity + 1);
@@ -102,7 +132,7 @@ public class ButtonVisualizer {
         }
     }
 
-    static void rebuildEntityAddButtons(Location continent) {
+    public static void rebuildEntityAddButtons(Location continent) {
         ArrayList<Entity> nameOfEntity = Variables.core.getEntityList();
         int numberEntity = nameOfEntity.size();
         double height = Variables.SCREEN_HEIGHT / numberEntity;
@@ -119,6 +149,31 @@ public class ButtonVisualizer {
 
             entityButton[entityID].setOnAction(new EntityAddButton(nameOfEntity.get(entityID), continent));
             Variables.root.getChildren().add(entityButton[entityID]);
+        }
+    }
+
+    public static void displayFactionPickButtons(int numberOfPlayers) {
+        double thisHeight = Variables.SCREEN_HEIGHT / (Variables.NUMBER_OF_FACTIONS + 1);
+        
+        Label label = new Label("player " + 0);
+        label.setPrefHeight(thisHeight);
+        label.setPrefWidth(Variables.SCREEN_WIDTH);
+        label.setAlignment(Pos.CENTER);
+        label.setFont(Font.font("Arial", 40));
+        Variables.root.getChildren().add(label);
+        Button[] factionPickButtons = new Button[Variables.NUMBER_OF_FACTIONS + 1];
+        for (int factionId = 0; factionId < Variables.NUMBER_OF_FACTIONS; factionId++) {
+            factionPickButtons[factionId] = new Button();
+            factionPickButtons[factionId].setTextFill(Variables.COLOR_OF_FACTIONS[factionId]);
+            factionPickButtons[factionId].setText(Variables.NAME_OF_FACTIONS[factionId]);
+            factionPickButtons[factionId].setFont(Font.font("Arial", 40));
+            factionPickButtons[factionId].setPrefHeight(thisHeight);
+            factionPickButtons[factionId].setLayoutY((factionId + 1) * thisHeight);
+            factionPickButtons[factionId].setPrefWidth(Variables.SCREEN_WIDTH);
+            factionPickButtons[factionId]
+                    .setOnAction(new FactionPickButton(numberOfPlayers, factionId, 0));
+
+            Variables.root.getChildren().add(factionPickButtons[factionId]);
         }
     }
 }
