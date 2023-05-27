@@ -25,6 +25,9 @@ public class EntityVisualizer {
             double y = (Variables.SCREEN_HEIGHT - height) / 2 + height * z.y;
             mapImageEntity.setLayoutX(x - widthEntity / 2);
             mapImageEntity.setLayoutY(y - heightEntity / 2);
+            mapImageEntity.setLayoutX(x);
+            mapImageEntity.setLayoutY(y);
+            mapImageEntity.setFitWidth(entity.icon.getWidth() * Variables.PROCENT * 0.7 * 0.5);
             mapImageEntity.setFitWidth(entity.icon.getWidth() * Variables.PROCENT / 2);
             mapImageEntity.setPreserveRatio(true);
             Variables.root.getChildren().add(mapImageEntity);

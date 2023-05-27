@@ -125,9 +125,9 @@ public class GameMap {
     ArrayList<Segment> Africa() {
         ArrayList<Segment> Africa = new ArrayList<>();
         Africa.add(new Segment(720, 330, 885, 330));
-        Africa.add(new Segment(705, 390, 960, 390));
-        Africa.add(new Segment(745, 440, 1020, 440));
-        Africa.add(new Segment(830, 500, 1000, 500));
+        Africa.add(new Segment(730, 390, 960, 390));
+        Africa.add(new Segment(830, 440, 900, 440));
+        Africa.add(new Segment(880, 490, 950, 490));
         return Africa;
     }
 
@@ -142,10 +142,9 @@ public class GameMap {
 
     ArrayList<Segment> ArcticOcean() {
         ArrayList<Segment> ArcticOcean = new ArrayList<>();
-        ArcticOcean.add(new Segment(90, 20, 320, 20));
-        ArcticOcean.add(new Segment(445, 20, 785, 20));
-        ArcticOcean.add(new Segment(505, 70, 690, 70));
-        ArcticOcean.add(new Segment(940, 20, 1150, 20));
+        ArcticOcean.add(new Segment(120, 20, 260, 20));
+        ArcticOcean.add(new Segment(475, 20, 755, 20));
+        ArcticOcean.add(new Segment(970, 20, 1120, 20));
         return ArcticOcean;
     }
 
@@ -227,7 +226,7 @@ public class GameMap {
 
     ArrayList<Segment> IndianOcean() {
         ArrayList<Segment> IndianOcean = new ArrayList<>();
-        IndianOcean.add(new Segment(1080, 415, 1250, 415));
+        IndianOcean.add(new Segment(1100, 415, 1250, 415));
         IndianOcean.add(new Segment(1050, 480, 1260, 480));
         IndianOcean.add(new Segment(1040, 545, 1260, 545));
         IndianOcean.add(new Segment(1110, 600, 1260, 600));
@@ -236,49 +235,49 @@ public class GameMap {
 
     ArrayList<Segment> Australia() {
         ArrayList<Segment> Australia = new ArrayList<>();
-        Australia.add(new Segment(55, 435, 175, 435));
-        Australia.add(new Segment(30, 485, 220, 485));
-        Australia.add(new Segment(130, 525, 235, 525));
+        Australia.add(new Segment(75, 435, 155, 435));
+        Australia.add(new Segment(80, 485, 200, 485));
+        Australia.add(new Segment(150, 525, 215, 525));
         return Australia;
     }
 
     ArrayList<Segment> SouthPacific() {
         ArrayList<Segment> SouthPacific = new ArrayList<>();
-        SouthPacific.add(new Segment(240, 460, 315, 460));
-        SouthPacific.add(new Segment(250, 505, 345, 505));
-        SouthPacific.add(new Segment(230, 560, 380, 560));
-        SouthPacific.add(new Segment(205, 610, 515, 610));
+        SouthPacific.add(new Segment(260, 460, 295, 460));
+        SouthPacific.add(new Segment(270, 505, 325, 505));
+        SouthPacific.add(new Segment(250, 560, 360, 560));
+        SouthPacific.add(new Segment(225, 610, 495, 610));
         return SouthPacific;
     }
 
     ArrayList<Segment> SouthAmerica() {
         ArrayList<Segment> SouthAmerica = new ArrayList<>();
-        SouthAmerica.add(new Segment(345, 425, 540, 425));
-        SouthAmerica.add(new Segment(355, 470, 510, 470));
-        SouthAmerica.add(new Segment(380, 520, 450, 520));
+        SouthAmerica.add(new Segment(365, 425, 520, 425));
+        SouthAmerica.add(new Segment(385, 470, 490, 470));
+        SouthAmerica.add(new Segment(400, 520, 430, 520));
         return SouthAmerica;
     }
 
     ArrayList<Segment> SouthAtlantic() {
         ArrayList<Segment> SouthAtlantic = new ArrayList<>();
-        SouthAtlantic.add(new Segment(590, 440, 695, 440));
-        SouthAtlantic.add(new Segment(560, 485, 785, 485));
-        SouthAtlantic.add(new Segment(545, 525, 815, 525));
+        SouthAtlantic.add(new Segment(610, 440, 675, 440));
+        SouthAtlantic.add(new Segment(580, 485, 765, 485));
+        SouthAtlantic.add(new Segment(565, 525, 835, 525));
         return SouthAtlantic;
     }
 
     ArrayList<Segment> Antarctica() {
         ArrayList<Segment> Antarctica = new ArrayList<>();
-        Antarctica.add(new Segment(600, 565, 755, 565));
-        Antarctica.add(new Segment(585, 620, 1060, 620));
+        Antarctica.add(new Segment(620, 565, 735, 565));
+        Antarctica.add(new Segment(605, 620, 1040, 620));
         return Antarctica;
     }
 
     ArrayList<Segment> Europe() {
         ArrayList<Segment> Europe = new ArrayList<>();
-        Europe.add(new Segment(750, 110, 980, 110));
-        Europe.add(new Segment(750, 150, 965, 150));
-        Europe.add(new Segment(620, 190, 950, 190));
+        Europe.add(new Segment(750, 90, 1000, 90));
+        Europe.add(new Segment(750, 130, 970, 130));
+        Europe.add(new Segment(620, 170, 980, 170));
         return Europe;
     }
 
