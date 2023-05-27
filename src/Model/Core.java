@@ -10,6 +10,7 @@ public class Core {
     EntityBase entityBase;
     int numOfPlayers;
     ArrayList<FactionType> factionsList;
+    CommandTree ct;
 
     public class InvalidNumOfPlayersException extends Exception {
 
@@ -43,6 +44,7 @@ public class Core {
         map = new GameMap(numOfPlayers);
 
         entityBase = new EntityBase(factionsList);
+        ct = new CommandTree();
     }
 
     public int getNumOfPlayers() {
@@ -71,5 +73,21 @@ public class Core {
 
     public Image getMapIcon() {
         return map.mapIcon;
+    }
+
+    public ArrayList<FactionType> getFactions() {
+        return factionsList;
+    }
+
+    public ArrayList<String> getCommandList() {
+        return ct.getCommandList();
+    }
+
+    public void activateCommand(Integer num) {
+        try {
+            ct.execute(num);
+        } catch (Exception e) {
+
+        }
     }
 }
