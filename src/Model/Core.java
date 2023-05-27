@@ -79,11 +79,15 @@ public class Core {
         return factionsList;
     }
 
-    public ArrayList<Integer> getCommandList() {
-        return new ArrayList<>();
+    public ArrayList<String> getCommandList() {
+        return ct.getCommandList();
     }
 
     public void activateCommand(Integer num) {
+        try {
+            ct.execute(num);
+        } catch (Exception e) {
 
+        }
     }
 }
