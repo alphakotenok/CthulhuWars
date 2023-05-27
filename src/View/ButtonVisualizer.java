@@ -3,6 +3,7 @@ package View;
 import java.util.ArrayList;
 import java.util.List;
 
+import Controler.CommandButton;
 import Controler.ContinentButton;
 import Controler.EntityAddButton;
 import Controler.EntityButton;
@@ -174,6 +175,30 @@ public class ButtonVisualizer {
                     .setOnAction(new FactionPickButton(numberOfPlayers, factionId, 0));
 
             Variables.root.getChildren().add(factionPickButtons[factionId]);
+        }
+    }
+    public static void displayCommandButtons() {
+        ArrayList<String> commands = Variables.core.getCommandList();
+        double thisHeight = Variables.SCREEN_HEIGHT / (commands.size() + 1);
+        Label label = new Label("Choose players order");
+        label.setPrefHeight(thisHeight);
+        label.setPrefWidth(Variables.SCREEN_WIDTH);
+        label.setAlignment(Pos.CENTER);
+        label.setFont(Font.font("Arial", 40));
+        Variables.root.getChildren().add(label);
+
+        Button[] commandButton = new Button[commands.size()];
+        for (int commandID = 0; commandID < commands.size(); commandID++) {
+            commandButton[commandID] = new Button();
+            commandButton[commandID].setText(commands.get(commandID));
+            commandButton[commandID].setFont(Font.font("Arial", 40));
+            commandButton[commandID].setPrefHeight(thisHeight);
+            commandButton[commandID].setLayoutY((commandID + 1) * thisHeight);
+            commandButton[commandID].setPrefWidth(Variables.SCREEN_WIDTH);
+            commandButton[commandID]
+                    .setOnAction(new CommandButton(commandID));
+
+            Variables.root.getChildren().add(commandButton[commandID]);
         }
     }
 }

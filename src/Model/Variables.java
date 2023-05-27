@@ -20,4 +20,5 @@ public class Variables {
         public final static Color[] COLOR_OF_FACTIONS = { Color.GREEN, Color.BLUE, Color.MAROON, Color.GOLD,
                         Color.PURPLE,
                         Color.DARKORANGE, Color.DARKGREY};
+        public static int numberOfPlayers;
 }

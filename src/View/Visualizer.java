@@ -134,10 +134,7 @@ public class Visualizer {
         } catch (InvalidFactionsSetException e) {
             e.printStackTrace();
         }
-        try {
-            Visualizer.createField(numberOfPlayers);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Variables.numberOfPlayers = numberOfPlayers;
+        ButtonVisualizer.displayCommandButtons();
     }
 }
