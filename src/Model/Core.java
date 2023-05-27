@@ -79,6 +79,14 @@ public class Core {
         return factionsList;
     }
 
+<<<<<<< HEAD
+    public ArrayList<Integer> getCommandList() {
+        return new ArrayList<>();
+    }
+
+    public void activateCommand(Integer num) {
+
+=======
     public ArrayList<String> getCommandList() {
         return ct.getCommandList();
     }
@@ -89,5 +97,6 @@ public class Core {
         } catch (Exception e) {
 
         }
+>>>>>>> 1fdfbbe095361dbf4c2338b2d016d340c1f84801
     }
 }

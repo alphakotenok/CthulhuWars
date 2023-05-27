@@ -1,6 +1,8 @@
-package View;
+package Controler;
 
 import Model.Location;
+import View.ButtonVisualizer;
+import View.Misc;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 

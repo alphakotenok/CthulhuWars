@@ -1,8 +1,9 @@
-package View;
+package Controler;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import Model.Location;
+import View.Misc;
 
 public class ContinentButton implements EventHandler<ActionEvent> {
     Location continent;
@@ -13,9 +14,8 @@ public class ContinentButton implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent arg0) {
-        /// TODO: we have to do something here, don't we?
         Misc.removeButtons(ContinentButton.class);
-        ButtonVisualizer.rebuildEntityDelButtons(continent);
+        View.ButtonVisualizer.rebuildEntityDelButtons(continent);
         return;
     }
 }
