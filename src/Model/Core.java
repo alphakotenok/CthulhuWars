@@ -14,6 +14,9 @@ public class Core {
     FactionBase factionBase;
     Ritual ritual;
     int turn;
+    boolean correcrtWay;
+    int firstPlayer;
+    boolean endOfTheGame;
 
     public class InvalidNumOfPlayersException extends Exception {
 
@@ -51,6 +54,9 @@ public class Core {
         ct = new CommandTree(this);
         ritual = new Ritual(this);
         turn = 0;
+        correcrtWay = true;
+        firstPlayer = 0;
+        endOfTheGame = false;
     }
 
     public int getNumOfPlayers() {
@@ -103,6 +109,12 @@ public class Core {
 
     void endOfTheGame() {
 
+    }
+
+    int getNextTurn(int who) {
+        if (correcrtWay)
+            return (who + 1) % numOfPlayers;
+        return (who - 1 + numOfPlayers) % numOfPlayers;
     }
 
     public ArrayList<Integer> getPowerList() {

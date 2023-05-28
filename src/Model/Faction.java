@@ -18,6 +18,7 @@ public class Faction {
     FactionType faction;
 
     Faction(String name, Core core) {
+        elderSignList = new ArrayList<>();
         this.core = core;
         this.name = name;
         energy = 8;
@@ -31,6 +32,7 @@ public class Faction {
 
     void recountEnergy() {
         energy = cultistAlive + unitsCaptured + 2 * gatesControlled + core.entityBase.neutralGateExists;
+        unitsCaptured = 0;
     }
 
     void getElderSign() {
