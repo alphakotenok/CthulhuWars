@@ -11,6 +11,7 @@ import Controler.EntityButton;
 import Controler.EntityDeleteButton;
 import Controler.FactionPickButton;
 import Controler.MenuButton;
+import Controler.getCommandButton;
 import Model.Entity;
 import Model.Location;
 import Model.Variables;
@@ -205,7 +206,7 @@ public class ButtonVisualizer {
         }
 
         double thisHeight = Variables.SCREEN_HEIGHT / (commands.size() + 1);
-        Label label = new Label("Choose players order");
+        Label label = new Label(Variables.core.getCommandDescription());
         label.setPrefHeight(thisHeight);
         label.setPrefWidth(Variables.SCREEN_WIDTH);
         label.setAlignment(Pos.CENTER);
@@ -236,6 +237,46 @@ public class ButtonVisualizer {
             commandButton[commandID].setLayoutY((commandID + 1) * thisHeight);
             commandButton[commandID].setPrefWidth(Variables.SCREEN_WIDTH);
             commandButton[commandID].setOnAction(new CommandButton(commandID));
+
+            Variables.root.getChildren().add(commandButton[commandID]);
+        }
+    }
+
+    public static void getcommandButton() {
+        ArrayList<String> commands = Variables.core.getCommandList();
+        System.out.println(commands.size());
+        double thisHeight = Variables.SCREEN_HEIGHT / (commands.size() + 1);
+        Label label = new Label(Variables.core.getCommandDescription());
+        label.setPrefHeight(thisHeight);
+        label.setPrefWidth(Variables.SCREEN_WIDTH);
+        label.setAlignment(Pos.CENTER);
+        label.setFont(Font.font("Arial", 40));
+        Variables.root.getChildren().add(label);
+
+        Button[] commandButton = new Button[commands.size()];
+        for (int commandID = 0; commandID < commands.size(); commandID++) {
+            commandButton[commandID] = new Button();
+            TextFlow textFlowFaction = new TextFlow();
+
+            for (int faction = 0; faction < commands.get(commandID).length(); faction++) {
+                int factionID = commands.get(commandID).charAt(faction) - '0';
+                Text textEntity1 = new Text(Variables.NAME_OF_FACTIONS[factionID]);
+                textEntity1.setFill(Variables.COLOR_OF_FACTIONS[factionID]);
+                textEntity1.setFont(Font.font("Arial", 32));
+                Text textEntity2 = new Text(" -> ");
+                textEntity2.setFill(Color.BLACK);
+                textEntity2.setFont(Font.font("Arial", 32));
+                textFlowFaction.getChildren().add(textEntity1);
+                if (faction != commands.get(commandID).length() - 1)
+                    textFlowFaction.getChildren().add(textEntity2);
+            }
+            textFlowFaction.setTextAlignment(TextAlignment.CENTER);
+
+            commandButton[commandID].setGraphic(textFlowFaction);
+            commandButton[commandID].setPrefHeight(thisHeight);
+            commandButton[commandID].setLayoutY((commandID + 1) * thisHeight);
+            commandButton[commandID].setPrefWidth(Variables.SCREEN_WIDTH);
+            commandButton[commandID].setOnAction(new getCommandButton(commandID));
 
             Variables.root.getChildren().add(commandButton[commandID]);
         }

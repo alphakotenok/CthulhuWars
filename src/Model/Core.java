@@ -11,6 +11,9 @@ public class Core {
     int numOfPlayers;
     ArrayList<FactionType> factionsList;
     CommandTree ct;
+    FactionBase factionBase;
+    Ritual ritual;
+    int turn;
 
     public class InvalidNumOfPlayersException extends Exception {
 
@@ -45,6 +48,8 @@ public class Core {
 
         entityBase = new EntityBase(factionsList);
         ct = new CommandTree(this);
+        factionBase = new FactionBase(this);
+        ritual = new Ritual(this);
     }
 
     public int getNumOfPlayers() {
@@ -80,6 +85,7 @@ public class Core {
     }
 
     public ArrayList<String> getCommandList() {
+        System.out.println(ct.getCommandList());
         return ct.getCommandList();
     }
 
@@ -93,5 +99,9 @@ public class Core {
 
     public String getCommandDescription() {
         return ct.curNode.desc;
+    }
+
+    void endOfTheGame() {
+
     }
 }

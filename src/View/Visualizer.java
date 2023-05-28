@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
+import Controler.FactionSheet;
 import Model.Core;
 import Model.Variables;
 import Model.Faction.FactionType;
@@ -44,11 +45,6 @@ public class Visualizer {
     }
 
     public static void initializeGameButtons(int countOfPlayers) throws FileNotFoundException {
-        FileInputStream inputstream1 = new FileInputStream("Zoog.png");
-        Image zoog = new Image(inputstream1);
-        ImageView zoogView = new ImageView(zoog);
-        zoogView.setX(200);
-
         Button[] gameButton = new Button[countOfPlayers];
         double weight = Variables.SCREEN_WIDTH * Variables.PROCENT / countOfPlayers;
         double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
@@ -66,24 +62,16 @@ public class Visualizer {
             logoView.setFitHeight((Variables.SCREEN_HEIGHT - height) / 2);
             logoView.setFitWidth((Variables.SCREEN_HEIGHT - height) / 2);
             gameButton[i].setGraphic(logoView);
+            gameButton[i].setOnAction(new FactionSheet(orderFactions.get(i).ordinal()));
 
-            gameButton[i].setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    /// TODO: WHAT THE $!@#$ IS IT?
-                    if (!zoogCheck) {
-                        Variables.root.getChildren().add(zoogView);
-                    } else {
-                        Variables.root.getChildren().remove(zoogView);
-                    }
-                    zoogCheck = !zoogCheck;
-                }
-            });
             Variables.root.getChildren().add(gameButton[i]);
         }
     }
 
     public static void startGame() {
+        for (int i = 0; i < Variables.NUMBER_OF_FACTIONS; i++) {
+            Variables.factionSheetButtonState[i] = false;
+        }
         Button startButton = new Button();
         startButton.setText("Start game");
         startButton.setPrefHeight(Variables.SCREEN_HEIGHT / 2);
@@ -121,7 +109,8 @@ public class Visualizer {
             Variables.root.getChildren().add(mapInitialization(numberOfPlayers));
             initializeGameButtons(numberOfPlayers);
             finishGame();
-            ButtonVisualizer.displayContinentButtons();
+            ButtonVisualizer.getcommandButton();
+            // ButtonVisualizer.displayContinentButtons();
         } catch (Exception e) {
             throw e;
         }
@@ -137,5 +126,20 @@ public class Visualizer {
         }
         Variables.numberOfPlayers = numberOfPlayers;
         ButtonVisualizer.displayCommandButtons();
+    }
+
+    public static void factionSheet(int numberOfFaction) throws FileNotFoundException {
+        ArrayList<FactionType> orderFactions = Variables.core.getFactions();
+        String factionName = "images/FactionSheet/FactionCard_" + orderFactions.get(numberOfFaction).name() + ".png";
+
+        FileInputStream inputStream = new FileInputStream(factionName);
+        Image sheet = new Image(inputStream);
+
+        ImageView sheetView = new ImageView(sheet);
+        double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
+        sheetView.setY((Variables.SCREEN_HEIGHT - height) / 2);
+        sheetView.setFitWidth(Variables.SCREEN_WIDTH * Variables.PROCENT);
+        sheetView.setFitHeight(height);
+        Variables.root.getChildren().add(sheetView);
     }
 }
