@@ -109,7 +109,8 @@ public class Visualizer {
             Variables.root.getChildren().add(mapInitialization(numberOfPlayers));
             initializeGameButtons(numberOfPlayers);
             finishGame();
-            ButtonVisualizer.displayContinentButtons();
+            ButtonVisualizer.getcommandButton();
+            // ButtonVisualizer.displayContinentButtons();
         } catch (Exception e) {
             throw e;
         }
