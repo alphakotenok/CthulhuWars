@@ -1,17 +1,17 @@
 package View;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
-import Controler.CommandButton;
+import Controler.OrderChooseButton;
 import Controler.ContinentButton;
 import Controler.EntityAddButton;
 import Controler.EntityButton;
 import Controler.EntityDeleteButton;
 import Controler.FactionPickButton;
 import Controler.MenuButton;
-import Controler.getCommandButton;
+import Controler.CommandButton;
 import Model.Entity;
 import Model.Location;
 import Model.Variables;
@@ -184,29 +184,11 @@ public class ButtonVisualizer {
         }
     }
 
-    public static void displayCommandButtons() {
-        ArrayList<String> commandsAll = Variables.core.getCommandList();
-        System.out.println(commandsAll.size());
-        ArrayList<String> commands = new ArrayList<>();
-
-        if (commandsAll.size() < Variables.NUMBER_OF_PERMUTATIONS) {
-            for (int commandsID = 0; commandsID < commandsAll.size(); commandsID++) {
-                commands.add(commandsAll.get(commandsID));
-            }
-        } else {
-            Random random = new Random();
-
-            while (commands.size() < Variables.NUMBER_OF_PERMUTATIONS) {
-                int randomIndex = random.nextInt(commandsAll.size());
-                String randomElement = commandsAll.get(randomIndex);
-
-                if (!commands.contains(randomElement)) {
-                    commands.add(randomElement);
-                }
-            }
-        }
-
-        double thisHeight = Variables.SCREEN_HEIGHT / (commands.size() + 1);
+    public static void displayOrderChooseButtons() {
+        ArrayList<String> commands = Variables.core.getCommandList();
+        Collections.shuffle(commands);
+        int countOfCommands = Math.min(commands.size(), Variables.NUMBER_OF_PERMUTATIONS);
+        double thisHeight = Variables.SCREEN_HEIGHT / (countOfCommands + 1);
         Label label = new Label(Variables.core.getCommandDescription());
         label.setPrefHeight(thisHeight);
         label.setPrefWidth(Variables.SCREEN_WIDTH);
@@ -214,8 +196,8 @@ public class ButtonVisualizer {
         label.setFont(Font.font("Arial", 40));
         Variables.root.getChildren().add(label);
 
-        Button[] commandButton = new Button[commands.size()];
-        for (int commandID = 0; commandID < commands.size(); commandID++) {
+        Button[] commandButton = new Button[countOfCommands];
+        for (int commandID = 0; commandID < countOfCommands; commandID++) {
             commandButton[commandID] = new Button();
             TextFlow textFlowFaction = new TextFlow();
 
@@ -237,13 +219,13 @@ public class ButtonVisualizer {
             commandButton[commandID].setPrefHeight(thisHeight);
             commandButton[commandID].setLayoutY((commandID + 1) * thisHeight);
             commandButton[commandID].setPrefWidth(Variables.SCREEN_WIDTH);
-            commandButton[commandID].setOnAction(new CommandButton(commandID));
+            commandButton[commandID].setOnAction(new OrderChooseButton(commandID));
 
             Variables.root.getChildren().add(commandButton[commandID]);
         }
     }
 
-    public static void getcommandButton() {
+    public static void displayCommandButtons() {
         ArrayList<String> commands = Variables.core.getCommandList();
         // System.out.println(commands.size());
         double thisHeight = Variables.SCREEN_HEIGHT / (commands.size() + 1);
@@ -264,7 +246,7 @@ public class ButtonVisualizer {
             commandButton[commandID].setLayoutY((commandID + 1) * thisHeight);
             commandButton[commandID].setPrefWidth(300);
             commandButton[commandID].setLayoutX(Variables.SCREEN_WIDTH - 300);
-            commandButton[commandID].setOnAction(new getCommandButton(commandID));
+            commandButton[commandID].setOnAction(new CommandButton(commandID));
 
             Variables.root.getChildren().add(commandButton[commandID]);
         }

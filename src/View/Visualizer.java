@@ -109,7 +109,7 @@ public class Visualizer {
             Variables.root.getChildren().add(mapInitialization(numberOfPlayers));
             initializeGameButtons(numberOfPlayers);
             finishGame();
-            ButtonVisualizer.getcommandButton();
+            ButtonVisualizer.displayCommandButtons();
             // ButtonVisualizer.displayContinentButtons();
         } catch (Exception e) {
             throw e;
@@ -125,7 +125,7 @@ public class Visualizer {
             e.printStackTrace();
         }
         Variables.numberOfPlayers = numberOfPlayers;
-        ButtonVisualizer.displayCommandButtons();
+        ButtonVisualizer.displayOrderChooseButtons();
     }
 
     public static void factionSheet(int numberOfFaction) throws FileNotFoundException {
