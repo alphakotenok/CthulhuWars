@@ -170,8 +170,12 @@ class CommandTree {
             return;
         }
         for (int j = 0; j < core.map.startLoc.get(core.factionsList.get(num).ordinal()).size(); ++j) {
-            Node n = new Node(core.map.startLoc.get(core.factionsList.get(num).ordinal()).get(j).name,
-                    "Choose " + Integer.valueOf(num + 2) + " player start location",
+            String desc;
+            if (num == core.numOfPlayers - 1)
+                desc = "Choose action";
+            else
+                desc = "Choose " + Integer.valueOf(num + 2) + " player start location";
+            Node n = new Node(core.map.startLoc.get(core.factionsList.get(num).ordinal()).get(j).name, desc,
                     CommandTree::placeStart, new ArrayList<Integer>(Arrays.asList(0, j)), core);
             curNode.adj.add(n);
         }
