@@ -85,6 +85,7 @@ public class Core {
     }
 
     public ArrayList<String> getCommandList() {
+        System.out.println(ct.getCommandList());
         return ct.getCommandList();
     }
 
