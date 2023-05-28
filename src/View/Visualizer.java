@@ -129,8 +129,7 @@ public class Visualizer {
     }
 
     public static void factionSheet(int numberOfFaction) throws FileNotFoundException {
-        ArrayList<FactionType> orderFactions = Variables.core.getFactions();
-        String factionName = "images/FactionSheet/FactionCard_" + orderFactions.get(numberOfFaction).name() + ".png";
+        String factionName = "images/FactionSheet/FactionCard_" + Variables.NAME_OF_FACTIONS[numberOfFaction] + ".png";
 
         FileInputStream inputStream = new FileInputStream(factionName);
         Image sheet = new Image(inputStream);

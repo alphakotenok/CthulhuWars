@@ -3,6 +3,7 @@ package View;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import Controler.OrderChooseButton;
 import Controler.ContinentButton;
@@ -185,9 +186,13 @@ public class ButtonVisualizer {
     }
 
     public static void displayOrderChooseButtons() {
-        ArrayList<String> commands = Variables.core.getCommandList();
-        Collections.shuffle(commands);
-        int countOfCommands = Math.min(commands.size(), Variables.NUMBER_OF_PERMUTATIONS);
+        ArrayList<String> orders = Variables.core.getCommandList();
+        int countOfCommands = Math.min(orders.size(), Variables.NUMBER_OF_PERMUTATIONS);
+        ArrayList<Integer> indexes = new ArrayList<Integer>();
+        for (int i = 0; i < orders.size(); i++) {
+            indexes.add(i);
+        }
+        Collections.shuffle(indexes, new Random());
         double thisHeight = Variables.SCREEN_HEIGHT / (countOfCommands + 1);
         Label label = new Label(Variables.core.getCommandDescription());
         label.setPrefHeight(thisHeight);
@@ -197,12 +202,13 @@ public class ButtonVisualizer {
         Variables.root.getChildren().add(label);
 
         Button[] commandButton = new Button[countOfCommands];
-        for (int commandID = 0; commandID < countOfCommands; commandID++) {
-            commandButton[commandID] = new Button();
+        for (int idx = 0; idx < countOfCommands; idx++) {
+            int orderID = indexes.get(idx);
+            commandButton[idx] = new Button();
             TextFlow textFlowFaction = new TextFlow();
 
-            for (int faction = 0; faction < commands.get(commandID).length(); faction++) {
-                int factionID = commands.get(commandID).charAt(faction) - '0';
+            for (int faction = 0; faction < orders.get(orderID).length(); faction++) {
+                int factionID = orders.get(orderID).charAt(faction) - '0';
                 Text textEntity1 = new Text(Variables.NAME_OF_FACTIONS[factionID]);
                 textEntity1.setFill(Variables.COLOR_OF_FACTIONS[factionID]);
                 textEntity1.setFont(Font.font("Arial", 32));
@@ -210,18 +216,18 @@ public class ButtonVisualizer {
                 textEntity2.setFill(Color.BLACK);
                 textEntity2.setFont(Font.font("Arial", 32));
                 textFlowFaction.getChildren().add(textEntity1);
-                if (faction != commands.get(commandID).length() - 1)
+                if (faction != orders.get(orderID).length() - 1)
                     textFlowFaction.getChildren().add(textEntity2);
             }
             textFlowFaction.setTextAlignment(TextAlignment.CENTER);
 
-            commandButton[commandID].setGraphic(textFlowFaction);
-            commandButton[commandID].setPrefHeight(thisHeight);
-            commandButton[commandID].setLayoutY((commandID + 1) * thisHeight);
-            commandButton[commandID].setPrefWidth(Variables.SCREEN_WIDTH);
-            commandButton[commandID].setOnAction(new OrderChooseButton(commandID));
+            commandButton[idx].setGraphic(textFlowFaction);
+            commandButton[idx].setPrefHeight(thisHeight);
+            commandButton[idx].setLayoutY((idx + 1) * thisHeight);
+            commandButton[idx].setPrefWidth(Variables.SCREEN_WIDTH);
+            commandButton[idx].setOnAction(new OrderChooseButton(orderID));
 
-            Variables.root.getChildren().add(commandButton[commandID]);
+            Variables.root.getChildren().add(commandButton[idx]);
         }
     }
 

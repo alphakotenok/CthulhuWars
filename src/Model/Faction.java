@@ -19,6 +19,7 @@ public class Faction {
 
     Faction(String name, Core core) {
         this.core = core;
+        this.name = name;
         energy = 8;
         cultistAlive = 6;
         gatesControlled = 1;
