@@ -9,7 +9,7 @@ public class Faction {
 
     int energy;
     int cultistAlive;
-    int GatesControlled;
+    int gatesControlled;
     int unitsCaptured;
     int activeGOO;
     Core core;
@@ -17,10 +17,16 @@ public class Faction {
 
     Faction(Core core) {
         this.core = core;
+        energy = 8;
+        cultistAlive = 6;
+        gatesControlled = 1;
+        unitsCaptured = 0;
+        activeGOO = 0;
+        victoryPoints = 0;
     }
 
     void recountEnergy() {
-        energy = cultistAlive + unitsCaptured + 2 * GatesControlled + core.entityBase.neutralGateExists;
+        energy = cultistAlive + unitsCaptured + 2 * gatesControlled + core.entityBase.neutralGateExists;
     }
 
     void getElderSign() {

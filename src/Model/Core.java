@@ -13,6 +13,7 @@ public class Core {
     CommandTree ct;
     FactionBase factionBase;
     Ritual ritual;
+    int turn;
 
     public class InvalidNumOfPlayersException extends Exception {
 

@@ -176,5 +176,19 @@ class CommandTree {
     }
 
     static void otherPrep(Core core, Node curNode) {
+        core.turn = 0;
+        for (FactionType faction : core.factionsList) {
+
+        }
     }
+
+    static void prepareActionSet(FactionType faction, Core core, Node curNode) {
+
+    }
+
+    static void energyRecount(Core core) {
+        // recount enegry
+    }
+
+    // static void
 }
