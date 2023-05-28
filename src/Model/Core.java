@@ -47,8 +47,8 @@ public class Core {
         map = new GameMap(numOfPlayers, this);
 
         entityBase = new EntityBase(factionsList);
-        ct = new CommandTree(this);
         factionBase = new FactionBase(this);
+        ct = new CommandTree(this);
         ritual = new Ritual(this);
         turn = 0;
     }
