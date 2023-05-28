@@ -385,58 +385,89 @@ public class GameMap {
         ArrayList<Location> OpenerOfTheWay = new ArrayList<>();
         ArrayList<Location> Sleeper = new ArrayList<>();
         ArrayList<Location> Windwalker = new ArrayList<>();
-        if(core.numOfPlayers == 2 || core.numOfPlayers == 3){
-            for(int i = 0; i < locations.size(); i ++){
+        if (core.numOfPlayers == 2 || core.numOfPlayers == 3) {
+            for (int i = 0; i < locations.size(); i++) {
                 String s = locations.get(i).name;
-                if(s.equals("South Pacific")) GreatCthulhu.add(locations.get(i));
-                if(s.equals("Asia")) CrawlingChaos.add(locations.get(i));
-                if(s.equals("Africa")) BlackGoat.add(locations.get(i));
-                if(s.equals("Europe")) YellowSign.add(locations.get(i));
-                if(s.equals("North America")) Sleeper.add(locations.get(i));
-                if(s.equals("Arctic Ocean") || s.equals("Antarctica")) Windwalker.add(locations.get(i));
-                if(!s.equals("South Pacific") && !s.equals("Asia") && !s.equals("Africa") && !s.equals("Europe") && !s.equals("North America") && !s.equals("Arctic Ocean") && !s.equals("Antarctica")){
+                if (s.equals("South Pacific"))
+                    GreatCthulhu.add(locations.get(i));
+                if (s.equals("Asia"))
+                    CrawlingChaos.add(locations.get(i));
+                if (s.equals("Africa"))
+                    BlackGoat.add(locations.get(i));
+                if (s.equals("Europe"))
+                    YellowSign.add(locations.get(i));
+                if (s.equals("North America"))
+                    Sleeper.add(locations.get(i));
+                if (s.equals("Arctic Ocean") || s.equals("Antarctica"))
+                    Windwalker.add(locations.get(i));
+                if (!s.equals("South Pacific") && !s.equals("Asia") && !s.equals("Africa") && !s.equals("Europe")
+                        && !s.equals("North America") && !s.equals("Arctic Ocean") && !s.equals("Antarctica")) {
                     OpenerOfTheWay.add(locations.get(i));
                 }
             }
         }
-        if(core.numOfPlayers == 4){
-            for(int i = 0; i < locations.size(); i ++){
+        if (core.numOfPlayers == 4) {
+            for (int i = 0; i < locations.size(); i++) {
                 String s = locations.get(i).name;
-                if(s.equals("South Pacific")) GreatCthulhu.add(locations.get(i));
-                if(s.equals("South Asia")) CrawlingChaos.add(locations.get(i));
-                if(s.equals("West Africa")) BlackGoat.add(locations.get(i));
-                if(s.equals("Europe")) YellowSign.add(locations.get(i));
-                if(s.equals("North America")) Sleeper.add(locations.get(i));
-                if(s.equals("Arctic Ocean") || s.equals("Antarctica")) Windwalker.add(locations.get(i));
-                if(!s.equals("South Pacific") && !s.equals("South Asia") && !s.equals("West Africa") && !s.equals("Europe") && !s.equals("North America") && !s.equals("Arctic Ocean") && !s.equals("Antarctica")){
+                if (s.equals("South Pacific"))
+                    GreatCthulhu.add(locations.get(i));
+                if (s.equals("South Asia"))
+                    CrawlingChaos.add(locations.get(i));
+                if (s.equals("West Africa"))
+                    BlackGoat.add(locations.get(i));
+                if (s.equals("Europe"))
+                    YellowSign.add(locations.get(i));
+                if (s.equals("North America"))
+                    Sleeper.add(locations.get(i));
+                if (s.equals("Arctic Ocean") || s.equals("Antarctica"))
+                    Windwalker.add(locations.get(i));
+                if (!s.equals("South Pacific") && !s.equals("South Asia") && !s.equals("West Africa")
+                        && !s.equals("Europe") && !s.equals("North America") && !s.equals("Arctic Ocean")
+                        && !s.equals("Antarctica")) {
                     OpenerOfTheWay.add(locations.get(i));
                 }
             }
         }
-        if(core.numOfPlayers == 5){
-            for(int i = 0; i < locations.size(); i ++){
+        if (core.numOfPlayers == 5) {
+            for (int i = 0; i < locations.size(); i++) {
                 String s = locations.get(i).name;
-                if(s.equals("South Pacific")) GreatCthulhu.add(locations.get(i));
-                if(s.equals("South Asia")) CrawlingChaos.add(locations.get(i));
-                if(s.equals("West Africa")) BlackGoat.add(locations.get(i));
-                if(s.equals("Europe")) YellowSign.add(locations.get(i));
-                if(s.equals("North America West")) Sleeper.add(locations.get(i));
-                if(s.equals("Arctic Ocean") || s.equals("Antarctica")) Windwalker.add(locations.get(i));
-                if(!s.equals("South Pacific") && !s.equals("South Asia") && !s.equals("West Africa") && !s.equals("Europe") && !s.equals("North America West") && !s.equals("Arctic Ocean") && !s.equals("Antarctica")){
+                if (s.equals("South Pacific"))
+                    GreatCthulhu.add(locations.get(i));
+                if (s.equals("South Asia"))
+                    CrawlingChaos.add(locations.get(i));
+                if (s.equals("West Africa"))
+                    BlackGoat.add(locations.get(i));
+                if (s.equals("Europe"))
+                    YellowSign.add(locations.get(i));
+                if (s.equals("North America West"))
+                    Sleeper.add(locations.get(i));
+                if (s.equals("Arctic Ocean") || s.equals("Antarctica"))
+                    Windwalker.add(locations.get(i));
+                if (!s.equals("South Pacific") && !s.equals("South Asia") && !s.equals("West Africa")
+                        && !s.equals("Europe") && !s.equals("North America West") && !s.equals("Arctic Ocean")
+                        && !s.equals("Antarctica")) {
                     OpenerOfTheWay.add(locations.get(i));
                 }
             }
         }
-        if(core.numOfPlayers == 6){
-            for(int i = 0; i < locations.size(); i ++){
+        if (core.numOfPlayers == 6) {
+            for (int i = 0; i < locations.size(); i++) {
                 String s = locations.get(i).name;
-                if(s.equals("South Pacific")) GreatCthulhu.add(locations.get(i));
-                if(s.equals("South Asia")) CrawlingChaos.add(locations.get(i));
-                if(s.equals("West Africa")) BlackGoat.add(locations.get(i));
-                if(s.equals("Europe")) YellowSign.add(locations.get(i));
-                if(s.equals("North America West")) Sleeper.add(locations.get(i));
-                if(s.equals("Arctic Ocean") || s.equals("Mountains of Madness")) Windwalker.add(locations.get(i));
-                if(!s.equals("South Pacific") && !s.equals("South Asia") && !s.equals("West Africa") && !s.equals("Europe") && !s.equals("North America West") && !s.equals("Arctic Ocean") && !s.equals("Mountains of Madness")){
+                if (s.equals("South Pacific"))
+                    GreatCthulhu.add(locations.get(i));
+                if (s.equals("South Asia"))
+                    CrawlingChaos.add(locations.get(i));
+                if (s.equals("West Africa"))
+                    BlackGoat.add(locations.get(i));
+                if (s.equals("Europe"))
+                    YellowSign.add(locations.get(i));
+                if (s.equals("North America West"))
+                    Sleeper.add(locations.get(i));
+                if (s.equals("Arctic Ocean") || s.equals("Mountains of Madness"))
+                    Windwalker.add(locations.get(i));
+                if (!s.equals("South Pacific") && !s.equals("South Asia") && !s.equals("West Africa")
+                        && !s.equals("Europe") && !s.equals("North America West") && !s.equals("Arctic Ocean")
+                        && !s.equals("Mountains of Madness")) {
                     OpenerOfTheWay.add(locations.get(i));
                 }
             }
@@ -453,6 +484,7 @@ public class GameMap {
     ArrayList<ArrayList<Location>> startLoc = new ArrayList<>();
 
     void setStartUnits(FactionType faction, Location location) {
+        System.out.println(core.entityBase.getUnitsOfFaction(faction));
         ArrayList<Entity> units = core.entityBase.getUnitsOfFaction(faction);
         for (Entity en : units) {
             if (en.entityType == EntityType.Cultist) {
@@ -461,5 +493,6 @@ public class GameMap {
                 }
             }
         }
+        System.out.println(222);
     }
 }

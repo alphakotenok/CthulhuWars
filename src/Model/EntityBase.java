@@ -92,6 +92,11 @@ public class EntityBase {
     }
 
     ArrayList<Entity> getUnitsOfFaction(FactionType faction) {
-        return null;
+        ArrayList<Entity> ans = new ArrayList<>();
+        for (Entity e : entityList) {
+            if (e.faction == faction)
+                ans.add(e);
+        }
+        return ans;
     }
 }
