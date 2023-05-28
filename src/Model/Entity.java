@@ -6,7 +6,7 @@ import javafx.scene.image.Image;
 public class Entity {
 
     public enum EntityType {
-        cultist, monster, GOO, none
+        Cultist, Monster, GOO, None
     }
 
     public String name;
