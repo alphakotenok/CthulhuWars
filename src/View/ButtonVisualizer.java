@@ -19,7 +19,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 public class ButtonVisualizer {
     public static void displayContinentButtons() {
@@ -45,7 +48,7 @@ public class ButtonVisualizer {
             Variables.root.getChildren().add(continentsButton[continentID]);
         }
     }
-    
+
     public static void rebuildFactionPickButtons(int choosenFaction) {
         List<Node> nodeList = new ArrayList<>();
         List<Button> buttonList = new ArrayList<>();
@@ -177,6 +180,7 @@ public class ButtonVisualizer {
             Variables.root.getChildren().add(factionPickButtons[factionId]);
         }
     }
+
     public static void displayCommandButtons() {
         ArrayList<String> commands = Variables.core.getCommandList();
         double thisHeight = Variables.SCREEN_HEIGHT / (commands.size() + 1);
@@ -190,7 +194,19 @@ public class ButtonVisualizer {
         Button[] commandButton = new Button[commands.size()];
         for (int commandID = 0; commandID < commands.size(); commandID++) {
             commandButton[commandID] = new Button();
-            commandButton[commandID].setText(commands.get(commandID));
+            TextFlow textFlowFaction = new TextFlow();
+            Text[] textEntity = new Text[commands.get(commandID).length() * 2];
+            for (int faction = 0; faction < commands.get(commandID).length(); faction++) {
+                int factionID = commands.get(commandID).charAt(faction);
+                textEntity[faction * 2] = new Text(Variables.NAME_OF_FACTIONS[factionID]);
+                textEntity[faction * 2].setFill(Variables.COLOR_OF_FACTIONS[factionID]);
+                textEntity[faction * 2 + 1] = new Text(" -> ");
+                textEntity[faction * 2 + 1].setFill(Color.BLACK);
+                textFlowFaction.getChildren().add(textEntity[faction * 2]);
+                textFlowFaction.getChildren().add(textEntity[faction * 2 + 1]);
+            }
+
+            commandButton[commandID].setGraphic(textFlowFaction);
             commandButton[commandID].setFont(Font.font("Arial", 40));
             commandButton[commandID].setPrefHeight(thisHeight);
             commandButton[commandID].setLayoutY((commandID + 1) * thisHeight);
