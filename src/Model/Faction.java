@@ -31,6 +31,7 @@ public class Faction {
 
     void recountEnergy() {
         energy = cultistAlive + unitsCaptured + 2 * gatesControlled + core.entityBase.neutralGateExists;
+        unitsCaptured = 0;
     }
 
     void getElderSign() {
