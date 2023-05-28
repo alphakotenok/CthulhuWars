@@ -8,6 +8,7 @@ class FactionBase {
     ArrayList<Faction> factList;
 
     FactionBase(Core core) {
+        factList = new ArrayList<>();
         factList.add(new GreatCthulhu(core));
     }
 

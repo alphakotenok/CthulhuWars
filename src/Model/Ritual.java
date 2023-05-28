@@ -40,7 +40,7 @@ class Ritual {
     void performRitual(FactionType faction) {
         Faction curFac = core.factionBase.getFactionFromEnum(faction);
         curFac.energy -= ritualTrack.get(ritualState);
-        curFac.victoryPoints += curFac.GatesControlled;
+        curFac.victoryPoints += curFac.gatesControlled;
         for (int i = 0; i < curFac.activeGOO; ++i)
             curFac.getElderSign();
         ++ritualState;
