@@ -117,7 +117,8 @@ class CommandTree {
             k += order3.get(i).toString();
         }
         Node n = new Node(k,
-                "Choose " + core.factionBase.getFactionNameFromEnum(core.factionsList.get(0)) + " start location",
+                "Choose " + core.factionBase.getFactionNameFromEnum(FactionType.values()[order3.get(0)])
+                        + " start location",
                 CommandTree::chooseFactionPermutation, order3, core);
         curNode.adj.add(n);
         while (nextPermutation.findNextPermutation(order2)) {
@@ -129,7 +130,8 @@ class CommandTree {
                 k += order3.get(i).toString();
             }
             n = new Node(k,
-                    "Choose " + core.factionBase.getFactionNameFromEnum(core.factionsList.get(0)) + " start location",
+                    "Choose " + core.factionBase.getFactionNameFromEnum(FactionType.values()[order3.get(0)])
+                            + " start location",
                     CommandTree::chooseFactionPermutation, order3, core);
             curNode.adj.add(n);
         }
@@ -171,13 +173,13 @@ class CommandTree {
                 core.map.startLoc.get(core.factionsList.get(data.get(0)).ordinal()).get(data.get(1)));
         int num = data.get(0) + 1;
         if (num >= core.numOfPlayers) {
-            prepareActionSet(new ArrayList<Integer>(Arrays.asList(core.factionsList.get(0).ordinal())), core, curNode);
+            prepareActionSet(null, core, curNode);
             return;
         }
         for (int j = 0; j < core.map.startLoc.get(core.factionsList.get(num).ordinal()).size(); ++j) {
             String desc;
             if (num == core.numOfPlayers - 1)
-                desc = core.factionBase.getFactionNameFromEnum(core.factionsList.get(0)) + " action";
+                desc = core.factionBase.getFactionNameFromEnum(core.factionsList.get(core.turn)) + " action";
             else
                 desc = "Choose " + core.factionBase.getFactionNameFromEnum(core.factionsList.get(num + 1))
                         + " start location";
@@ -188,19 +190,35 @@ class CommandTree {
     }
 
     static void prepareActionSet(ArrayList<Integer> data, Core core, Node curNode) {
-        Faction faction = core.factionBase.getFactionFromEnum(FactionType.values()[data.get(0)]);
+        Faction faction = core.factionBase.getFactionFromEnum(FactionType.values()[core.turn]);
         if (faction.skip) {
             if (core.factionBase.totalSkip == core.numOfPlayers) {
                 // TODO: if everyone skip
+                curNode.desc = "turnEnd";
+                return;
             }
-            int nextNum = (data.get(0) + 1) % core.numOfPlayers;
             Node n = new Node("Skip",
-                    core.factionBase.getFactionNameFromEnum(core.factionsList.get(nextNum)) + " action",
-                    CommandTree::prepareActionSet, new ArrayList<Integer>(Arrays.asList(nextNum)), core);
+                    core.factionBase.getFactionNameFromEnum(core.factionsList.get((core.turn + 1) % core.numOfPlayers))
+                            + " action",
+                    CommandTree::prepareActionSet, null, core);
             curNode.adj.add(n);
+            core.turn = (core.turn + 1) % core.numOfPlayers;
         } else {
 
+            Node n = new Node("Skip",
+                    core.factionBase.getFactionNameFromEnum(core.factionsList.get((core.turn + 1) % core.numOfPlayers))
+                            + " action",
+                    CommandTree::skipTurn, data, core);
+            curNode.adj.add(n);
         }
+    }
+
+    static void skipTurn(ArrayList<Integer> data, Core core, Node curNode) {
+        Faction faction = core.factionBase.getFactionFromEnum(FactionType.values()[core.turn]);
+        faction.skip = true;
+        core.factionBase.totalSkip++;
+        core.turn = (core.turn + 1) % core.numOfPlayers;
+        prepareActionSet(data, core, curNode);
     }
 
     static void energyRecount(Core core) {
