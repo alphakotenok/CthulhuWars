@@ -18,6 +18,7 @@ public class Faction {
     FactionType faction;
 
     Faction(String name, Core core) {
+        elderSignList = new ArrayList<>();
         this.core = core;
         this.name = name;
         energy = 8;

@@ -16,6 +16,7 @@ public class Core {
     int turn;
     boolean correcrtWay;
     int firstPlayer;
+    boolean endOfTheGame;
 
     public class InvalidNumOfPlayersException extends Exception {
 
@@ -55,6 +56,7 @@ public class Core {
         turn = 0;
         correcrtWay = true;
         firstPlayer = 0;
+        endOfTheGame = false;
     }
 
     public int getNumOfPlayers() {
