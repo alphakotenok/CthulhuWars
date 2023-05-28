@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 import Model.Faction.FactionType;
-
+ 
 class Ritual {
     ArrayList<Integer> elderSignPool;
     ArrayList<Integer> ritualTrack;

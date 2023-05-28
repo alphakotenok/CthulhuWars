@@ -1,7 +1,7 @@
 package Model;
 
 class GreatCthulhu extends Faction {
-    GreatCthulhu(Core core) {
-        super(core);
+    GreatCthulhu(String name, Core core) {
+        super(name, core);
     }
 }

@@ -484,7 +484,6 @@ public class GameMap {
     ArrayList<ArrayList<Location>> startLoc = new ArrayList<>();
 
     void setStartUnits(FactionType faction, Location location) {
-        System.out.println(core.entityBase.getUnitsOfFaction(faction));
         ArrayList<Entity> units = core.entityBase.getUnitsOfFaction(faction);
         for (Entity en : units) {
             if (en.entityType == EntityType.Cultist) {
@@ -493,6 +492,5 @@ public class GameMap {
                 }
             }
         }
-        System.out.println(222);
     }
 }
