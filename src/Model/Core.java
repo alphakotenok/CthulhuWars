@@ -104,4 +104,25 @@ public class Core {
     void endOfTheGame() {
 
     }
+
+    public ArrayList<Integer> getPowerList() {
+        ArrayList<Integer> ans = new ArrayList<>();
+        for (int i = 0; i < numOfPlayers; ++i)
+            ans.add(factionBase.factList.get(factionsList.get(i).ordinal()).energy);
+        return ans;
+    }
+
+    public ArrayList<Integer> getDoomList() {
+        ArrayList<Integer> ans = new ArrayList<>();
+        for (int i = 0; i < numOfPlayers; ++i)
+            ans.add(factionBase.factList.get(factionsList.get(i).ordinal()).victoryPoints);
+        return ans;
+    }
+
+    public ArrayList<Integer> getElderSignList() {
+        ArrayList<Integer> ans = new ArrayList<>();
+        for (int i = 0; i < numOfPlayers; ++i)
+            ans.add(factionBase.factList.get(factionsList.get(i).ordinal()).elderSignList.size());
+        return ans;
+    }
 }
