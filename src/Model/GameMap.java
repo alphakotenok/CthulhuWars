@@ -441,7 +441,6 @@ public class GameMap {
                 }
             }
         }
-        ArrayList<ArrayList<Location>> startLoc = new ArrayList<>();
         startLoc.add(GreatCthulhu);
         startLoc.add(CrawlingChaos);
         startLoc.add(BlackGoat);
@@ -451,7 +450,7 @@ public class GameMap {
         startLoc.add(Windwalker);
     }
 
-    ArrayList<ArrayList<Location>> startLoc;
+    ArrayList<ArrayList<Location>> startLoc = new ArrayList<>();
 
     void setStartUnits(FactionType faction, Location location) {
         ArrayList<Entity> units = core.entityBase.getUnitsOfFaction(faction);
