@@ -14,7 +14,7 @@ public class OrderChooseButton implements EventHandler<ActionEvent> {
 
     public void handle(ActionEvent arg0) {
         ActionsMisc.removeButtons(OrderChooseButton.class);
-        ActionsMisc.removeLabel(Variables.core.getCommandDescription());
+        ActionsMisc.removeLabelByText(Variables.core.getCommandDescription());
         Variables.core.activateCommand(commandID);
         try {
             Visualizer.createField(Variables.numberOfPlayers);
