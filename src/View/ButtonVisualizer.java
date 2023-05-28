@@ -244,7 +244,6 @@ public class ButtonVisualizer {
 
     public static void getcommandButton() {
         ArrayList<String> commands = Variables.core.getCommandList();
-        System.out.println(commands.size());
         double thisHeight = Variables.SCREEN_HEIGHT / (commands.size() + 1);
         Label label = new Label(Variables.core.getCommandDescription());
         label.setPrefHeight(thisHeight);
