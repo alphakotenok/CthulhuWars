@@ -211,11 +211,11 @@ class CommandTree {
         } else {
 
             // TODO: delete this temp code
-            if (core.factionBase.getFactionFromEnum(core.factionsList.get(core.getNextTurn(core.turn))).energy > 0) {
+            if (core.factionBase.getFactionFromEnum(core.factionsList.get(core.turn)).energy > 0) {
                 Node n = new Node("Some action to spend one energy",
                         core.factionBase.getFactionNameFromEnum(core.factionsList.get(core.getNextTurn(core.turn)))
                                 + " action",
-                        CommandTree::passTurn, data, core);
+                        CommandTree::tempFunc, data, core);
                 curNode.adj.add(n);
             }
             Node n = new Node("Pass and lose remaining power",
@@ -228,11 +228,12 @@ class CommandTree {
 
     static void tempFunc(ArrayList<Integer> data, Core core, Node curNode) {
         core.factionBase.getFactionFromEnum(core.factionsList.get(core.turn)).energy -= 1;
+        core.turn = core.getNextTurn(core.turn);
         prepareActionSet(data, core, curNode);
     }
 
     static void passTurn(ArrayList<Integer> data, Core core, Node curNode) {
-        Faction faction = core.factionBase.getFactionFromEnum(FactionType.values()[core.turn]);
+        Faction faction = core.factionBase.getFactionFromEnum(core.factionsList.get(core.turn));
         faction.skip = true;
         core.factionBase.totalSkip++;
         faction.energy = 0;
