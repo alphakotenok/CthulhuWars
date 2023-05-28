@@ -410,6 +410,7 @@ public class GameMap {
         if(numOfPlayers <= 5) locations.add(ArcticOcean);
         if(numOfPlayers <= 4) locations.add(NorthAmerica);
         if(numOfPlayers >= 5) locations.add(NorthAmericaEast);
+        if(numOfPlayers >= 5) locations.add(NorthAmericaWest);
         if(numOfPlayers == 6) locations.add(ArcticOceanSmall);
         if(numOfPlayers == 6) locations.add(BeringSea);
         if(numOfPlayers >= 5) locations.add(CentralAmerica);
