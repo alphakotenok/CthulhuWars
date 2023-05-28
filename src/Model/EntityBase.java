@@ -10,6 +10,7 @@ import javafx.scene.image.Image;
 public class EntityBase {
 
     ArrayList<Entity> entityList;
+    int neutralGateExists;
 
     void addEntityToList(String name, EntityType entityType, FactionType faction, int cost, int combat) {
 
@@ -80,6 +81,7 @@ public class EntityBase {
             addEntityToList("Hastur", EntityType.GOO, FactionType.YellowSign, 10, 0);
             return;
         }
+        neutralGateExists = 0;
     }
 
     EntityBase(ArrayList<FactionType> factions) {
