@@ -19,9 +19,12 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 
 public class ButtonVisualizer {
@@ -158,14 +161,14 @@ public class ButtonVisualizer {
 
     public static void displayFactionPickButtons(int numberOfPlayers) {
         double thisHeight = Variables.SCREEN_HEIGHT / (Variables.NUMBER_OF_FACTIONS + 1);
-        
+
         Label label = new Label("player " + 0);
         label.setPrefHeight(thisHeight);
         label.setPrefWidth(Variables.SCREEN_WIDTH);
         label.setAlignment(Pos.CENTER);
         label.setFont(Font.font("Arial", 40));
         Variables.root.getChildren().add(label);
-        Button[] factionPickButtons = new Button[Variables.NUMBER_OF_FACTIONS + 1];
+        Button[] factionPickButtons = new Button[Variables.NUMBER_OF_FACTIONS];
         for (int factionId = 0; factionId < Variables.NUMBER_OF_FACTIONS; factionId++) {
             factionPickButtons[factionId] = new Button();
             factionPickButtons[factionId].setTextFill(Variables.COLOR_OF_FACTIONS[factionId]);
@@ -188,26 +191,27 @@ public class ButtonVisualizer {
         label.setPrefHeight(thisHeight);
         label.setPrefWidth(Variables.SCREEN_WIDTH);
         label.setAlignment(Pos.CENTER);
-        label.setFont(Font.font("Arial", 40));
         Variables.root.getChildren().add(label);
 
         Button[] commandButton = new Button[commands.size()];
         for (int commandID = 0; commandID < commands.size(); commandID++) {
             commandButton[commandID] = new Button();
             TextFlow textFlowFaction = new TextFlow();
-            Text[] textEntity = new Text[commands.get(commandID).length() * 2];
+
             for (int faction = 0; faction < commands.get(commandID).length(); faction++) {
-                int factionID = commands.get(commandID).charAt(faction);
-                textEntity[faction * 2] = new Text(Variables.NAME_OF_FACTIONS[factionID]);
-                textEntity[faction * 2].setFill(Variables.COLOR_OF_FACTIONS[factionID]);
-                textEntity[faction * 2 + 1] = new Text(" -> ");
-                textEntity[faction * 2 + 1].setFill(Color.BLACK);
-                textFlowFaction.getChildren().add(textEntity[faction * 2]);
-                textFlowFaction.getChildren().add(textEntity[faction * 2 + 1]);
+                int factionID = commands.get(commandID).charAt(faction) - '0';
+                System.out.println(factionID);
+                Text textEntity1 = new Text(Variables.NAME_OF_FACTIONS[factionID]);
+                textEntity1.setFill(Variables.COLOR_OF_FACTIONS[factionID]);
+                Text textEntity2 = new Text(" -> ");
+                textEntity2.setFill(Color.BLACK);
+                textFlowFaction.getChildren().add(textEntity1);
+                if (faction != commands.get(commandID).length() - 1)
+                    textFlowFaction.getChildren().add(textEntity2);
             }
+            textFlowFaction.setTextAlignment(TextAlignment.CENTER);
 
             commandButton[commandID].setGraphic(textFlowFaction);
-            commandButton[commandID].setFont(Font.font("Arial", 40));
             commandButton[commandID].setPrefHeight(thisHeight);
             commandButton[commandID].setLayoutY((commandID + 1) * thisHeight);
             commandButton[commandID].setPrefWidth(Variables.SCREEN_WIDTH);
