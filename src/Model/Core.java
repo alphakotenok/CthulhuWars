@@ -90,4 +90,8 @@ public class Core {
 
         }
     }
+
+    public String getCommandDescription() {
+        return ct.curNode.desc;
+    }
 }
