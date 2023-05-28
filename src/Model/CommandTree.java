@@ -152,7 +152,9 @@ class CommandTree {
         for (int i = 0; i < core.numOfPlayers; ++i) {
             core.factionsList.add(FactionType.values()[perm.get(i)]);
         }
+
         for (int j = 0; j < core.map.startLoc.get(core.factionsList.get(0).ordinal()).size(); ++j) {
+
             Node n = new Node(core.map.startLoc.get(core.factionsList.get(0).ordinal()).get(j).name,
                     "Choose 2 player start location",
                     CommandTree::placeStart, new ArrayList<Integer>(Arrays.asList(0, j)), core);
