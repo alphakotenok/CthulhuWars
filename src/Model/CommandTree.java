@@ -170,7 +170,7 @@ class CommandTree {
         core.map.setStartUnits(core.factionsList.get(data.get(0)), core.map.locations.get(data.get(1)));
         int num = data.get(0) + 1;
         if (num >= core.numOfPlayers) {
-            prepareActionSet(core.factionsList.get(0), core, curNode);
+            prepareActionSet(new ArrayList<Integer>(Arrays.asList(core.factionsList.get(0).ordinal())), core, curNode);
             return;
         }
         for (int j = 0; j < core.map.startLoc.get(core.factionsList.get(num).ordinal()).size(); ++j) {
@@ -186,9 +186,20 @@ class CommandTree {
         }
     }
 
-    static void prepareActionSet(FactionType fact, Core core, Node curNode) {
-        Faction faction = core.factionBase.getFactionFromEnum(fact);
-        // if(faction.skip)
+    static void prepareActionSet(ArrayList<Integer> data, Core core, Node curNode) {
+        Faction faction = core.factionBase.getFactionFromEnum(FactionType.values()[data.get(0)]);
+        if (faction.skip) {
+            if (core.factionBase.totalSkip == core.numOfPlayers) {
+                // TODO: if everyone skip
+            }
+            int nextNum = (data.get(0) + 1) % core.numOfPlayers;
+            Node n = new Node("Skip",
+                    core.factionBase.getFactionNameFromEnum(core.factionsList.get(nextNum)) + " action",
+                    CommandTree::prepareActionSet, new ArrayList<Integer>(Arrays.asList(nextNum)), core);
+            curNode.adj.add(n);
+        } else {
+
+        }
     }
 
     static void energyRecount(Core core) {
