@@ -167,7 +167,8 @@ class CommandTree {
     }
 
     static void placeStart(ArrayList<Integer> data, Core core, Node curNode) {
-        core.map.setStartUnits(core.factionsList.get(data.get(0)), core.map.locations.get(data.get(1)));
+        core.map.setStartUnits(core.factionsList.get(data.get(0)),
+                core.map.startLoc.get(core.factionsList.get(data.get(0)).ordinal()).get(data.get(1)));
         int num = data.get(0) + 1;
         if (num >= core.numOfPlayers) {
             prepareActionSet(new ArrayList<Integer>(Arrays.asList(core.factionsList.get(0).ordinal())), core, curNode);
