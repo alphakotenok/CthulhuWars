@@ -1,7 +1,7 @@
 package Controler;
 
 import Model.Variables;
-import View.Misc;
+import View.ActionsMisc;
 import View.Visualizer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,8 +13,8 @@ public class OrderChooseButton implements EventHandler<ActionEvent> {
     }
 
     public void handle(ActionEvent arg0) {
-        Misc.removeButtons(OrderChooseButton.class);
-        Misc.removeLabel(Variables.core.getCommandDescription());
+        ActionsMisc.removeButtons(OrderChooseButton.class);
+        ActionsMisc.removeLabel(Variables.core.getCommandDescription());
         Variables.core.activateCommand(commandID);
         try {
             Visualizer.createField(Variables.numberOfPlayers);
