@@ -14,9 +14,8 @@ public class CommandButton implements EventHandler<ActionEvent> {
     }
 
     public void handle(ActionEvent arg0) {
-        Misc.removeButtons(CommandButton.class);
-        Misc.removeLabel(Variables.core.getCommandDescription());
         Variables.core.activateCommand(commandID);
+        Misc.removeButtons(CommandButton.class);
         ButtonVisualizer.displayCommandButtons();
         return;
     }

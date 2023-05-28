@@ -8,9 +8,8 @@ import javafx.event.EventHandler;
 
 public class OrderChooseButton implements EventHandler<ActionEvent> {
     int commandID;
-
-    public OrderChooseButton(int commandID) {
-        this.commandID = commandID;
+    public OrderChooseButton(int commandID){
+        this.commandID = commandID; 
     }
 
     public void handle(ActionEvent arg0) {
@@ -24,5 +23,5 @@ public class OrderChooseButton implements EventHandler<ActionEvent> {
         }
         return;
     }
-
+    
 }
