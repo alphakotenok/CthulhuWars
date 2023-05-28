@@ -25,57 +25,57 @@ public class EntityBase {
 
     void entityListInit(FactionType faction) {
         if (faction == FactionType.CrawlingChaos) {
-            addEntityToList("Acolyte (blue)", EntityType.cultist, FactionType.CrawlingChaos, 1, 0);
-            addEntityToList("Nightgaunt", EntityType.monster, FactionType.CrawlingChaos, 1, 0);
-            addEntityToList("Flying Polyp", EntityType.monster, FactionType.CrawlingChaos, 2, 2);
-            addEntityToList("Hunting Horror", EntityType.monster, FactionType.CrawlingChaos, 3, 3);
+            addEntityToList("Acolyte (blue)", EntityType.Cultist, FactionType.CrawlingChaos, 1, 0);
+            addEntityToList("Nightgaunt", EntityType.Monster, FactionType.CrawlingChaos, 1, 0);
+            addEntityToList("Flying Polyp", EntityType.Monster, FactionType.CrawlingChaos, 2, 2);
+            addEntityToList("Hunting Horror", EntityType.Monster, FactionType.CrawlingChaos, 3, 3);
             addEntityToList("Nyarlathotep", EntityType.GOO, FactionType.CrawlingChaos, 10, 0);
             return;
         }
         if (faction == FactionType.GreatCthulhu) {
-            addEntityToList("Acolyte (green)", EntityType.cultist, FactionType.GreatCthulhu, 1, 0);
-            addEntityToList("Deep One", EntityType.monster, FactionType.GreatCthulhu, 1, 1);
-            addEntityToList("Shoggoth", EntityType.monster, FactionType.GreatCthulhu, 2, 2);
-            addEntityToList("Star Spawn", EntityType.monster, FactionType.GreatCthulhu, 3, 3);
+            addEntityToList("Acolyte (green)", EntityType.Cultist, FactionType.GreatCthulhu, 1, 0);
+            addEntityToList("Deep One", EntityType.Monster, FactionType.GreatCthulhu, 1, 1);
+            addEntityToList("Shoggoth", EntityType.Monster, FactionType.GreatCthulhu, 2, 2);
+            addEntityToList("Star Spawn", EntityType.Monster, FactionType.GreatCthulhu, 3, 3);
             addEntityToList("Cthulhu", EntityType.GOO, FactionType.GreatCthulhu, 4, 6);
             return;
         }
         if (faction == FactionType.BlackGoat) {
-            addEntityToList("Acolyte (red)", EntityType.cultist, FactionType.BlackGoat, 1, 0);
-            addEntityToList("Ghoul", EntityType.monster, FactionType.BlackGoat, 1, 0);
-            addEntityToList("Fungi from Yuggoth", EntityType.monster, FactionType.BlackGoat, 2, 1);
-            addEntityToList("Dark Young", EntityType.monster, FactionType.BlackGoat, 3, 2);
+            addEntityToList("Acolyte (red)", EntityType.Cultist, FactionType.BlackGoat, 1, 0);
+            addEntityToList("Ghoul", EntityType.Monster, FactionType.BlackGoat, 1, 0);
+            addEntityToList("Fungi from Yuggoth", EntityType.Monster, FactionType.BlackGoat, 2, 1);
+            addEntityToList("Dark Young", EntityType.Monster, FactionType.BlackGoat, 3, 2);
             addEntityToList("Shub-Niggurath", EntityType.GOO, FactionType.BlackGoat, 8, 0);
             return;
         }
         if (faction == FactionType.OpenerOfTheWay) {
-            addEntityToList("Acolyte (purple)", EntityType.cultist, FactionType.OpenerOfTheWay, 1, 0);
-            addEntityToList("Mutant", EntityType.monster, FactionType.OpenerOfTheWay, 2, 1);
-            addEntityToList("Abomination", EntityType.monster, FactionType.OpenerOfTheWay, 3, 2);
-            addEntityToList("Spawn of Yog-Sothoth", EntityType.monster, FactionType.OpenerOfTheWay, 4, 3);
+            addEntityToList("Acolyte (purple)", EntityType.Cultist, FactionType.OpenerOfTheWay, 1, 0);
+            addEntityToList("Mutant", EntityType.Monster, FactionType.OpenerOfTheWay, 2, 1);
+            addEntityToList("Abomination", EntityType.Monster, FactionType.OpenerOfTheWay, 3, 2);
+            addEntityToList("Spawn of Yog-Sothoth", EntityType.Monster, FactionType.OpenerOfTheWay, 4, 3);
             addEntityToList("Yog-Sothoth", EntityType.GOO, FactionType.OpenerOfTheWay, 6, 0);
             return;
         }
         if (faction == FactionType.Sleeper) {
-            addEntityToList("Acolyte (orange)", EntityType.cultist, FactionType.Sleeper, 1, 0);
-            addEntityToList("Wizard", EntityType.monster, FactionType.Sleeper, 1, 0);
-            addEntityToList("Serpent Man", EntityType.monster, FactionType.Sleeper, 2, 1);
-            addEntityToList("Formless Spawn", EntityType.monster, FactionType.Sleeper, 3, 0);
+            addEntityToList("Acolyte (orange)", EntityType.Cultist, FactionType.Sleeper, 1, 0);
+            addEntityToList("Wizard", EntityType.Monster, FactionType.Sleeper, 1, 0);
+            addEntityToList("Serpent Man", EntityType.Monster, FactionType.Sleeper, 2, 1);
+            addEntityToList("Formless Spawn", EntityType.Monster, FactionType.Sleeper, 3, 0);
             addEntityToList("Tsathoggua", EntityType.GOO, FactionType.Sleeper, 8, 0);
             return;
         }
         if (faction == FactionType.Windwalker) {
-            addEntityToList("Acolyte (white)", EntityType.cultist, FactionType.Windwalker, 1, 0);
-            addEntityToList("Wendigo", EntityType.monster, FactionType.Windwalker, 1, 1);
-            addEntityToList("Gnoph-Keh", EntityType.monster, FactionType.Windwalker, 0, 3);
+            addEntityToList("Acolyte (white)", EntityType.Cultist, FactionType.Windwalker, 1, 0);
+            addEntityToList("Wendigo", EntityType.Monster, FactionType.Windwalker, 1, 1);
+            addEntityToList("Gnoph-Keh", EntityType.Monster, FactionType.Windwalker, 0, 3);
             addEntityToList("Rhan Tegoth", EntityType.GOO, FactionType.Windwalker, 6, 3);
             addEntityToList("Ithaqua", EntityType.GOO, FactionType.Windwalker, 6, 0);
             return;
         }
         if (faction == FactionType.YellowSign) {
-            addEntityToList("Acolyte (yellow)", EntityType.cultist, FactionType.YellowSign, 1, 0);
-            addEntityToList("Undead", EntityType.monster, FactionType.YellowSign, 1, 0);
-            addEntityToList("Byakhee", EntityType.monster, FactionType.YellowSign, 2, 0);
+            addEntityToList("Acolyte (yellow)", EntityType.Cultist, FactionType.YellowSign, 1, 0);
+            addEntityToList("Undead", EntityType.Monster, FactionType.YellowSign, 1, 0);
+            addEntityToList("Byakhee", EntityType.Monster, FactionType.YellowSign, 2, 0);
             addEntityToList("King in Yellow", EntityType.GOO, FactionType.YellowSign, 4, 0);
             addEntityToList("Hastur", EntityType.GOO, FactionType.YellowSign, 10, 0);
             return;
@@ -87,5 +87,9 @@ public class EntityBase {
         for (FactionType faction : factions) {
             entityListInit(faction);
         }
+    }
+
+    ArrayList<Entity> getUnitsOfFaction(FactionType faction) {
+        return null;
     }
 }

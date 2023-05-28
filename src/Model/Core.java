@@ -41,10 +41,10 @@ public class Core {
         }
 
         this.numOfPlayers = numOfPlayers;
-        map = new GameMap(numOfPlayers);
+        map = new GameMap(numOfPlayers, this);
 
         entityBase = new EntityBase(factionsList);
-        ct = new CommandTree();
+        ct = new CommandTree(this);
     }
 
     public int getNumOfPlayers() {
@@ -89,5 +89,9 @@ public class Core {
         } catch (Exception e) {
 
         }
+    }
+
+    public String getCommandDescription() {
+        return ct.curNode.desc;
     }
 }

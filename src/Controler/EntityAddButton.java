@@ -1,8 +1,11 @@
-package View;
+package Controler;
 
 import Model.Entity;
 import Model.Location;
 import Model.Variables;
+import View.ButtonVisualizer;
+import View.EntityVisualizer;
+import View.Misc;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
@@ -16,12 +19,12 @@ public class EntityAddButton implements EventHandler<ActionEvent> {
     }
 
     public void handle(ActionEvent arg0) {
-        MapEntity.removeEntitiesFromLocation(continent);
+        EntityVisualizer.removeEntitiesFromMap(continent);
         Variables.core.addEntity(continent, entity);
-        MapEntity.placeOnMap(continent);
+        EntityVisualizer.placeEntitiesOnMap(continent);
         Misc.removeButtons(ContinentButton.class);
         Misc.removeButtons(EntityButton.class);
         Misc.removeButtons(EntityAddButton.class);
-        Visualizer.continentsButtons();
+        ButtonVisualizer.displayContinentButtons();
     }
 }

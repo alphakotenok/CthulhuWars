@@ -4,13 +4,16 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-import Model.Location;
+import Model.Core;
 import Model.Variables;
+import Model.Faction.FactionType;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import Model.Core.InvalidFactionsSetException;
+import Model.Core.InvalidNumOfPlayersException;
 
 public class Visualizer {
     static Boolean zoogCheck = false;
@@ -49,13 +52,14 @@ public class Visualizer {
         Button[] gameButton = new Button[countOfPlayers];
         double weight = Variables.SCREEN_WIDTH * Variables.PROCENT / countOfPlayers;
         double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
+
+        ArrayList<FactionType> orderFactions = Variables.core.getFactions();
         for (int i = 0; i < countOfPlayers; i++) {
             gameButton[i] = new Button();
             gameButton[i].setPrefHeight((Variables.SCREEN_HEIGHT - height) / 2);
             gameButton[i].setLayoutX(i * weight);
             gameButton[i].setPrefWidth(weight);
-
-            String logoName = "images/logo/Faction_" + Variables.NAME_OF_FRACTIONS[i] + ".png";
+            String logoName = "images/logo/Faction_" + orderFactions.get(i).name() + ".png";
             FileInputStream inputStream = new FileInputStream(logoName);
             Image logo = new Image(inputStream);
             ImageView logoView = new ImageView(logo);
@@ -79,30 +83,6 @@ public class Visualizer {
         }
     }
 
-    public static void continentsButtons() {
-        ArrayList<String> continent = new ArrayList<>();
-        for (Location location : Variables.core.getLocationsList()) {
-            continent.add(location.name);
-        }
-
-        int numberOfContinents = continent.size();
-        double height = Variables.SCREEN_HEIGHT / numberOfContinents;
-        Button[] continentsButton = new Button[numberOfContinents];
-
-        for (int continentID = 0; continentID < numberOfContinents; continentID++) {
-            continentsButton[continentID] = new Button();
-            continentsButton[continentID].setPrefHeight(height);
-            continentsButton[continentID].setLayoutY(continentID * height);
-            continentsButton[continentID].setPrefWidth(300);
-            continentsButton[continentID].setText(continent.get(continentID));
-            continentsButton[continentID].setLayoutX(Variables.SCREEN_WIDTH - 300);
-
-            continentsButton[continentID]
-                    .setOnAction(new ContinentButton(Variables.core.getLocationsList().get(continentID)));
-            Variables.root.getChildren().add(continentsButton[continentID]);
-        }
-    }
-
     public static void startGame() {
         Button startButton = new Button();
         startButton.setText("Start game");
@@ -112,7 +92,7 @@ public class Visualizer {
             @Override
             public void handle(ActionEvent event) {
                 Variables.root.getChildren().remove(startButton);
-                ButtonVisualizer.chooseCountOfPlayers();
+                ButtonVisualizer.displayCountOfPlayersButtons();
             }
         });
         Variables.root.getChildren().add(startButton);
@@ -141,9 +121,21 @@ public class Visualizer {
             Variables.root.getChildren().add(mapInitialization(numberOfPlayers));
             initializeGameButtons(numberOfPlayers);
             finishGame();
-            continentsButtons();
+            ButtonVisualizer.displayContinentButtons();
         } catch (Exception e) {
             throw e;
         }
+    }
+
+    public static void startCore(int numberOfPlayers, ArrayList<FactionType> factionList) {
+        try {
+            Variables.core = new Core(numberOfPlayers, factionList);
+        } catch (InvalidNumOfPlayersException e) {
+            e.printStackTrace();
+        } catch (InvalidFactionsSetException e) {
+            e.printStackTrace();
+        }
+        Variables.numberOfPlayers = numberOfPlayers;
+        ButtonVisualizer.displayCommandButtons();
     }
 }
