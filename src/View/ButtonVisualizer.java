@@ -2,6 +2,7 @@ package View;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import Controler.CommandButton;
 import Controler.ContinentButton;
@@ -185,12 +186,32 @@ public class ButtonVisualizer {
     }
 
     public static void displayCommandButtons() {
-        ArrayList<String> commands = Variables.core.getCommandList();
+        ArrayList<String> commandsAll = Variables.core.getCommandList();
+        ArrayList<String> commands = new ArrayList<>();
+
+        if (commandsAll.size() < Variables.NUMBER_OF_PERMUTATIONS) {
+            for (int commandsID = 0; commandsID < commandsAll.size(); commandsID++) {
+                commands.add(commandsAll.get(commandsID));
+            }
+        } else {
+            Random random = new Random();
+
+            while (commands.size() < Variables.NUMBER_OF_PERMUTATIONS) {
+                int randomIndex = random.nextInt(commandsAll.size());
+                String randomElement = commandsAll.get(randomIndex);
+
+                if (!commands.contains(randomElement)) {
+                    commands.add(randomElement);
+                }
+            }
+        }
+
         double thisHeight = Variables.SCREEN_HEIGHT / (commands.size() + 1);
         Label label = new Label("Choose players order");
         label.setPrefHeight(thisHeight);
         label.setPrefWidth(Variables.SCREEN_WIDTH);
         label.setAlignment(Pos.CENTER);
+        label.setFont(Font.font("Arial", 40));
         Variables.root.getChildren().add(label);
 
         Button[] commandButton = new Button[commands.size()];
@@ -200,11 +221,12 @@ public class ButtonVisualizer {
 
             for (int faction = 0; faction < commands.get(commandID).length(); faction++) {
                 int factionID = commands.get(commandID).charAt(faction) - '0';
-                System.out.println(factionID);
                 Text textEntity1 = new Text(Variables.NAME_OF_FACTIONS[factionID]);
                 textEntity1.setFill(Variables.COLOR_OF_FACTIONS[factionID]);
+                textEntity1.setFont(Font.font("Arial", 32));
                 Text textEntity2 = new Text(" -> ");
                 textEntity2.setFill(Color.BLACK);
+                textEntity2.setFont(Font.font("Arial", 32));
                 textFlowFaction.getChildren().add(textEntity1);
                 if (faction != commands.get(commandID).length() - 1)
                     textFlowFaction.getChildren().add(textEntity2);
@@ -215,8 +237,7 @@ public class ButtonVisualizer {
             commandButton[commandID].setPrefHeight(thisHeight);
             commandButton[commandID].setLayoutY((commandID + 1) * thisHeight);
             commandButton[commandID].setPrefWidth(Variables.SCREEN_WIDTH);
-            commandButton[commandID]
-                    .setOnAction(new CommandButton(commandID));
+            commandButton[commandID].setOnAction(new CommandButton(commandID));
 
             Variables.root.getChildren().add(commandButton[commandID]);
         }
