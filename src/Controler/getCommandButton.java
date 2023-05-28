@@ -15,8 +15,10 @@ public class getCommandButton implements EventHandler<ActionEvent> {
     }
 
     public void handle(ActionEvent arg0) {
-        Variables.core.activateCommand(commandID);
         Misc.removeButtons(getCommandButton.class);
+        Misc.removeLabel(Variables.core.getCommandDescription());
+        Variables.core.activateCommand(commandID);
+
         ButtonVisualizer.getcommandButton();
         return;
     }
