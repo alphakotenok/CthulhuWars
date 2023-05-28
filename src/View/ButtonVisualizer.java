@@ -186,6 +186,7 @@ public class ButtonVisualizer {
 
     public static void displayCommandButtons() {
         ArrayList<String> commandsAll = Variables.core.getCommandList();
+        System.out.println(commandsAll.size());
         ArrayList<String> commands = new ArrayList<>();
 
         if (commandsAll.size() < Variables.NUMBER_OF_PERMUTATIONS) {
