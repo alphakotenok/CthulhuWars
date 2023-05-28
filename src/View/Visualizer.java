@@ -8,6 +8,7 @@ import Model.Variables;
 import Model.Faction.FactionType;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -93,6 +94,7 @@ public class Visualizer {
             ButtonVisualizer.initializeGameButtons(numberOfPlayers);
             finishGame();
             ButtonVisualizer.displayCommandButtons();
+            ritual();
 
             initializeLabels();
         } catch (Exception e) {
@@ -158,5 +160,20 @@ public class Visualizer {
         label.setLayoutX(x);
 
         Variables.root.getChildren().add(label);
+    }
+
+    public static void ritual() {
+        ArrayList<Integer> ritualList = Variables.core.getRitualData();
+        Label ritual = new Label(
+                String.valueOf("Ritual: " + ritualList.get(0)) + "(" + String.valueOf(ritualList.get(1)) + "/"
+                        + String.valueOf(ritualList.get(2)) + ")");
+        ritual.setPrefWidth(Variables.SCREEN_WIDTH * Variables.PROCENT - 100);
+        ritual.setLayoutY(Variables.SCREEN_HEIGHT - 60);
+        ritual.setLayoutX(100);
+        ritual.setAlignment(Pos.CENTER);
+        ritual.setFont(Font.font("Arial", 32));
+        ritual.setId("ritual");
+        ritual.setTextFill(Color.BLACK);
+        Variables.root.getChildren().add(ritual);
     }
 }

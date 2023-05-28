@@ -21,10 +21,12 @@ public class CommandButton implements EventHandler<ActionEvent> {
         ActionsMisc.removeLabelById("Power label");
         ActionsMisc.removeLabelById("Doom label");
         ActionsMisc.removeLabelById("ElderSign label");
+        ActionsMisc.removeLabelById("ritual");
         ActionsMisc.removeLabelByText(Variables.core.getCommandDescription());
         Variables.core.activateCommand(commandID);
         ButtonVisualizer.displayCommandButtons();
         Visualizer.initializeLabels();
+        Visualizer.ritual();
 
         for (Location location : Variables.core.getLocationsList()) {
             EntityVisualizer.removeEntitiesFromMap(location);
