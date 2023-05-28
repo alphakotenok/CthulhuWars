@@ -1,7 +1,6 @@
 package View;
 
 import javafx.event.EventHandler;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -46,9 +45,15 @@ public class ActionsMisc {
         return;
     }
 
-    public static void removeLabel(String text) {
+    public static void removeLabelByText(String text) {
         Variables.root.getChildren().removeIf(node -> {
             return node instanceof Label && ((Label) node).getText().equals(text);
+        });
+        return;
+    }
+    public static void removeLabelById(String id) {
+        Variables.root.getChildren().removeIf(node -> {
+            return node instanceof Label && ((Label) node).getId() != null && ((Label) node).getId().equals(id);
         });
         return;
     }

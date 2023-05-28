@@ -46,7 +46,7 @@ public class ButtonVisualizer {
         Variables.root.getChildren().removeAll(nodeList);
         double thisHeight = Variables.SCREEN_HEIGHT / (Variables.NUMBER_OF_FACTIONS + 1);
 
-        ActionsMisc.removeLabel("player " + playerID);
+        ActionsMisc.removeLabelByText("player " + playerID);
 
         int factionId = 0;
 
