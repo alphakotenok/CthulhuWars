@@ -9,6 +9,7 @@ import Model.Variables;
 import Model.Faction.FactionType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelReader;
 
 public class ImageMisc {
     public static ImageView getFactionSheetImageView(int factionID) throws FileNotFoundException{
@@ -60,5 +61,21 @@ public class ImageMisc {
         Image image = new Image(inputStream);
         ImageView imageView = new ImageView(image);
         return imageView;
+    }
+    public static Boolean imagesAreEqual(Image image1,Image image2){
+        if(image1 == null) return image2 == null;
+        if(image2 == null) return image1 == null;
+        if (image1.getWidth() != image2.getWidth() || image1.getHeight() != image2.getHeight()) return false;
+
+        int width = (int) image1.getWidth();
+        int height = (int) image1.getHeight();
+        PixelReader reader1 = image1.getPixelReader();
+        PixelReader reader2 = image2.getPixelReader();
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (reader1.getArgb(x, y) != reader2.getArgb(x, y)) return false;
+            }
+        }
+        return true;
     }
 }

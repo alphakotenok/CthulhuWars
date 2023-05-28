@@ -72,19 +72,9 @@ public class ActionsMisc {
         return;
     }
 
-    public static void removeLastImage() {
-        ImageView lastImage = null;
-        for (Node node : Variables.root.getChildren()) {
-            if (node instanceof ImageView) {
-                lastImage = (ImageView) node;
-            }
-        }
-        Variables.root.getChildren().remove(lastImage);
-        return;
-    }
-    public static void removeImage(Image image){
+    public static void removeImage(Image image) {
         Variables.root.getChildren().removeIf(node -> {
-            return node instanceof ImageView && ((ImageView)node).getImage().equals(image);
+            return node instanceof ImageView && ImageMisc.imagesAreEqual(image, ((ImageView) node).getImage());
         });
     }
 }

@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 
 import Model.Variables;
 import View.ActionsMisc;
+import View.ImageMisc;
 import View.Visualizer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,8 +20,13 @@ public class FactionSheetButton implements EventHandler<ActionEvent> {
     public void handle(ActionEvent event) {
         for (int i = 0; i < Variables.NUMBER_OF_FACTIONS; i++) {
             if (i != factionID) {
-                if (Variables.factionSheetButtonState[i] == true)
-                    ActionsMisc.removeLastImage();
+                if (Variables.factionSheetButtonState[i] == true) {
+                    try {
+                        ActionsMisc.removeImage(ImageMisc.getFactionSheetImage(factionID));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
                 Variables.factionSheetButtonState[i] = false;
             }
         }
@@ -35,12 +41,11 @@ public class FactionSheetButton implements EventHandler<ActionEvent> {
             }
         } else {
             ActionsMisc.enableButtons(CommandButton.class);
-            ActionsMisc.removeLastImage();
-            // try {
-            //     ActionsMisc.removeImage(ImageMisc.getFactionSheetImage(factionID));
-            // } catch (FileNotFoundException e) {
-            //     e.printStackTrace();
-            // }
+            try {
+                ActionsMisc.removeImage(ImageMisc.getFactionSheetImage(factionID));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

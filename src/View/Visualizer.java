@@ -9,10 +9,13 @@ import Model.Faction.FactionType;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import Model.Core.InvalidFactionsSetException;
 import Model.Core.InvalidNumOfPlayersException;
 
@@ -20,7 +23,7 @@ public class Visualizer {
     static Boolean zoogCheck = false;
 
     public static ImageView mapInitialization(int countOfPlayers) throws FileNotFoundException, Exception {
-        
+
         Image map = ImageMisc.getMapImage(countOfPlayers);
         Variables.mapRatio = map.getWidth() / map.getHeight();
 
@@ -90,7 +93,7 @@ public class Visualizer {
             ButtonVisualizer.initializeGameButtons(numberOfPlayers);
             finishGame();
             ButtonVisualizer.displayCommandButtons();
-            // ButtonVisualizer.displayContinentButtons();
+            powerLabel();
         } catch (Exception e) {
             throw e;
         }
@@ -111,5 +114,38 @@ public class Visualizer {
     public static void displayfactionSheet(int factionID) throws FileNotFoundException {
         ImageView sheetView = ImageMisc.getFactionSheetImageView(factionID);
         Variables.root.getChildren().add(sheetView);
+    }
+
+    public static void powerLabel() {
+        TextFlow textFlowPower = new TextFlow();
+        Text power = new Text("Power: ");
+        power.setFill(Color.BLACK);
+        power.setFont(Font.font("Arial", 32));
+        textFlowPower.getChildren().add(power);
+        ArrayList<Integer> powerList = Variables.core.getPowerList();
+        ArrayList<FactionType> order = Variables.core.getFactions();
+        for (int i = 0; i < powerList.size(); i++) {
+            Text powerFaction1 = new Text(String.valueOf(powerList.get(i)));
+            powerFaction1.setFill(Variables.COLOR_OF_FACTIONS[order.get(i).ordinal()]);
+            powerFaction1.setFont(Font.font("Arial", 32));
+            textFlowPower.getChildren().add(powerFaction1);
+            Text powerFaction2 = new Text("|");
+            powerFaction2.setFill(Color.BLACK);
+            powerFaction2.setFont(Font.font("Arial", 32));
+            if (i != powerList.size() - 1)
+                textFlowPower.getChildren().add(powerFaction2);
+        }
+
+        double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
+
+        Label labelPower = new Label();
+        labelPower.setGraphic(textFlowPower);
+
+        labelPower.setPrefHeight((Variables.SCREEN_HEIGHT - height) / 2);
+        labelPower.setLayoutY((Variables.SCREEN_HEIGHT - height) / 2 + height);
+        labelPower.setPrefWidth(300);
+        labelPower.setLayoutX(100);
+
+        Variables.root.getChildren().add(labelPower);
     }
 }
