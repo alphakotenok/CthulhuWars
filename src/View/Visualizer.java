@@ -93,7 +93,8 @@ public class Visualizer {
             ButtonVisualizer.initializeGameButtons(numberOfPlayers);
             finishGame();
             ButtonVisualizer.displayCommandButtons();
-            powerLabel();
+
+            initializeLabels();
         } catch (Exception e) {
             throw e;
         }
@@ -116,36 +117,46 @@ public class Visualizer {
         Variables.root.getChildren().add(sheetView);
     }
 
-    public static void powerLabel() {
-        TextFlow textFlowPower = new TextFlow();
-        Text power = new Text("Power: ");
-        power.setFill(Color.BLACK);
-        power.setFont(Font.font("Arial", 32));
-        textFlowPower.getChildren().add(power);
-        ArrayList<Integer> powerList = Variables.core.getPowerList();
+    public static void initializeLabels() {
+        double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
+        initializeLabel("Power", Variables.core.getPowerList(), (Variables.SCREEN_HEIGHT - height) / 2, 350, 125,
+                (Variables.SCREEN_HEIGHT - height) / 2 + height);
+        initializeLabel("Doom", Variables.core.getDoomList(), (Variables.SCREEN_HEIGHT - height) / 2, 350, 500,
+                (Variables.SCREEN_HEIGHT - height) / 2 + height);
+        initializeLabel("ElderSign", Variables.core.getElderSignList(), (Variables.SCREEN_HEIGHT - height) / 2, 350,
+                875, (Variables.SCREEN_HEIGHT - height) / 2 + height);
+        return;
+    }
+
+    public static void initializeLabel(String partName, ArrayList<Integer> list, double h, double w, double x,
+            double y) {
+        TextFlow textFlow = new TextFlow();
+        Text text = new Text(partName + ": ");
+        text.setFill(Color.BLACK);
+        text.setFont(Font.font("Arial", 32));
+        textFlow.getChildren().add(text);
         ArrayList<FactionType> order = Variables.core.getFactions();
-        for (int i = 0; i < powerList.size(); i++) {
-            Text powerFaction1 = new Text(String.valueOf(powerList.get(i)));
-            powerFaction1.setFill(Variables.COLOR_OF_FACTIONS[order.get(i).ordinal()]);
-            powerFaction1.setFont(Font.font("Arial", 32));
-            textFlowPower.getChildren().add(powerFaction1);
-            Text powerFaction2 = new Text("|");
-            powerFaction2.setFill(Color.BLACK);
-            powerFaction2.setFont(Font.font("Arial", 32));
-            if (i != powerList.size() - 1)
-                textFlowPower.getChildren().add(powerFaction2);
+        for (int i = 0; i < list.size(); i++) {
+            Text Faction1 = new Text(String.valueOf(list.get(i)));
+            Faction1.setFill(Variables.COLOR_OF_FACTIONS[order.get(i).ordinal()]);
+            Faction1.setFont(Font.font("Arial", 32));
+            textFlow.getChildren().add(Faction1);
+            Text Faction2 = new Text("|");
+            Faction2.setFill(Color.BLACK);
+            Faction2.setFont(Font.font("Arial", 32));
+            if (i != list.size() - 1)
+                textFlow.getChildren().add(Faction2);
         }
 
-        double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
+        Label label = new Label();
+        label.setId(partName + " label");
+        label.setGraphic(textFlow);
 
-        Label labelPower = new Label();
-        labelPower.setGraphic(textFlowPower);
+        label.setPrefHeight(h);
+        label.setLayoutY(y);
+        label.setPrefWidth(w);
+        label.setLayoutX(x);
 
-        labelPower.setPrefHeight((Variables.SCREEN_HEIGHT - height) / 2);
-        labelPower.setLayoutY((Variables.SCREEN_HEIGHT - height) / 2 + height);
-        labelPower.setPrefWidth(300);
-        labelPower.setLayoutX(100);
-
-        Variables.root.getChildren().add(labelPower);
+        Variables.root.getChildren().add(label);
     }
 }

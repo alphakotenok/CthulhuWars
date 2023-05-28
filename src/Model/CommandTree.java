@@ -190,12 +190,12 @@ class CommandTree {
     }
 
     static void prepareActionSet(ArrayList<Integer> data, Core core, Node curNode) {
-        Faction faction = core.factionBase.getFactionFromEnum(FactionType.values()[core.turn]);
+        Faction faction = core.factionBase.getFactionFromEnum(core.factionsList.get(core.turn));
         if (faction.skip) {
             if (core.factionBase.totalSkip == core.numOfPlayers) {
-                // TODO: if everyone skip
                 energyRecount(core);
                 chooseFirstPlayer(core);
+                core.turn = core.firstPlayer;
                 // who + how much already was
                 curNode.desc = core.factionBase.getFactionNameFromEnum(core.factionsList.get(core.firstPlayer))
                         + " can perform ritual";
@@ -210,6 +210,14 @@ class CommandTree {
             core.turn = core.getNextTurn(core.turn);
         } else {
 
+            // TODO: delete this temp code
+            if (core.factionBase.getFactionFromEnum(core.factionsList.get(core.turn)).energy > 0) {
+                Node n = new Node("Some action to spend one energy",
+                        core.factionBase.getFactionNameFromEnum(core.factionsList.get(core.getNextTurn(core.turn)))
+                                + " action",
+                        CommandTree::tempFunc, data, core);
+                curNode.adj.add(n);
+            }
             Node n = new Node("Pass and lose remaining power",
                     core.factionBase.getFactionNameFromEnum(core.factionsList.get(core.getNextTurn(core.turn)))
                             + " action",
@@ -218,8 +226,14 @@ class CommandTree {
         }
     }
 
+    static void tempFunc(ArrayList<Integer> data, Core core, Node curNode) {
+        core.factionBase.getFactionFromEnum(core.factionsList.get(core.turn)).energy -= 1;
+        core.turn = core.getNextTurn(core.turn);
+        prepareActionSet(data, core, curNode);
+    }
+
     static void passTurn(ArrayList<Integer> data, Core core, Node curNode) {
-        Faction faction = core.factionBase.getFactionFromEnum(FactionType.values()[core.turn]);
+        Faction faction = core.factionBase.getFactionFromEnum(core.factionsList.get(core.turn));
         faction.skip = true;
         core.factionBase.totalSkip++;
         faction.energy = 0;
@@ -229,10 +243,12 @@ class CommandTree {
 
     static void energyRecount(Core core) {
         for (int i = 0; i < core.numOfPlayers; ++i) {
-            Faction faction = core.factionBase.factList.get(i);
+            Faction faction = core.factionBase.factList.get(core.factionsList.get(i).ordinal());
+            System.out.println(faction.name);
             faction.recountEnergy();
             faction.skip = false;
         }
+        core.factionBase.totalSkip = 0;
 
     }
 
@@ -240,10 +256,21 @@ class CommandTree {
         // TODO: first player
     }
 
+    static boolean checkPlayersDoom() {
+        // TODO: this func
+        return false;
+    }
+
     static void createRitualAsk(Core core, Node curNode, int who, int num) {
         if (num == core.numOfPlayers) {
-            // TODO: start next round
-            curNode.desc = "newRound";
+            if (core.endOfTheGame || checkPlayersDoom()) {
+                // TODO: end handler
+                curNode.desc = "end";
+                return;
+            }
+            curNode.desc = core.factionBase.getFactionNameFromEnum(core.factionsList.get(core.firstPlayer))
+                    + " action";
+            prepareActionSet(null, core, curNode);
             return;
         }
         if (core.ritual.canPerformRItual(core.factionsList.get(who))) {

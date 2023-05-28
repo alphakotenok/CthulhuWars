@@ -30,7 +30,7 @@ public class FactionPickButton implements EventHandler<ActionEvent> {
 
         if (playerID + 1 == numberOfPlayers) {
             ActionsMisc.removeButtons(FactionPickButton.class);
-            ActionsMisc.removeLabel("player " + numberOfPlayers);
+            ActionsMisc.removeLabelByText("player " + numberOfPlayers);
             Visualizer.startCore(numberOfPlayers,factionList);
         }
     }

@@ -4,6 +4,7 @@ import Model.Location;
 import Model.Variables;
 import View.ButtonVisualizer;
 import View.EntityVisualizer;
+import View.Visualizer;
 import View.ActionsMisc;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -17,11 +18,15 @@ public class CommandButton implements EventHandler<ActionEvent> {
 
     public void handle(ActionEvent arg0) {
         ActionsMisc.removeButtons(CommandButton.class);
-        ActionsMisc.removeLabel(Variables.core.getCommandDescription());
+        ActionsMisc.removeLabelById("Power label");
+        ActionsMisc.removeLabelById("Doom label");
+        ActionsMisc.removeLabelById("ElderSign label");
+        ActionsMisc.removeLabelByText(Variables.core.getCommandDescription());
         Variables.core.activateCommand(commandID);
         ButtonVisualizer.displayCommandButtons();
-        
-        for(Location location : Variables.core.getLocationsList()){
+        Visualizer.initializeLabels();
+
+        for (Location location : Variables.core.getLocationsList()) {
             EntityVisualizer.removeEntitiesFromMap(location);
             EntityVisualizer.placeEntitiesOnMap(location);
         }

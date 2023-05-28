@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import Model.Faction.FactionType;
 import javafx.scene.image.Image;
@@ -16,6 +17,7 @@ public class Core {
     int turn;
     boolean correcrtWay;
     int firstPlayer;
+    boolean endOfTheGame;
 
     public class InvalidNumOfPlayersException extends Exception {
 
@@ -55,6 +57,7 @@ public class Core {
         turn = 0;
         correcrtWay = true;
         firstPlayer = 0;
+        endOfTheGame = false;
     }
 
     public int getNumOfPlayers() {
@@ -134,5 +137,16 @@ public class Core {
         for (int i = 0; i < numOfPlayers; ++i)
             ans.add(factionBase.factList.get(factionsList.get(i).ordinal()).elderSignList.size());
         return ans;
+    }
+
+    public ArrayList<Integer> getRitualData() {
+        if (endOfTheGame) {
+            return new ArrayList<Integer>(
+                    Arrays.asList(ritual.ritualTrack.get(ritual.ritualState), ritual.ritualTrack.size(),
+                            ritual.ritualTrack.size()));
+        }
+        return new ArrayList<Integer>(Arrays.asList(ritual.ritualTrack.get(ritual.ritualState), ritual.ritualState,
+                ritual.ritualTrack.size()));
+
     }
 }
