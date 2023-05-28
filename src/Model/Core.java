@@ -50,6 +50,7 @@ public class Core {
         ct = new CommandTree(this);
         factionBase = new FactionBase(this);
         ritual = new Ritual(this);
+        turn = 0;
     }
 
     public int getNumOfPlayers() {

@@ -7,15 +7,17 @@ public class Faction {
         GreatCthulhu, CrawlingChaos, BlackGoat, YellowSign, OpenerOfTheWay, Sleeper, Windwalker
     }
 
+    String name;
     int energy;
     int cultistAlive;
     int gatesControlled;
     int unitsCaptured;
     int activeGOO;
+    boolean skip;
     Core core;
     FactionType faction;
 
-    Faction(Core core) {
+    Faction(String name, Core core) {
         this.core = core;
         energy = 8;
         cultistAlive = 6;
@@ -23,6 +25,7 @@ public class Faction {
         unitsCaptured = 0;
         activeGOO = 0;
         victoryPoints = 0;
+        skip = false;
     }
 
     void recountEnergy() {
