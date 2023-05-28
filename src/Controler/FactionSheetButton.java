@@ -22,7 +22,7 @@ public class FactionSheetButton implements EventHandler<ActionEvent> {
             if (i != factionID) {
                 if (Variables.factionSheetButtonState[i] == true) {
                     try {
-                        ActionsMisc.removeImage(ImageMisc.getFactionSheetImage(factionID));
+                        ActionsMisc.removeImage(ImageMisc.getFactionSheetImage(i));
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
