@@ -88,4 +88,8 @@ public class EntityBase {
             entityListInit(faction);
         }
     }
+
+    ArrayList<Entity> getUnitsOfFaction(FactionType faction) {
+        return null;
+    }
 }
