@@ -2,6 +2,7 @@ package Model;
 
 import java.util.*;
 
+import Model.Faction.FactionType;
 import Model.Location.Segment;
 import javafx.scene.image.Image;
 
@@ -11,6 +12,7 @@ public class GameMap {
     Image mapIcon;
     static int minNumOfPlayers = 2;
     static int maxNumOfPlayers = 6;
+    Core core;
 
     ArrayList<Segment> BeringSea() {
         ArrayList<Segment> BeringSea = new ArrayList<>();
@@ -281,7 +283,8 @@ public class GameMap {
         return Europe;
     }
 
-    GameMap(int numOfPlayers) {
+    GameMap(int numOfPlayers, Core core) {
+        this.core = core;
         locations = new ArrayList<>();
         if (numOfPlayers == 2 || numOfPlayers == 3) {
             locations.add(new Location("Europe", Europe()));
@@ -370,5 +373,9 @@ public class GameMap {
 
     ArrayList<Entity> getEntityListInLocation(Location location) {
         return location.entityList;
+    }
+
+    void setStartUnits(FactionType faction, Location location) {
+        ArrayList<Entity> units = core.entityBase.getUnitsOfFaction(faction);
     }
 }

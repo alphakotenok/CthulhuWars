@@ -65,7 +65,7 @@ class CommandTree {
 
     @FunctionalInterface
     static interface FunctionContainer {
-        void activate(ArrayList<Integer> args);
+        void activate(ArrayList<Integer> args, Core core);
     }
 
     static class Node {
@@ -73,22 +73,24 @@ class CommandTree {
         ArrayList<Node> adj;
         FunctionContainer func;
         ArrayList<Integer> data;
+        Core core;
 
-        Node(String name, FunctionContainer func, ArrayList<Integer> data) {
+        Node(String name, FunctionContainer func, ArrayList<Integer> data, Core core) {
             this.name = name;
             this.func = func;
             this.data = data;
+            this.core = core;
             adj = new ArrayList<>();
         }
 
         void activate() {
-            func.activate(data);
+            func.activate(data, core);
         }
     }
 
     CommandTree(Core core) {
         this.core = core;
-        curNode = new Node("Start node", null, null);
+        curNode = new Node("Start node", null, null, core);
         int CthulhuPlace = -1;
         for (int i = 0; i < core.numOfPlayers; ++i) {
             if (core.factionsList.get(i).equals(FactionType.GreatCthulhu)) {
@@ -111,7 +113,7 @@ class CommandTree {
         for (int i = 0; i < core.numOfPlayers; ++i) {
             k += order3.get(i).toString();
         }
-        Node n = new Node(k, CommandTree::chooseFactionPermutation, order3);
+        Node n = new Node(k, CommandTree::chooseFactionPermutation, order3, core);
         curNode.adj.add(n);
         while (nextPermutation.findNextPermutation(order2)) {
             order3 = new ArrayList<>();
@@ -121,7 +123,7 @@ class CommandTree {
             for (int i = 0; i < core.numOfPlayers; ++i) {
                 k += order3.get(i).toString();
             }
-            n = new Node(k, CommandTree::chooseFactionPermutation, order3);
+            n = new Node(k, CommandTree::chooseFactionPermutation, order3, core);
             curNode.adj.add(n);
         }
     }
@@ -142,7 +144,11 @@ class CommandTree {
         curNode.activate();
     }
 
-    static void chooseFactionPermutation(ArrayList<Integer> perm) {
+    static void chooseFactionPermutation(ArrayList<Integer> perm, Core core) {
+        core.factionsList.clear();
+        for (int i = 0; i < core.numOfPlayers; ++i) {
+            core.factionsList.add(FactionType.values()[perm.get(i)]);
+        }
 
     }
 }

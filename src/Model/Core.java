@@ -41,7 +41,7 @@ public class Core {
         }
 
         this.numOfPlayers = numOfPlayers;
-        map = new GameMap(numOfPlayers);
+        map = new GameMap(numOfPlayers, this);
 
         entityBase = new EntityBase(factionsList);
         ct = new CommandTree(this);
