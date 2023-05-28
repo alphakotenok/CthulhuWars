@@ -247,12 +247,13 @@ public class ButtonVisualizer {
         ArrayList<String> commands = Variables.core.getCommandList();
         // System.out.println(commands.size());
         double thisHeight = Variables.SCREEN_HEIGHT / (commands.size() + 1);
-        // Label label = new Label(Variables.core.getCommandDescription());
-        // label.setPrefHeight(thisHeight);
-        // label.setPrefWidth(Variables.SCREEN_WIDTH - 100);
-        // label.setAlignment(Pos.CENTER);
-        // label.setFont(Font.font("Arial", 40));
-        // Variables.root.getChildren().add(label);
+        Label label = new Label(Variables.core.getCommandDescription());
+        label.setPrefHeight(thisHeight);
+        label.setPrefWidth(300);
+        label.setLayoutX(Variables.SCREEN_WIDTH - 300);
+        label.setAlignment(Pos.CENTER);
+        label.setFont(Font.font("Arial", 16));
+        Variables.root.getChildren().add(label);
 
         Button[] commandButton = new Button[commands.size()];
         for (int commandID = 0; commandID < commands.size(); commandID++) {
