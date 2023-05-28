@@ -284,92 +284,158 @@ public class GameMap {
         return Europe;
     }
 
+
+    Location Europe = new Location("Europe", Europe());
+    Location ArcticOcean = new Location("Arctic Ocean", ArcticOcean());
+    Location NorthAmerica = new Location("North America", NorthAmerica());
+    Location NorthPacific = new Location("North Pacific", NorthPacific());
+    Location NorthAtlantic = new Location("North Atlantic", NorthAtlantic());
+    Location Asia = new Location("Asia", Asia());
+    Location IndianOcean = new Location("Indian Ocean", IndianOcean());
+    Location Australia = new Location("Australia", Australia());
+    Location SouthPacific = new Location("South Pacific", SouthPacific());
+    Location SouthAmerica = new Location("South America", SouthAmerica());
+    Location SouthAtlantic = new Location("South Atlantic", SouthAtlantic());
+    Location Antarctica = new Location("Antarctica", Antarctica());
+    Location Africa = new Location("Africa", Africa());
+    Location EuropeSmall = new Location("Europe", EuropeSmall());
+    Location Scandinavia = new Location("Scandinavia", Scandinavia());
+    Location NorthAmericaEast = new Location("North America East", NorthAmericaEast());
+    Location ArcticOceanSmall = new Location("Arctic Ocean", ArcticOceanSmall());
+    Location BeringSea = new Location("Bering Sea", BeringSea());
+    Location NorthAmericaWest = new Location("North America West", NorthAmericaWest());
+    Location CentralAmerica = new Location("Central America", CentralAmerica());
+    Location NorthAtlanticSmall = new Location("North Atlantic", NorthAtlanticSmall());
+    Location MediterraneanSea = new Location("Mediterranean Sea", MediterraneanSea());
+    Location NorthAsia = new Location("North Asia", NorthAsia());
+    Location Arabia = new Location("Arabia", Arabia());
+    Location SouthAsia = new Location("South Asia", SouthAsia());
+    Location AustraliaSmall = new Location("Australia", AustraliaSmall());
+    Location NewZealand = new Location("New Zealand", NewZealand());
+    Location SouthAmericaEast = new Location("South America East", SouthAmericaEast());
+    Location SouthAmericaWest = new Location("South America West", SouthAmericaWest());
+    Location AntarcticaSmall = new Location("Antarctica", AntarcticaSmall());
+    Location MountainsofMadness = new Location("Mountains of Madness", MountainsofMadness());
+    Location WestAfrica = new Location("West Africa", WestAfrica());
+    Location EastAfrica = new Location("East Africa", EastAfrica());
+
+    void fillAdj(int numOfPlayers){
+        Europe.adj.add(ArcticOcean);
+        Europe.adj.add(NorthAtlantic);
+        Europe.adj.add(Asia);
+
+        Asia.adj.add(NorthPacific);
+        Asia.adj.add(ArcticOcean);
+        Asia.adj.add(Europe);
+        Asia.adj.add(NorthAtlantic);
+        Asia.adj.add(Africa);
+        Asia.adj.add(IndianOcean);
+
+        ArcticOcean.adj.add(NorthPacific);
+        ArcticOcean.adj.add(Asia);
+        ArcticOcean.adj.add(Europe);
+        ArcticOcean.adj.add(NorthAtlantic);
+        ArcticOcean.adj.add(NorthAmerica);
+
+        NorthPacific.adj.add(ArcticOcean);
+        NorthPacific.adj.add(Asia);
+        NorthPacific.adj.add(IndianOcean);
+        NorthPacific.adj.add(SouthPacific);
+        NorthPacific.adj.add(NorthAmerica);
+        NorthPacific.adj.add(SouthAmerica);
+        NorthPacific.adj.add(NorthAtlantic);
+
+        NorthAmerica.adj.add(NorthAtlantic);
+        NorthAmerica.adj.add(ArcticOcean);
+        NorthAmerica.adj.add(SouthAmerica);
+        NorthAmerica.adj.add(NorthPacific);
+
+        NorthAtlantic.adj.add(NorthPacific);
+        NorthAtlantic.adj.add(NorthAmerica);
+        NorthAtlantic.adj.add(ArcticOcean);
+        NorthAtlantic.adj.add(Europe);
+        NorthAtlantic.adj.add(Asia);
+        NorthAtlantic.adj.add(Africa);
+        NorthAtlantic.adj.add(SouthAtlantic);
+        NorthAtlantic.adj.add(SouthAmerica);
+
+        IndianOcean.adj.add(Australia);
+        IndianOcean.adj.add(NorthPacific);
+        IndianOcean.adj.add(Asia);
+        IndianOcean.adj.add(Africa);
+        IndianOcean.adj.add(SouthAtlantic);
+        IndianOcean.adj.add(Antarctica);
+        IndianOcean.adj.add(SouthPacific);
+
+        Australia.adj.add(SouthPacific);
+        Australia.adj.add(IndianOcean);
+
+        SouthPacific.adj.add(Australia);
+        SouthPacific.adj.add(NorthPacific);
+        SouthPacific.adj.add(SouthAmerica);
+        SouthPacific.adj.add(SouthAtlantic);
+        SouthPacific.adj.add(Antarctica);
+        SouthPacific.adj.add(IndianOcean);
+
+        SouthAmerica.adj.add(NorthAmerica);
+        SouthAmerica.adj.add(NorthAtlantic);
+        SouthAmerica.adj.add(SouthAtlantic);
+        SouthAmerica.adj.add(SouthPacific);
+        SouthAmerica.adj.add(NorthPacific);
+
+        SouthAtlantic.adj.add(SouthAmerica);
+        SouthAtlantic.adj.add(NorthAtlantic);
+        SouthAtlantic.adj.add(Africa);
+        SouthAtlantic.adj.add(IndianOcean);
+        SouthAtlantic.adj.add(Antarctica);
+        SouthAtlantic.adj.add(SouthPacific);
+
+        Africa.adj.add(SouthAtlantic);
+        Africa.adj.add(NorthAtlantic);
+        Africa.adj.add(Asia);
+        Africa.adj.add(IndianOcean);
+
+        Antarctica.adj.add(IndianOcean);
+        Antarctica.adj.add(SouthAtlantic);
+        Antarctica.adj.add(SouthPacific);
+    }
+
     GameMap(int numOfPlayers, Core core) {
         this.core = core;
         locations = new ArrayList<>();
-        if (numOfPlayers == 2 || numOfPlayers == 3) {
-            locations.add(new Location("Europe", Europe()));
-            locations.add(new Location("Arctic Ocean", ArcticOcean()));
-            locations.add(new Location("North America", NorthAmerica()));
-            locations.add(new Location("North Pacific", NorthPacific()));
-            locations.add(new Location("North Atlantic", NorthAtlantic()));
-            locations.add(new Location("Asia", Asia()));
-            locations.add(new Location("Indian Ocean", IndianOcean()));
-            locations.add(new Location("Australia", Australia()));
-            locations.add(new Location("South Pacific", SouthPacific()));
-            locations.add(new Location("South America", SouthAmerica()));
-            locations.add(new Location("South Atlantic", SouthAtlantic()));
-            locations.add(new Location("Antarctica", Antarctica()));
-            locations.add(new Location("Africa", Africa()));
-        }
-        if (numOfPlayers == 4) {
-            locations.add(new Location("Europe", EuropeSmall()));
-            locations.add(new Location("Scandinavia", Scandinavia()));
-            locations.add(new Location("Arctic Ocean", ArcticOcean()));
-            locations.add(new Location("North America", NorthAmerica()));
-            locations.add(new Location("North Pacific", NorthPacific()));
-            locations.add(new Location("North Atlantic", NorthAtlantic()));
-            locations.add(new Location("North Asia", NorthAsia()));
-            locations.add(new Location("Arabia", Arabia()));
-            locations.add(new Location("South Asia", SouthAsia()));
-            locations.add(new Location("Indian Ocean", IndianOcean()));
-            locations.add(new Location("Australia", Australia()));
-            locations.add(new Location("South Pacific", SouthPacific()));
-            locations.add(new Location("South America", SouthAmerica()));
-            locations.add(new Location("South Atlantic", SouthAtlantic()));
-            locations.add(new Location("Antarctica", Antarctica()));
-            locations.add(new Location("West Africa", WestAfrica()));
-            locations.add(new Location("East Africa", EastAfrica()));
-        }
-        if (numOfPlayers == 5) {
-            locations.add(new Location("Europe", EuropeSmall()));
-            locations.add(new Location("Scandinavia", Scandinavia()));
-            locations.add(new Location("Arctic Ocean", ArcticOcean()));
-            locations.add(new Location("North America East", NorthAmericaEast()));
-            locations.add(new Location("North America West", NorthAmericaWest()));
-            locations.add(new Location("Central America", CentralAmerica()));
-            locations.add(new Location("North Pacific", NorthPacific()));
-            locations.add(new Location("North Atlantic", NorthAtlantic()));
-            locations.add(new Location("North Asia", NorthAsia()));
-            locations.add(new Location("Arabia", Arabia()));
-            locations.add(new Location("South Asia", SouthAsia()));
-            locations.add(new Location("Indian Ocean", IndianOcean()));
-            locations.add(new Location("Australia", AustraliaSmall()));
-            locations.add(new Location("New Zealand", NewZealand()));
-            locations.add(new Location("South Pacific", SouthPacific()));
-            locations.add(new Location("South America East", SouthAmericaEast()));
-            locations.add(new Location("South America West", SouthAmericaWest()));
-            locations.add(new Location("South Atlantic", SouthAtlantic()));
-            locations.add(new Location("Antarctica", Antarctica()));
-            locations.add(new Location("West Africa", WestAfrica()));
-            locations.add(new Location("East Africa", EastAfrica()));
-        }
-        if (numOfPlayers == 6) {
-            locations.add(new Location("Europe", EuropeSmall()));
-            locations.add(new Location("Scandinavia", Scandinavia()));
-            locations.add(new Location("Arctic Ocean", ArcticOceanSmall()));
-            locations.add(new Location("Bering Sea", BeringSea()));
-            locations.add(new Location("North America East", NorthAmericaEast()));
-            locations.add(new Location("North America West", NorthAmericaWest()));
-            locations.add(new Location("Central America", CentralAmerica()));
-            locations.add(new Location("North Pacific", NorthPacific()));
-            locations.add(new Location("North Atlantic", NorthAtlanticSmall()));
-            locations.add(new Location("Mediterranean Sea", MediterraneanSea()));
-            locations.add(new Location("North Asia", NorthAsia()));
-            locations.add(new Location("Arabia", Arabia()));
-            locations.add(new Location("South Asia", SouthAsia()));
-            locations.add(new Location("Indian Ocean", IndianOcean()));
-            locations.add(new Location("Australia", AustraliaSmall()));
-            locations.add(new Location("New Zealand", NewZealand()));
-            locations.add(new Location("South Pacific", SouthPacific()));
-            locations.add(new Location("South America East", SouthAmericaEast()));
-            locations.add(new Location("South America West", SouthAmericaWest()));
-            locations.add(new Location("South Atlantic", SouthAtlantic()));
-            locations.add(new Location("Antarctica", AntarcticaSmall()));
-            locations.add(new Location("Mountains of Madness", MountainsofMadness()));
-            locations.add(new Location("West Africa", WestAfrica()));
-            locations.add(new Location("East Africa", EastAfrica()));
-        }
+        fillAdj(numOfPlayers);
+        if(numOfPlayers <= 3) locations.add(Europe);
+        if(numOfPlayers >= 4) locations.add(EuropeSmall);
+        if(numOfPlayers >= 4) locations.add(Scandinavia);
+        if(numOfPlayers <= 5) locations.add(ArcticOcean);
+        if(numOfPlayers <= 4) locations.add(NorthAmerica);
+        if(numOfPlayers >= 5) locations.add(NorthAmericaEast);
+        if(numOfPlayers == 6) locations.add(ArcticOceanSmall);
+        if(numOfPlayers == 6) locations.add(BeringSea);
+        if(numOfPlayers >= 5) locations.add(CentralAmerica);
+        if(numOfPlayers == 6) locations.add(NorthAtlanticSmall);
+        if(numOfPlayers == 6) locations.add(MediterraneanSea);
+        if(numOfPlayers <= 5) locations.add(NorthAtlantic);
+        if(numOfPlayers <= 3) locations.add(Asia);
+        if(numOfPlayers >= 4) locations.add(NorthAsia);
+        locations.add(NorthPacific);
+        if(numOfPlayers >= 4) locations.add(Arabia);
+        if(numOfPlayers >= 4) locations.add(SouthAsia);
+        locations.add(IndianOcean);
+        if(numOfPlayers >= 5) locations.add(AustraliaSmall);
+        if(numOfPlayers >= 5) locations.add(NewZealand);
+        if(numOfPlayers <= 4) locations.add(Australia);
+        locations.add(SouthPacific);
+        if(numOfPlayers >= 5) locations.add(SouthAmericaEast);
+        if(numOfPlayers >= 5) locations.add(SouthAmericaWest);
+        if(numOfPlayers <= 4) locations.add(SouthAmerica);
+        locations.add(SouthAtlantic);
+        if(numOfPlayers == 6) locations.add(AntarcticaSmall);
+        if(numOfPlayers == 6) locations.add(MountainsofMadness);
+        if(numOfPlayers <= 5) locations.add(Antarctica);
+        if(numOfPlayers <= 3) locations.add(Africa);
+        if(numOfPlayers >= 4) locations.add(EastAfrica);
+        if(numOfPlayers >= 4) locations.add(WestAfrica);
         fillStartLocArray();
     }
 
