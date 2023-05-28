@@ -2,6 +2,7 @@ package Model;
 
 import java.util.*;
 
+import Model.Entity.EntityType;
 import Model.Faction.FactionType;
 import Model.Location.Segment;
 import javafx.scene.image.Image;
@@ -369,13 +370,27 @@ public class GameMap {
             locations.add(new Location("West Africa", WestAfrica()));
             locations.add(new Location("East Africa", EastAfrica()));
         }
+        fillStartLocArray();
     }
 
     ArrayList<Entity> getEntityListInLocation(Location location) {
         return location.entityList;
     }
 
+    void fillStartLocArray() {
+
+    }
+
+    ArrayList<ArrayList<Location>> startLoc;
+
     void setStartUnits(FactionType faction, Location location) {
         ArrayList<Entity> units = core.entityBase.getUnitsOfFaction(faction);
+        for (Entity en : units) {
+            if (en.entityType == EntityType.Cultist) {
+                for (int i = 0; i < 6; ++i) {
+                    core.addEntity(location, en);
+                }
+            }
+        }
     }
 }
