@@ -1,6 +1,6 @@
 package Controler;
 
-import View.Misc;
+import View.ActionsMisc;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
@@ -13,7 +13,7 @@ public class MenuButton implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent event) {
-        Misc.removeButtons(MenuButton.class);
+        ActionsMisc.removeButtons(MenuButton.class);
         
         View.ButtonVisualizer.displayFactionPickButtons(numberOfPlayers);
     }

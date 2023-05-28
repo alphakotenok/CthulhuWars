@@ -4,25 +4,18 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.util.ArrayList;
-
-import Controler.EntityDeleteButton;
-import Model.Entity;
 import Model.Variables;
-import Model.Entity.EntityType;
-import Model.Faction.FactionType;
 import javafx.event.ActionEvent;
 
-public class Misc {
+public class ActionsMisc {
     public static <T extends EventHandler<ActionEvent>> void removeButtons(Class<T> c) {
         Variables.root.getChildren().removeIf(node -> {
             if (node instanceof Button) {
                 EventHandler<ActionEvent> onAction = ((Button) node).getOnAction();
-                if (onAction != null && c.isInstance(onAction)) {
-                    return true;
-                }
+                return onAction != null && c.isInstance(onAction);
             }
             return false;
         });
@@ -30,26 +23,26 @@ public class Misc {
     }
 
     public static <T extends EventHandler<ActionEvent>> void disableButtons(Class<T> c) {
-        for (Node node : Variables.root.getChildren()) {
+        Variables.root.getChildren().forEach(node -> {
             if (node instanceof Button) {
                 EventHandler<ActionEvent> onAction = ((Button) node).getOnAction();
                 if (onAction != null && c.isInstance(onAction)) {
                     node.setDisable(true);
                 }
             }
-        }
+        });
         return;
     }
 
-    public static <T extends EventHandler<ActionEvent>> void ableButtons(Class<T> c) {
-        for (Node node : Variables.root.getChildren()) {
+    public static <T extends EventHandler<ActionEvent>> void enableButtons(Class<T> c) {
+        Variables.root.getChildren().forEach(node -> {
             if (node instanceof Button) {
                 EventHandler<ActionEvent> onAction = ((Button) node).getOnAction();
                 if (onAction != null && c.isInstance(onAction)) {
                     node.setDisable(false);
                 }
             }
-        }
+        });
         return;
     }
 
@@ -69,46 +62,19 @@ public class Misc {
     }
 
     public static <T extends EventHandler<ActionEvent>> void removeButton(T curEventHandler) {
-        for (Node node : Variables.root.getChildren()) {
-            if (node instanceof Button) {
-                Object onAction = ((Button) node).getOnAction();
-                if (onAction != null && onAction.equals(curEventHandler)) {
-                    Variables.root.getChildren().remove(node);
-                    return;
-                }
-            }
-        }
-        return;
-    }
-
-    public static void removeButtons(ArrayList<Entity> entities) {
         Variables.root.getChildren().removeIf(node -> {
             if (node instanceof Button) {
-                EventHandler<ActionEvent> onAction = ((Button) node).getOnAction();
-                return onAction != null && onAction instanceof EntityDeleteButton
-                        && entities.contains(((EntityDeleteButton) onAction).entity);
+                Object onAction = ((Button) node).getOnAction();
+                return onAction != null && onAction.equals(curEventHandler);
             }
             return false;
         });
         return;
     }
 
-    public static EntityType getEntityByID(int entityID) {
-        return Entity.EntityType.values()[entityID];
-    }
-
-    public static FactionType getFactionByID(int factionID) {
-        return FactionType.values()[factionID];
-    }
-
-    public static void removeLastImage() {
-        ImageView lastImage = null;
-        for (Node node : Variables.root.getChildren()) {
-            if (node instanceof ImageView) {
-                lastImage = (ImageView) node;
-            }
-        }
-        Variables.root.getChildren().remove(lastImage);
-        return;
+    public static void removeImage(Image image) {
+        Variables.root.getChildren().removeIf(node -> {
+            return node instanceof ImageView && ImageMisc.imagesAreEqual(image, ((ImageView) node).getImage());
+        });
     }
 }

@@ -1,38 +1,30 @@
 package View;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-import Controler.FactionSheet;
 import Model.Core;
 import Model.Variables;
 import Model.Faction.FactionType;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import Model.Core.InvalidFactionsSetException;
 import Model.Core.InvalidNumOfPlayersException;
 
 public class Visualizer {
     static Boolean zoogCheck = false;
 
-    public static ImageView mapInitialization(int countOfPlayers) throws Exception {
-        String mapName = "error.png";
+    public static ImageView mapInitialization(int countOfPlayers) throws FileNotFoundException, Exception {
 
-        if (countOfPlayers == 2 || countOfPlayers == 3) {
-            mapName = "images/maps/map2_3.jpg";
-        } else if (countOfPlayers <= Variables.MAX_COUNT_OF_PLAYERS
-                && countOfPlayers >= Variables.MIN_COUNT_OF_PLAYERS) {
-            mapName = "images/maps/map" + countOfPlayers + ".jpg";
-        } else {
-            throw new Exception("too many players");
-        }
-
-        FileInputStream inputStream = new FileInputStream(mapName);
-        Image map = new Image(inputStream);
+        Image map = ImageMisc.getMapImage(countOfPlayers);
         Variables.mapRatio = map.getWidth() / map.getHeight();
 
         ImageView mapView = new ImageView(map);
@@ -44,42 +36,33 @@ public class Visualizer {
         return mapView;
     }
 
-    public static void initializeGameButtons(int countOfPlayers) throws FileNotFoundException {
-        Button[] gameButton = new Button[countOfPlayers];
-        double weight = Variables.SCREEN_WIDTH * Variables.PROCENT / countOfPlayers;
-        double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
-
-        ArrayList<FactionType> orderFactions = Variables.core.getFactions();
-        for (int i = 0; i < countOfPlayers; i++) {
-            gameButton[i] = new Button();
-            gameButton[i].setPrefHeight((Variables.SCREEN_HEIGHT - height) / 2);
-            gameButton[i].setLayoutX(i * weight);
-            gameButton[i].setPrefWidth(weight);
-            String logoName = "images/logo/Faction_" + orderFactions.get(i).name() + ".png";
-            FileInputStream inputStream = new FileInputStream(logoName);
-            Image logo = new Image(inputStream);
-            ImageView logoView = new ImageView(logo);
-            logoView.setFitHeight((Variables.SCREEN_HEIGHT - height) / 2);
-            logoView.setFitWidth((Variables.SCREEN_HEIGHT - height) / 2);
-            gameButton[i].setGraphic(logoView);
-            gameButton[i].setOnAction(new FactionSheet(orderFactions.get(i).ordinal()));
-
-            Variables.root.getChildren().add(gameButton[i]);
-        }
-    }
-
     public static void startGame() {
         for (int i = 0; i < Variables.NUMBER_OF_FACTIONS; i++) {
             Variables.factionSheetButtonState[i] = false;
         }
+
+        try {
+            ImageView imageView = ImageMisc.getGameIconImageView();
+            imageView.setFitHeight(Variables.SCREEN_HEIGHT);
+            imageView.setFitWidth(Variables.SCREEN_WIDTH);
+            Variables.root.getChildren().add(imageView);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
         Button startButton = new Button();
         startButton.setText("Start game");
-        startButton.setPrefHeight(Variables.SCREEN_HEIGHT / 2);
-        startButton.setPrefWidth(Variables.SCREEN_WIDTH);
+        startButton.setPrefHeight(100);
+        startButton.setLayoutX(Variables.SCREEN_WIDTH - 300);
+        startButton.setPrefWidth(300);
+        startButton.setTextFill(Color.SILVER);
+        startButton.setStyle("-fx-background-color: grey");
+
+        startButton.setFont(Font.font("Arial", 40));
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Variables.root.getChildren().remove(startButton);
+                Variables.root.getChildren().clear();
                 ButtonVisualizer.displayCountOfPlayersButtons();
             }
         });
@@ -107,10 +90,10 @@ public class Visualizer {
     public static void createField(int numberOfPlayers) throws Exception {
         try {
             Variables.root.getChildren().add(mapInitialization(numberOfPlayers));
-            initializeGameButtons(numberOfPlayers);
+            ButtonVisualizer.initializeGameButtons(numberOfPlayers);
             finishGame();
             ButtonVisualizer.displayCommandButtons();
-            // ButtonVisualizer.displayContinentButtons();
+            powerLabel();
         } catch (Exception e) {
             throw e;
         }
@@ -128,17 +111,41 @@ public class Visualizer {
         ButtonVisualizer.displayOrderChooseButtons();
     }
 
-    public static void factionSheet(int numberOfFaction) throws FileNotFoundException {
-        String factionName = "images/FactionSheet/FactionCard_" + Variables.NAME_OF_FACTIONS[numberOfFaction] + ".png";
-
-        FileInputStream inputStream = new FileInputStream(factionName);
-        Image sheet = new Image(inputStream);
-
-        ImageView sheetView = new ImageView(sheet);
-        double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
-        sheetView.setY((Variables.SCREEN_HEIGHT - height) / 2);
-        sheetView.setFitWidth(Variables.SCREEN_WIDTH * Variables.PROCENT);
-        sheetView.setFitHeight(height);
+    public static void displayfactionSheet(int factionID) throws FileNotFoundException {
+        ImageView sheetView = ImageMisc.getFactionSheetImageView(factionID);
         Variables.root.getChildren().add(sheetView);
+    }
+
+    public static void powerLabel() {
+        TextFlow textFlowPower = new TextFlow();
+        Text power = new Text("Power: ");
+        power.setFill(Color.BLACK);
+        power.setFont(Font.font("Arial", 32));
+        textFlowPower.getChildren().add(power);
+        ArrayList<Integer> powerList = Variables.core.getPowerList();
+        ArrayList<FactionType> order = Variables.core.getFactions();
+        for (int i = 0; i < powerList.size(); i++) {
+            Text powerFaction1 = new Text(String.valueOf(powerList.get(i)));
+            powerFaction1.setFill(Variables.COLOR_OF_FACTIONS[order.get(i).ordinal()]);
+            powerFaction1.setFont(Font.font("Arial", 32));
+            textFlowPower.getChildren().add(powerFaction1);
+            Text powerFaction2 = new Text("|");
+            powerFaction2.setFill(Color.BLACK);
+            powerFaction2.setFont(Font.font("Arial", 32));
+            if (i != powerList.size() - 1)
+                textFlowPower.getChildren().add(powerFaction2);
+        }
+
+        double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
+
+        Label labelPower = new Label();
+        labelPower.setGraphic(textFlowPower);
+
+        labelPower.setPrefHeight((Variables.SCREEN_HEIGHT - height) / 2);
+        labelPower.setLayoutY((Variables.SCREEN_HEIGHT - height) / 2 + height);
+        labelPower.setPrefWidth(300);
+        labelPower.setLayoutX(100);
+
+        Variables.root.getChildren().add(labelPower);
     }
 }
