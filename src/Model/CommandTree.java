@@ -116,7 +116,9 @@ class CommandTree {
         for (int i = 0; i < core.numOfPlayers; ++i) {
             k += order3.get(i).toString();
         }
-        Node n = new Node(k, "Choose 1 player start location", CommandTree::chooseFactionPermutation, order3, core);
+        Node n = new Node(k,
+                "Choose " + core.factionBase.getFactionNameFromEnum(core.factionsList.get(0)) + " start location",
+                CommandTree::chooseFactionPermutation, order3, core);
         curNode.adj.add(n);
         while (nextPermutation.findNextPermutation(order2)) {
             order3 = new ArrayList<>();
@@ -126,7 +128,9 @@ class CommandTree {
             for (int i = 0; i < core.numOfPlayers; ++i) {
                 k += order3.get(i).toString();
             }
-            n = new Node(k, "Choose 1 player start location", CommandTree::chooseFactionPermutation, order3, core);
+            n = new Node(k,
+                    "Choose " + core.factionBase.getFactionNameFromEnum(core.factionsList.get(0)) + " start location",
+                    CommandTree::chooseFactionPermutation, order3, core);
             curNode.adj.add(n);
         }
     }
@@ -156,7 +160,7 @@ class CommandTree {
         for (int j = 0; j < core.map.startLoc.get(core.factionsList.get(0).ordinal()).size(); ++j) {
 
             Node n = new Node(core.map.startLoc.get(core.factionsList.get(0).ordinal()).get(j).name,
-                    "Choose 2 player start location",
+                    "Choose " + core.factionBase.getFactionNameFromEnum(core.factionsList.get(1)) + " start location",
                     CommandTree::placeStart, new ArrayList<Integer>(Arrays.asList(0, j)), core);
             curNode.adj.add(n);
         }
@@ -166,29 +170,25 @@ class CommandTree {
         core.map.setStartUnits(core.factionsList.get(data.get(0)), core.map.locations.get(data.get(1)));
         int num = data.get(0) + 1;
         if (num >= core.numOfPlayers) {
+            prepareActionSet(core.factionsList.get(0), core, curNode);
             return;
         }
         for (int j = 0; j < core.map.startLoc.get(core.factionsList.get(num).ordinal()).size(); ++j) {
             String desc;
             if (num == core.numOfPlayers - 1)
-                desc = "Choose action";
+                desc = core.factionBase.getFactionNameFromEnum(core.factionsList.get(0)) + " action";
             else
-                desc = "Choose " + Integer.valueOf(num + 2) + " player start location";
+                desc = "Choose " + core.factionBase.getFactionNameFromEnum(core.factionsList.get(num + 1))
+                        + " start location";
             Node n = new Node(core.map.startLoc.get(core.factionsList.get(num).ordinal()).get(j).name, desc,
                     CommandTree::placeStart, new ArrayList<Integer>(Arrays.asList(num, j)), core);
             curNode.adj.add(n);
         }
     }
 
-    static void otherPrep(Core core, Node curNode) {
-        core.turn = 0;
-        for (FactionType faction : core.factionsList) {
-
-        }
-    }
-
-    static void prepareActionSet(FactionType faction, Core core, Node curNode) {
-
+    static void prepareActionSet(FactionType fact, Core core, Node curNode) {
+        Faction faction = core.factionBase.getFactionFromEnum(fact);
+        // if(faction.skip)
     }
 
     static void energyRecount(Core core) {
