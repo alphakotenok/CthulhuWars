@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import javafx.event.ActionEvent;
 import Model.Faction.FactionType;
 import View.ButtonVisualizer;
-import View.Misc;
+import View.ActionsMisc;
 import View.Visualizer;
 
 public class FactionPickButton implements EventHandler<ActionEvent> {
@@ -26,11 +26,11 @@ public class FactionPickButton implements EventHandler<ActionEvent> {
     @Override
     public void handle(ActionEvent event) {
         ButtonVisualizer.rebuildFactionPickButtons(factionID);
-        factionList.add(Misc.getFactionByID(factionID));
+        factionList.add(MiscFunctions.getFactionByID(factionID));
 
         if (playerID + 1 == numberOfPlayers) {
-            Misc.removeButtons(FactionPickButton.class);
-            Misc.removeLabel("player " + numberOfPlayers);
+            ActionsMisc.removeButtons(FactionPickButton.class);
+            ActionsMisc.removeLabel("player " + numberOfPlayers);
             Visualizer.startCore(numberOfPlayers,factionList);
         }
     }
