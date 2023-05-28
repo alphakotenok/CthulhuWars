@@ -225,7 +225,7 @@ public class ButtonVisualizer {
             commandButton[idx].setPrefHeight(thisHeight);
             commandButton[idx].setLayoutY((idx + 1) * thisHeight);
             commandButton[idx].setPrefWidth(Variables.SCREEN_WIDTH);
-            commandButton[idx].setOnAction(new OrderChooseButton(idx));
+            commandButton[idx].setOnAction(new OrderChooseButton(orderID));
 
             Variables.root.getChildren().add(commandButton[idx]);
         }
