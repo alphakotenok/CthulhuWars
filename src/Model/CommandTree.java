@@ -114,12 +114,6 @@ class CommandTree {
         Node n = new Node(k, CommandTree::chooseFactionPermutation, order3);
         curNode.adj.add(n);
         while (nextPermutation.findNextPermutation(order2)) {
-            order2 = new ArrayList<>();
-            for (int i = 0; i < core.numOfPlayers; ++i) {
-                if (i != CthulhuPlace)
-                    order2.add(Integer.valueOf(core.factionsList.get(i).ordinal()));
-            }
-            Collections.sort(order2);
             order3 = new ArrayList<>();
             order3.addAll(order);
             order3.addAll(order2);
