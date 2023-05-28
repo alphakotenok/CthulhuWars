@@ -108,10 +108,6 @@ public class Core {
         return ct.curNode.desc;
     }
 
-    void endOfTheGame() {
-
-    }
-
     int getNextTurn(int who) {
         if (correcrtWay)
             return (who + 1) % numOfPlayers;
