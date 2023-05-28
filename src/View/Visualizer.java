@@ -52,13 +52,14 @@ public class Visualizer {
         Button[] gameButton = new Button[countOfPlayers];
         double weight = Variables.SCREEN_WIDTH * Variables.PROCENT / countOfPlayers;
         double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
+
+        ArrayList<FactionType> orderFactions = Variables.core.getFactions();
         for (int i = 0; i < countOfPlayers; i++) {
             gameButton[i] = new Button();
             gameButton[i].setPrefHeight((Variables.SCREEN_HEIGHT - height) / 2);
             gameButton[i].setLayoutX(i * weight);
             gameButton[i].setPrefWidth(weight);
-
-            String logoName = "images/logo/Faction_" + Variables.NAME_OF_FACTIONS[i] + ".png";
+            String logoName = "images/logo/Faction_" + orderFactions.get(i).name() + ".png";
             FileInputStream inputStream = new FileInputStream(logoName);
             Image logo = new Image(inputStream);
             ImageView logoView = new ImageView(logo);
