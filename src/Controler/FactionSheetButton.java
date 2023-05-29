@@ -1,18 +1,16 @@
 package Controler;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-
 import Model.Variables;
 import View.ActionsMisc;
 import View.ImageMisc;
 import View.Visualizer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.image.Image;
 
 public class FactionSheetButton implements EventHandler<ActionEvent> {
     private int factionID;
+    public static Boolean[] buttonState = new Boolean[Variables.NUMBER_OF_FACTIONS];
 
     public FactionSheetButton(int factionID) {
         this.factionID = factionID;
@@ -28,7 +26,7 @@ public class FactionSheetButton implements EventHandler<ActionEvent> {
         }
         for (int i = 0; i < Variables.NUMBER_OF_FACTIONS; i++) {
             if (i != factionID) {
-                if (Variables.factionSheetButtonState[i] == true) {
+                if (buttonState[i] == true) {
                     try {
                         ActionsMisc.removeImage(ImageMisc.getFactionSheetImage(i));
                         ActionsMisc.removeBooks(i);
@@ -36,12 +34,12 @@ public class FactionSheetButton implements EventHandler<ActionEvent> {
                         e.printStackTrace();
                     }
                 }
-                Variables.factionSheetButtonState[i] = false;
+                buttonState[i] = false;
             }
         }
 
-        Variables.factionSheetButtonState[factionID] = !Variables.factionSheetButtonState[factionID];
-        if (Variables.factionSheetButtonState[factionID] == true) {
+        buttonState[factionID] = !buttonState[factionID];
+        if (buttonState[factionID] == true) {
             ActionsMisc.disableButtons(CommandButton.class);
             try {
                 Visualizer.displayFactionSheet(factionID);

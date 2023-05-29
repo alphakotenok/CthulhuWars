@@ -3,25 +3,21 @@ package View;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-import Controler.FactionPickButton;
+import Controler.FinishButton;
 import Controler.MiscFunctions;
-import Model.Core;
+import Controler.StartButton;
 import Model.Variables;
 import Model.Faction.FactionType;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.image.ImageView;    
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import Model.Core.Coordinates;
-import Model.Core.InvalidFactionsSetException;
-import Model.Core.InvalidNumOfPlayersException;
 
 public class Visualizer {
     static Boolean zoogCheck = false;
@@ -40,18 +36,12 @@ public class Visualizer {
         return mapView;
     }
 
-    public static void startGame() {
-        for (int i = 0; i < Variables.NUMBER_OF_FACTIONS; i++) {
-            Variables.factionSheetButtonState[i] = false;
-            Variables.spellBookButtonState[i] = false;
-        }
-        FactionPickButton.factionList.clear();
-
+    public static void displayStartGameButton() {
         try {
             ImageView imageView = ImageMisc.getGameIconImageView();
             imageView.setFitHeight(Variables.SCREEN_HEIGHT);
             imageView.setFitWidth(Variables.SCREEN_WIDTH);
-            Variables.root.getChildren().add(imageView);
+            ActionsMisc.display(imageView);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -65,17 +55,11 @@ public class Visualizer {
         startButton.setStyle("-fx-background-color: grey");
 
         startButton.setFont(Font.font("Arial", 40));
-        startButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Variables.root.getChildren().clear();
-                ButtonVisualizer.displayCountOfPlayersButtons();
-            }
-        });
-        Variables.root.getChildren().add(startButton);
+        startButton.setOnAction(new StartButton());
+        ActionsMisc.display(startButton);
     }
 
-    public static void finishGame() {
+    public static void displayFinishGameButton() {
         Button finishButton = new Button();
         double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
         finishButton.setText("Finish game");
@@ -83,23 +67,17 @@ public class Visualizer {
         finishButton.setLayoutY((Variables.SCREEN_HEIGHT - height) / 2 + height);
         finishButton.setPrefWidth(100);
 
-        finishButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Variables.root.getChildren().clear();
-                startGame();
-            }
-        });
-        Variables.root.getChildren().add(finishButton);
+        finishButton.setOnAction(new FinishButton());
+        ActionsMisc.display(finishButton);
     }
 
     public static void createField(int numberOfPlayers) throws Exception {
         try {
-            Variables.root.getChildren().add(mapInitialization(numberOfPlayers));
+            ActionsMisc.display(mapInitialization(numberOfPlayers));
             ButtonVisualizer.initializeGameButtons(numberOfPlayers);
-            finishGame();
+            displayFinishGameButton();
             ButtonVisualizer.displayCommandButtons();
-            ritual();
+            displayRitualLabel();
 
             initializeLabels();
         } catch (Exception e) {
@@ -107,41 +85,29 @@ public class Visualizer {
         }
     }
 
-    public static void startCore(int numberOfPlayers, ArrayList<FactionType> factionList) {
-        try {
-            Variables.core = new Core(numberOfPlayers, factionList);
-        } catch (InvalidNumOfPlayersException e) {
-            e.printStackTrace();
-        } catch (InvalidFactionsSetException e) {
-            e.printStackTrace();
-        }
-        Variables.numberOfPlayers = numberOfPlayers;
-        ButtonVisualizer.displayOrderChooseButtons();
-    }
-
     public static void displayFactionSheet(int factionID) throws FileNotFoundException {
         ImageView sheetView = ImageMisc.getFactionSheetImageView(factionID);
-        Variables.root.getChildren().add(sheetView);
+        ActionsMisc.display(sheetView);
         ButtonVisualizer.spellBookButton(factionID);
     }
 
     public static void displaySpellBookSheet(int factionID) throws FileNotFoundException {
         ImageView sheetView = ImageMisc.getSpellBookSheetImageView();
-        Variables.root.getChildren().add(sheetView);
+        ActionsMisc.display(sheetView);
     }
 
     public static void initializeLabels() {
         double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
-        initializeLabel("Power", Variables.core.getPowerList(), (Variables.SCREEN_HEIGHT - height) / 2, 350, 125,
+        displayLabel("Power", Variables.core.getPowerList(), (Variables.SCREEN_HEIGHT - height) / 2, 350, 125,
                 (Variables.SCREEN_HEIGHT - height) / 2 + height);
-        initializeLabel("Doom", Variables.core.getDoomList(), (Variables.SCREEN_HEIGHT - height) / 2, 350, 500,
+        displayLabel("Doom", Variables.core.getDoomList(), (Variables.SCREEN_HEIGHT - height) / 2, 350, 500,
                 (Variables.SCREEN_HEIGHT - height) / 2 + height);
-        initializeLabel("ElderSign", Variables.core.getElderSignList(), (Variables.SCREEN_HEIGHT - height) / 2, 350,
+        displayLabel("ElderSign", Variables.core.getElderSignList(), (Variables.SCREEN_HEIGHT - height) / 2, 350,
                 875, (Variables.SCREEN_HEIGHT - height) / 2 + height);
         return;
     }
 
-    public static void initializeLabel(String partName, ArrayList<Integer> list, double h, double w, double x,
+    public static void displayLabel(String partName, ArrayList<Integer> list, double h, double w, double x,
             double y) {
         TextFlow textFlow = new TextFlow();
         Text text = new Text(partName + ": ");
@@ -170,10 +136,10 @@ public class Visualizer {
         label.setPrefWidth(w);
         label.setLayoutX(x);
 
-        Variables.root.getChildren().add(label);
+        ActionsMisc.display(label);
     }
 
-    public static void ritual() {
+    public static void displayRitualLabel() {
         ArrayList<Integer> ritualList = Variables.core.getRitualData();
         Label ritual = new Label(
                 String.valueOf("Ritual: " + ritualList.get(0)) + "(" + String.valueOf(ritualList.get(1)) + "/"
@@ -185,7 +151,7 @@ public class Visualizer {
         ritual.setFont(Font.font("Arial", 32));
         ritual.setId("ritual");
         ritual.setTextFill(Color.BLACK);
-        Variables.root.getChildren().add(ritual);
+        ActionsMisc.display(ritual);
     }
 
     public static void displayOpenBookSheet(int factionID) {
@@ -196,7 +162,7 @@ public class Visualizer {
             if (!openedBooks.get(i).equals(-1)) {
                 ImageView bookView = ImageMisc.getOpenedSpellBookImageView(imageBooks.get(i),
                         rightSpellBooksSheetCoordinates.get(openedBooks.get(i)));
-                Variables.root.getChildren().add(bookView);
+                ActionsMisc.display(bookView);
             }
         }
     }
@@ -209,7 +175,7 @@ public class Visualizer {
             if (unopenedBooks.get(i).equals(-1)) {
                 ImageView bookView = ImageMisc.getOpenedSpellBookImageView(imageBooks.get(i),
                         leftSpellBooksSheetCoordinates.get(i));
-                Variables.root.getChildren().add(bookView);
+                ActionsMisc.display(bookView);
             }
         }
     }

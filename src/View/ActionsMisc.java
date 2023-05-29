@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import Controler.MiscFunctions;
 
 import java.util.ArrayList;
+import java.util.function.Predicate;
 
 import Model.Variables;
 import javafx.collections.ObservableList;
@@ -104,5 +105,11 @@ public class ActionsMisc {
                 removeImage(imageBooks.get(i));
             }
         }
+    }
+    public static void clearScreen(){
+        Variables.root.getChildren().clear();
+    }
+    public static void removeByFilter(Predicate<? super Node> filter){
+        Variables.root.getChildren().removeIf(filter);
     }
 }

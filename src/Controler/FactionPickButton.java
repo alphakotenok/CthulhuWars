@@ -8,7 +8,6 @@ import javafx.event.ActionEvent;
 import Model.Faction.FactionType;
 import View.ButtonVisualizer;
 import View.ActionsMisc;
-import View.Visualizer;
 
 public class FactionPickButton implements EventHandler<ActionEvent> {
     public static int numberOfPlayers;
@@ -27,7 +26,7 @@ public class FactionPickButton implements EventHandler<ActionEvent> {
         if (playerID == numberOfPlayers) {
             ActionsMisc.removeButtons(FactionPickButton.class);
             ActionsMisc.removeLabelByText("player " + numberOfPlayers);
-            Visualizer.startCore(numberOfPlayers,factionList);
+            Game.startCore(numberOfPlayers,factionList);
         }
     }
 }

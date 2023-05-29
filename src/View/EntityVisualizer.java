@@ -1,10 +1,6 @@
 package View;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import javafx.scene.Node;
-
 import Model.Entity;
 import Model.Location;
 import Model.Variables;
@@ -28,19 +24,15 @@ public class EntityVisualizer {
             mapImageEntity.setLayoutY(y - heightEntity / 2);
             mapImageEntity.setFitWidth(widthEntity);
             mapImageEntity.setPreserveRatio(true);
-            Variables.root.getChildren().add(mapImageEntity);
+            ActionsMisc.display(mapImageEntity);
         }
         return;
     }
 
     public static void removeEntitiesFromMap(Location continent) {
-        List<Node> removeNodes = new ArrayList<>();
-        for (Node node : Variables.root.getChildren()) {
-            if (node instanceof MapImageEntity && ((MapImageEntity) node).continent.equals(continent)) {
-                removeNodes.add(node);
-            }
-        }
-        Variables.root.getChildren().removeAll(removeNodes);
+        ActionsMisc.removeByFilter(node -> {
+            return node instanceof MapImageEntity && ((MapImageEntity) node).continent.equals(continent);
+        });
         return;
     }
 }
