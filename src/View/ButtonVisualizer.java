@@ -29,15 +29,15 @@ public class ButtonVisualizer {
     public static void rebuildFactionPickButtons(int choosenFaction) {
         int playerID = FactionPickButton.playerID;
         double thisHeight = Variables.SCREEN_HEIGHT / (Variables.NUMBER_OF_FACTIONS + 1);
-        
+
         ActionsMisc.removeButtons(FactionPickButton.class);
-        
+
         displayFactionPickButtons(FactionPickButton.numberOfPlayers);
-        
+
         ActionsMisc.removeLabelByText("player " + playerID);
-        
+
         FactionPickButton.playerID++;
-        
+
         Label label = new Label("player " + (playerID + 1));
         label.setPrefHeight(thisHeight);
         label.setPrefWidth(Variables.SCREEN_WIDTH);
@@ -96,16 +96,16 @@ public class ButtonVisualizer {
         label.setPrefWidth(Variables.SCREEN_WIDTH);
         label.setAlignment(Pos.CENTER);
         label.setFont(Font.font("Arial", 40));
-        
+
         ActionsMisc.display(label);
 
         Button[] factionPickButtons = new Button[Variables.NUMBER_OF_FACTIONS];
-        
+
         FactionPickButton.numberOfPlayers = numberOfPlayers;
         int id = 0;
 
         for (int factionId = 0; factionId < Variables.NUMBER_OF_FACTIONS; factionId++) {
-            if(FactionPickButton.factionList.contains(MiscFunctions.getFactionByID(factionId)))
+            if (FactionPickButton.factionList.contains(MiscFunctions.getFactionByID(factionId)))
                 continue;
             factionPickButtons[factionId] = new Button();
             factionPickButtons[factionId].setTextFill(Variables.COLOR_OF_FACTIONS[factionId]);
@@ -169,7 +169,6 @@ public class ButtonVisualizer {
 
     public static void displayCommandButtons() {
         ArrayList<String> commands = Variables.core.getCommandList();
-        // System.out.println(commands.size());
         double thisHeight = Variables.SCREEN_HEIGHT / (commands.size() + 1);
         Label label = new Label(Variables.core.getCommandDescription());
         label.setPrefHeight(thisHeight);
@@ -199,6 +198,7 @@ public class ButtonVisualizer {
         double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
         Button spellBookButton = new Button();
         spellBookButton.setText("About spellbooks");
+        spellBookButton.setFont(Font.font("Arial", 25));
         spellBookButton.setPrefHeight(100 * Variables.PROCENT);
         spellBookButton.setLayoutY((Variables.SCREEN_HEIGHT - height) / 2 + 20 * Variables.PROCENT);
         spellBookButton.setPrefWidth(300 * Variables.PROCENT);

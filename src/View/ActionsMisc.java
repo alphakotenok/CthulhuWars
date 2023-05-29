@@ -11,7 +11,6 @@ import Controler.MiscFunctions;
 import java.util.ArrayList;
 
 import Model.Variables;
-import Model.Core.Coordinates;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 
