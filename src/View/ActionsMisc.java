@@ -1,12 +1,14 @@
 package View;
 
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import Model.Variables;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 
 public class ActionsMisc {
@@ -58,12 +60,11 @@ public class ActionsMisc {
         return;
     }
 
-    public static void addButton(Button b) {
-        Variables.root.getChildren().add(b);
+    public static <T extends Node> void display(T object){
+        Variables.root.getChildren().add(object);
     }
-
-    public static void addLabel(Label l) {
-        Variables.root.getChildren().add(l);
+    public static ObservableList<Node> getDisplayedNodes(){
+        return Variables.root.getChildren();
     }
 
     public static <T extends EventHandler<ActionEvent>> void removeButton(T curEventHandler) {

@@ -18,6 +18,7 @@ public class Core {
     boolean correcrtWay;
     int firstPlayer;
     boolean endOfTheGame;
+    ArrayList<Coordinates> rightBookCoordinates;
 
     public class InvalidNumOfPlayersException extends Exception {
 
@@ -67,6 +68,13 @@ public class Core {
         correcrtWay = true;
         firstPlayer = 0;
         endOfTheGame = false;
+        rightBookCoordinates = new ArrayList<>();
+        rightBookCoordinates.add(new Coordinates(0.506, 0.241));
+        rightBookCoordinates.add(new Coordinates(0.742, 0.241));
+        rightBookCoordinates.add(new Coordinates(0.506, 0.485));
+        rightBookCoordinates.add(new Coordinates(0.742, 0.485));
+        rightBookCoordinates.add(new Coordinates(0.506, 0.724));
+        rightBookCoordinates.add(new Coordinates(0.742, 0.724));
     }
 
     public int getNumOfPlayers() {
@@ -160,7 +168,7 @@ public class Core {
     }
 
     public ArrayList<Image> getBookImageList(FactionType faction) {
-        return null;
+        return factionBase.getFactionFromEnum(faction).bookImages;
     }
 
     public ArrayList<Coordinates> getLeftBookCoordinates() {
@@ -168,6 +176,6 @@ public class Core {
     }
 
     public ArrayList<Coordinates> getRightBookCoordinates() {
-        return null;
+        return rightBookCoordinates;
     }
 }

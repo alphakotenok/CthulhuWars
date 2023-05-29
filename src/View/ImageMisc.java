@@ -11,10 +11,7 @@ import javafx.scene.image.PixelReader;
 
 public class ImageMisc {
     public static ImageView getFactionSheetImageView(int factionID) throws FileNotFoundException {
-        String factionName = "images/FactionSheet/FactionCard_" + Variables.NAME_OF_FACTIONS[factionID] + ".png";
-
-        FileInputStream inputStream = new FileInputStream(factionName);
-        Image sheet = new Image(inputStream);
+        Image sheet = getFactionSheetImage(factionID);
 
         ImageView sheetView = new ImageView(sheet);
         double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
@@ -57,16 +54,14 @@ public class ImageMisc {
     }
 
     public static Image getSpellBookSheetImage() throws FileNotFoundException {
-        String spellBookSheetName = "images/SpeelBookSheet.png";
+        String spellBookSheetName = "images/SpellBooks/SpellBookSheet.png";
         FileInputStream inputStream = new FileInputStream(spellBookSheetName);
         Image spellBookSheet = new Image(inputStream);
         return spellBookSheet;
     }
 
     public static ImageView getSpellBookSheetImageView() throws FileNotFoundException {
-        String spellBookSheetName = "images/SpeelBookSheet.png";
-        FileInputStream inputStream = new FileInputStream(spellBookSheetName);
-        Image spellBookSheet = new Image(inputStream);
+        Image spellBookSheet = getSpellBookSheetImage();
 
         ImageView sheetView = new ImageView(spellBookSheet);
         double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
@@ -78,7 +73,7 @@ public class ImageMisc {
     }
 
     public static ImageView getGameIconImageView() throws FileNotFoundException {
-        String pathToImage = "Images/Cthulhu_Wars.png";
+        String pathToImage = "Images/logo/Cthulhu_Wars.png";
         FileInputStream inputStream;
         inputStream = new FileInputStream(pathToImage);
         Image image = new Image(inputStream);

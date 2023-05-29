@@ -3,6 +3,7 @@ package View;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
+import Controler.FactionPickButton;
 import Model.Core;
 import Model.Variables;
 import Model.Faction.FactionType;
@@ -42,6 +43,7 @@ public class Visualizer {
             Variables.factionSheetButtonState[i] = false;
             Variables.spellBookButtonState[i] = false;
         }
+        FactionPickButton.factionList.clear();
 
         try {
             ImageView imageView = ImageMisc.getGameIconImageView();

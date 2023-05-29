@@ -1,5 +1,6 @@
 package Model;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 
 import javafx.scene.image.Image;
@@ -39,6 +40,34 @@ public class Faction {
             openedBooks.add(-1);
         }
         bookImages = new ArrayList<>();
+        loadBooksImages();
+    }
+
+    void loadBooksImages() {
+        for (int i = 0; i < 6; ++i) {
+            String path = "images/Spellbooks/" + name + "/" + i + ".png";
+            try {
+                FileInputStream fileStream = new FileInputStream(path);
+                Image icon = new Image(fileStream);
+                bookImages.add(icon);
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    boolean isBookOpened(int bookNum) {
+        boolean ans = false;
+        for (int i : openedBooks) {
+            if (i == bookNum) {
+                ans = true;
+                break;
+            }
+        }
+        return ans;
+    }
+
+    boolean isQuestComplete(int questNum) {
+        return ((int) openedBooks.get(questNum)) != -1;
     }
 
     void recountEnergy() {

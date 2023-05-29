@@ -244,7 +244,6 @@ class CommandTree {
     static void energyRecount(Core core) {
         for (int i = 0; i < core.numOfPlayers; ++i) {
             Faction faction = core.factionBase.factList.get(core.factionsList.get(i).ordinal());
-            System.out.println(faction.name);
             faction.recountEnergy();
             faction.skip = false;
         }
