@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import Controler.FactionPickButton;
+import Controler.MiscFunctions;
 import Model.Core;
 import Model.Variables;
 import Model.Faction.FactionType;
@@ -18,6 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import Model.Core.Coordinates;
 import Model.Core.InvalidFactionsSetException;
 import Model.Core.InvalidNumOfPlayersException;
 
@@ -117,7 +119,7 @@ public class Visualizer {
         ButtonVisualizer.displayOrderChooseButtons();
     }
 
-    public static void displayfactionSheet(int factionID) throws FileNotFoundException {
+    public static void displayFactionSheet(int factionID) throws FileNotFoundException {
         ImageView sheetView = ImageMisc.getFactionSheetImageView(factionID);
         Variables.root.getChildren().add(sheetView);
         ButtonVisualizer.spellBookButton(factionID);
@@ -184,5 +186,31 @@ public class Visualizer {
         ritual.setId("ritual");
         ritual.setTextFill(Color.BLACK);
         Variables.root.getChildren().add(ritual);
+    }
+
+    public static void displayOpenBookSheet(int factionID) {
+        ArrayList<Integer> openedBooks = Variables.core.getOpenedBookList(MiscFunctions.getFactionByID(factionID));
+        ArrayList<Image> imageBooks = Variables.core.getBookImageList(MiscFunctions.getFactionByID(factionID));
+        ArrayList<Coordinates> rightSpellBooksSheetCoordinates = Variables.core.getRightBookCoordinates();
+        for (int i = 0; i < openedBooks.size(); i++) {
+            if (!openedBooks.get(i).equals(-1)) {
+                ImageView bookView = ImageMisc.getOpenedSpellBookImageView(imageBooks.get(i),
+                        rightSpellBooksSheetCoordinates.get(openedBooks.get(i)));
+                Variables.root.getChildren().add(bookView);
+            }
+        }
+    }
+
+    public static void displayUnopenedBookSheet(int factionID) {
+        ArrayList<Integer> unopenedBooks = Variables.core.getOpenedBookList(MiscFunctions.getFactionByID(factionID));
+        ArrayList<Image> imageBooks = Variables.core.getBookImageList(MiscFunctions.getFactionByID(factionID));
+        ArrayList<Coordinates> leftSpellBooksSheetCoordinates = Variables.core.getLeftBookCoordinates();
+        for (int i = 0; i < unopenedBooks.size(); i++) {
+            if (unopenedBooks.get(i).equals(-1)) {
+                ImageView bookView = ImageMisc.getOpenedSpellBookImageView(imageBooks.get(i),
+                        leftSpellBooksSheetCoordinates.get(i));
+                Variables.root.getChildren().add(bookView);
+            }
+        }
     }
 }

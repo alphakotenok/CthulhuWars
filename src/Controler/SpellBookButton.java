@@ -22,12 +22,14 @@ public class SpellBookButton implements EventHandler<ActionEvent> {
         if (Variables.spellBookButtonState[factionID] == true) {
             try {
                 Visualizer.displaySpellBookSheet(factionID);
+                Visualizer.displayUnopenedBookSheet(factionID);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         } else {
             try {
                 ActionsMisc.removeImage(ImageMisc.getSpellBookSheetImage());
+                ActionsMisc.removeUnopenedBooks(factionID);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }

@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import Model.Variables;
+import Model.Core.Coordinates;
 import Model.Faction.FactionType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -65,10 +66,10 @@ public class ImageMisc {
 
         ImageView sheetView = new ImageView(spellBookSheet);
         double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
-        sheetView.setY((Variables.SCREEN_HEIGHT - height) / 2 + 140 * Variables.PROCENT);
+        sheetView.setY((Variables.SCREEN_HEIGHT - height) / 2 + 137 * Variables.PROCENT);
         sheetView.setX(Variables.PROCENT * 20);
         sheetView.setFitWidth(Variables.SCREEN_WIDTH * Variables.PROCENT / 2 - Variables.PROCENT * 40);
-        sheetView.setFitHeight(height - 160 * Variables.PROCENT);
+        sheetView.setFitHeight(height - 158 * Variables.PROCENT);
         return sheetView;
     }
 
@@ -79,6 +80,21 @@ public class ImageMisc {
         Image image = new Image(inputStream);
         ImageView imageView = new ImageView(image);
         return imageView;
+    }
+
+    public static ImageView getOpenedSpellBookImageView(Image bookImage, Coordinates bookCoordinates) {
+        double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
+        double heightBook = bookImage.getHeight() * Variables.PROCENT;
+        double widthBook = heightBook * Variables.mapRatio;
+        double x = bookCoordinates.x * Variables.SCREEN_WIDTH * Variables.PROCENT;
+        double y = (Variables.SCREEN_HEIGHT - height) / 2 + height * bookCoordinates.y;
+
+        ImageView bookView = new ImageView(bookImage);
+        bookView.setY(y);
+        bookView.setX(x);
+        bookView.setFitWidth(widthBook);
+        bookView.setFitHeight(heightBook);
+        return bookView;
     }
 
     public static Boolean imagesAreEqual(Image image1, Image image2) {

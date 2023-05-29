@@ -18,7 +18,7 @@ public class Core {
     boolean correcrtWay;
     int firstPlayer;
     boolean endOfTheGame;
-    ArrayList<Coordinates> rightBookCoordinates;
+    ArrayList<Coordinates> rightBookCoordinates, leftBookCoordinates;
 
     public class InvalidNumOfPlayersException extends Exception {
 
@@ -75,6 +75,13 @@ public class Core {
         rightBookCoordinates.add(new Coordinates(0.742, 0.485));
         rightBookCoordinates.add(new Coordinates(0.506, 0.724));
         rightBookCoordinates.add(new Coordinates(0.742, 0.724));
+        leftBookCoordinates = new ArrayList<>();
+        leftBookCoordinates.add(new Coordinates(0.027, 0.241));
+        leftBookCoordinates.add(new Coordinates(0.267, 0.241));
+        leftBookCoordinates.add(new Coordinates(0.027, 0.485));
+        leftBookCoordinates.add(new Coordinates(0.267, 0.485));
+        leftBookCoordinates.add(new Coordinates(0.027, 0.724));
+        leftBookCoordinates.add(new Coordinates(0.267, 0.724));
     }
 
     public int getNumOfPlayers() {
@@ -172,7 +179,7 @@ public class Core {
     }
 
     public ArrayList<Coordinates> getLeftBookCoordinates() {
-        return null;
+        return leftBookCoordinates;
     }
 
     public ArrayList<Coordinates> getRightBookCoordinates() {

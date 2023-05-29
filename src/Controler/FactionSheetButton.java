@@ -1,6 +1,7 @@
 package Controler;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 import Model.Variables;
 import View.ActionsMisc;
@@ -8,6 +9,7 @@ import View.ImageMisc;
 import View.Visualizer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.image.Image;
 
 public class FactionSheetButton implements EventHandler<ActionEvent> {
     private int factionID;
@@ -29,6 +31,7 @@ public class FactionSheetButton implements EventHandler<ActionEvent> {
                 if (Variables.factionSheetButtonState[i] == true) {
                     try {
                         ActionsMisc.removeImage(ImageMisc.getFactionSheetImage(i));
+                        ActionsMisc.removeBooks(i);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -41,14 +44,16 @@ public class FactionSheetButton implements EventHandler<ActionEvent> {
         if (Variables.factionSheetButtonState[factionID] == true) {
             ActionsMisc.disableButtons(CommandButton.class);
             try {
-                Visualizer.displayfactionSheet(factionID);
+                Visualizer.displayFactionSheet(factionID);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+            Visualizer.displayOpenBookSheet(factionID);
         } else {
             ActionsMisc.enableButtons(CommandButton.class);
             try {
                 ActionsMisc.removeImage(ImageMisc.getFactionSheetImage(factionID));
+                ActionsMisc.removeBooks(factionID);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }

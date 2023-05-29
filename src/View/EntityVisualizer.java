@@ -19,15 +19,14 @@ public class EntityVisualizer {
             mapImageEntity.setImage(entity.icon);
             RatioCoordinates z = continent.getEntityPosition(entityID);
             double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
-            double widthEntity = entity.icon.getWidth() * Variables.PROCENT * 0.7;
-            double heightEntity = entity.icon.getHeight() * Variables.PROCENT * 0.7;
+            double widthEntity = entity.icon.getWidth() * Variables.PROCENT * 0.5;
+            double heightEntity = entity.icon.getHeight() * Variables.PROCENT * 0.5;
             double x = z.x * Variables.SCREEN_WIDTH * Variables.PROCENT;
             double y = (Variables.SCREEN_HEIGHT - height) / 2 + height * z.y;
 
             mapImageEntity.setLayoutX(x - widthEntity / 2);
             mapImageEntity.setLayoutY(y - heightEntity / 2);
-            mapImageEntity.setFitWidth(entity.icon.getWidth() * Variables.PROCENT * 0.7 * 0.5);
-            mapImageEntity.setFitWidth(entity.icon.getWidth() * Variables.PROCENT / 2);
+            mapImageEntity.setFitWidth(widthEntity);
             mapImageEntity.setPreserveRatio(true);
             Variables.root.getChildren().add(mapImageEntity);
         }
