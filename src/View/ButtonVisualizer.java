@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 import Controler.OrderChooseButton;
+import Controler.SpellBookButton;
 import Controler.FactionPickButton;
 import Controler.FactionSheetButton;
 import Controler.MenuButton;
@@ -205,5 +206,19 @@ public class ButtonVisualizer {
 
             Variables.root.getChildren().add(commandButton[commandID]);
         }
+    }
+
+    public static void spellBookButton(int factionID) {
+        double width = Variables.SCREEN_WIDTH * Variables.PROCENT;
+        double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
+        Button spellBookButton = new Button();
+        spellBookButton.setText("About spellbooks");
+        spellBookButton.setPrefHeight(100 * Variables.PROCENT);
+        spellBookButton.setLayoutY((Variables.SCREEN_HEIGHT - height) / 2 + 20 * Variables.PROCENT);
+        spellBookButton.setPrefWidth(300 * Variables.PROCENT);
+        spellBookButton.setLayoutX(width / 2 + 160 * Variables.PROCENT);
+        spellBookButton.setOnAction(new SpellBookButton(factionID));
+
+        Variables.root.getChildren().add(spellBookButton);
     }
 }

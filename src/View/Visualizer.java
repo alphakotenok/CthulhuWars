@@ -40,6 +40,7 @@ public class Visualizer {
     public static void startGame() {
         for (int i = 0; i < Variables.NUMBER_OF_FACTIONS; i++) {
             Variables.factionSheetButtonState[i] = false;
+            Variables.spellBookButtonState[i] = false;
         }
 
         try {
@@ -116,6 +117,12 @@ public class Visualizer {
 
     public static void displayfactionSheet(int factionID) throws FileNotFoundException {
         ImageView sheetView = ImageMisc.getFactionSheetImageView(factionID);
+        Variables.root.getChildren().add(sheetView);
+        ButtonVisualizer.spellBookButton(factionID);
+    }
+
+    public static void displaySpellBookSheet(int factionID) throws FileNotFoundException {
+        ImageView sheetView = ImageMisc.getSpellBookSheetImageView();
         Variables.root.getChildren().add(sheetView);
     }
 

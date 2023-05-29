@@ -13,6 +13,7 @@ public class Variables {
         public static final int NUMBER_OF_FACTIONS = 7;
         public static final int NUMBER_OF_PERMUTATIONS = 15;
         public static Boolean[] factionSheetButtonState = { false, false, false, false, false, false, false };
+        public static Boolean[] spellBookButtonState = { false, false, false, false, false, false, false };
         public static Group root = new Group();
         public static Core core;
         public static double mapRatio;
