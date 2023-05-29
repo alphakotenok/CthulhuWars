@@ -18,6 +18,12 @@ public class FactionSheetButton implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent event) {
+        try {
+            ActionsMisc.removeImage(ImageMisc.getSpellBookSheetImage());
+            ActionsMisc.removeButtons(SpellBookButton.class);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         for (int i = 0; i < Variables.NUMBER_OF_FACTIONS; i++) {
             if (i != factionID) {
                 if (Variables.factionSheetButtonState[i] == true) {
