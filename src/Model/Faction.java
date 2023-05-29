@@ -2,6 +2,8 @@ package Model;
 
 import java.util.ArrayList;
 
+import javafx.scene.image.Image;
+
 public class Faction {
     public enum FactionType {
         GreatCthulhu, CrawlingChaos, BlackGoat, YellowSign, OpenerOfTheWay, Sleeper, Windwalker
@@ -16,6 +18,10 @@ public class Faction {
     boolean skip;
     Core core;
     FactionType faction;
+    int victoryPoints;
+    ArrayList<Integer> elderSignList;
+    ArrayList<Integer> openedBooks;
+    ArrayList<Image> bookImages;
 
     Faction(String name, Core core) {
         elderSignList = new ArrayList<>();
@@ -28,6 +34,11 @@ public class Faction {
         activeGOO = 0;
         victoryPoints = 0;
         skip = false;
+        openedBooks = new ArrayList<>();
+        for (int i = 0; i < 6; ++i) {
+            openedBooks.add(-1);
+        }
+        bookImages = new ArrayList<>();
     }
 
     void recountEnergy() {
@@ -44,7 +55,4 @@ public class Faction {
         elderSignList.add(sign);
     }
 
-    int victoryPoints;
-
-    ArrayList<Integer> elderSignList;
 }
