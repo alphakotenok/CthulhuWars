@@ -27,6 +27,15 @@ public class Core {
 
     }
 
+    public static class Coordinates {
+        public double x, y;
+
+        Coordinates(double x, double y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
     public Core(int numOfPlayers, ArrayList<FactionType> factions)
             throws InvalidNumOfPlayersException, InvalidFactionsSetException {
         if (numOfPlayers > GameMap.maxNumOfPlayers || numOfPlayers < GameMap.minNumOfPlayers) {
@@ -144,5 +153,21 @@ public class Core {
         return new ArrayList<Integer>(Arrays.asList(ritual.ritualTrack.get(ritual.ritualState), ritual.ritualState,
                 ritual.ritualTrack.size()));
 
+    }
+
+    public ArrayList<Integer> getOpenedBookList(FactionType faction) {
+        return factionBase.getFactionFromEnum(faction).openedBooks;
+    }
+
+    public ArrayList<Image> getBookImageList(FactionType faction) {
+        return null;
+    }
+
+    public ArrayList<Coordinates> getLeftBookCoordinates() {
+        return null;
+    }
+
+    public ArrayList<Coordinates> getRightBookCoordinates() {
+        return null;
     }
 }
