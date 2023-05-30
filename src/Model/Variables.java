@@ -12,7 +12,6 @@ public class Variables {
         public static final int MIN_COUNT_OF_PLAYERS = 2;
         public static final int NUMBER_OF_FACTIONS = 7;
         public static final int NUMBER_OF_PERMUTATIONS = 15;
-        public static Boolean[] factionSheetButtonState = { false, false, false, false, false, false, false };
         public static Group root = new Group();
         public static Core core;
         public static double mapRatio;

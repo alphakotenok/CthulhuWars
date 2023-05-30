@@ -7,8 +7,6 @@ import Model.Faction.FactionType;
 class FactionBase {
     ArrayList<Faction> factList;
 
-    int totalSkip;
-
     FactionBase(Core core) {
         factList = new ArrayList<>();
         factList.add(new GreatCthulhu("GreatCthulhu", core));
@@ -18,7 +16,6 @@ class FactionBase {
         factList.add(new OpenerOfTheWay("OpenerOfTheWay", core));
         factList.add(new Sleeper("Sleeper", core));
         factList.add(new Windwalker("Windwalker", core));
-        totalSkip = 0;
     }
 
     Faction getFactionFromEnum(FactionType faction) {

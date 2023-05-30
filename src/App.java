@@ -5,7 +5,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-import View.*;
+import Controler.Game;
 import Model.Variables;
 
 public class App extends Application {
@@ -15,7 +15,7 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         try {
-            Visualizer.startGame();
+            Game.startGame();
             Scene scene = new Scene(Variables.root, Color.GREY);
             primaryStage.setTitle("CthulhuWars");
             primaryStage.setScene(scene);
