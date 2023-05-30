@@ -6,7 +6,7 @@ import java.util.Collections;
 
 import Model.FactionEnum.FactionType;
 
-class NewCommandTree {
+class CommandTree {
 
     @FunctionalInterface
     static interface EgdeFunctionContainer {
@@ -110,7 +110,7 @@ class NewCommandTree {
 
     }
 
-    NewCommandTree(Core core) {
+    CommandTree(Core core) {
         this.core = core;
         curNode = startNode;
         openBookNode.bookNode = true;
@@ -255,7 +255,7 @@ class NewCommandTree {
 }
 
 class NodeNameTreeFunctions {
-    static NewCommandTree.NodeNameFunctionContainer constName(String name) {
+    static CommandTree.NodeNameFunctionContainer constName(String name) {
         return (core -> name);
     }
 
@@ -292,7 +292,7 @@ class NodeNameTreeFunctions {
 }
 
 class EdgeNameTreeFunctions {
-    static NewCommandTree.EdgeNameFunctionContainer constName(String name) {
+    static CommandTree.EdgeNameFunctionContainer constName(String name) {
         return ((data, core) -> name);
     }
 
@@ -529,7 +529,7 @@ class DataGeneratorTreeFunctions {
 
 class EdgeCreatorTreeChecker {
 
-    static NewCommandTree.EdgeCreatorCheckerContainer opposite(NewCommandTree.EdgeCreatorCheckerContainer checker) {
+    static CommandTree.EdgeCreatorCheckerContainer opposite(CommandTree.EdgeCreatorCheckerContainer checker) {
         return (core -> !checker.activate(core));
     }
 
