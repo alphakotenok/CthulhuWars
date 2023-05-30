@@ -3,7 +3,7 @@ package Model;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import Model.Faction.FactionType;
+import Model.FactionEnum.FactionType;
 import javafx.scene.image.Image;
 
 public class Core {

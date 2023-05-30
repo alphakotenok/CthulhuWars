@@ -3,7 +3,7 @@ package Model;
 import java.util.*;
 
 import Model.Entity.EntityType;
-import Model.Faction.FactionType;
+import Model.FactionEnum.FactionType;
 import Model.Location.Segment;
 import javafx.scene.image.Image;
 

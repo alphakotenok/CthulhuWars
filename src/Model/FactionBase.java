@@ -2,7 +2,7 @@ package Model;
 
 import java.util.ArrayList;
 
-import Model.Faction.FactionType;
+import Model.FactionEnum.FactionType;
 
 class FactionBase {
     ArrayList<Faction> factList;
