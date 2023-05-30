@@ -10,23 +10,13 @@ public class Location {
     public ArrayList<Entity> entityList = new ArrayList<>();
     ArrayList<Segment> segments = new ArrayList<>();
 
-    static class Point {
-        int x;
-        int y;
-
-        Point(int curX, int curY) {
-            x = curX;
-            y = curY;
-        }
-    }
-
     static class Segment {
-        Point left;
-        Point right;
+        Coordinates left;
+        Coordinates right;
 
         Segment(int leftX, int leftY, int rightX, int rightY) {
-            left = new Point(leftX, leftY);
-            right = new Point(rightX, rightY);
+            left = new Coordinates(leftX, leftY);
+            right = new Coordinates(rightX, rightY);
         }
     }
 
@@ -38,19 +28,19 @@ public class Location {
     public Coordinates getEntityPosition(int entityNum) {
         int entityTotal = entityList.size() + 1;
         int segTotal = segments.size();
-        int lengthOfSegments[] = new int[segTotal];
-        int sumOfLength = 0;
+        double lengthOfSegments[] = new double[segTotal];
+        double sumOfLength = 0;
         for (int i = 0; i < segTotal; i++) {
-            lengthOfSegments[i] = (int) Math.sqrt((segments.get(i).left.x - segments.get(i).right.x)
+            lengthOfSegments[i] =  Math.sqrt((segments.get(i).left.x - segments.get(i).right.x)
                     * (segments.get(i).left.x - segments.get(i).right.x)
                     + (segments.get(i).left.y - segments.get(i).right.y)
                             * (segments.get(i).left.y - segments.get(i).right.y));
             sumOfLength += lengthOfSegments[i];
         }
-        int avLength = sumOfLength / entityTotal;
+        double avLength = sumOfLength / entityTotal;
         int colEnt[] = new int[segTotal];
         for (int i = 0; i < segTotal; i++) {
-            colEnt[i] = (lengthOfSegments[i] + avLength / 2) / avLength;
+            colEnt[i] = (int)((lengthOfSegments[i] + avLength / 2.0) / avLength);
             entityTotal -= colEnt[i];
         }
         for (int i = 0; i < segTotal; i++) {
@@ -63,8 +53,8 @@ public class Location {
             if (entityNum >= colEnt[i])
                 entityNum -= colEnt[i];
             else {
-                Point left = segments.get(i).left;
-                Point right = segments.get(i).right;
+                Coordinates left = segments.get(i).left;
+                Coordinates right = segments.get(i).right;
                 double perShift = 1.0 / colEnt[i];
                 double resPer = perShift * entityNum + perShift / 2;
                 double xCoordinate = left.x * resPer + right.x * (1 - resPer);
