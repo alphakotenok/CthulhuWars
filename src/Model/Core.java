@@ -9,12 +9,20 @@ import javafx.scene.image.Image;
 public class Core {
     GameMap map;
     EntityBase entityBase;
-    NewCommandTree ct;
+    CommandTree ct;
     FactionBase factionBase;
     Ritual ritual;
     GameVariables var;
 
     ArrayList<Coordinates> rightBookCoordinates, leftBookCoordinates;
+
+    Faction getCurFact() {
+        return factionBase.getFactionFromEnum(var.factionsList.get(var.turn));
+    }
+
+    Faction getSomeFact(int i) {
+        return factionBase.getFactionFromEnum(var.factionsList.get(i));
+    }
 
     public class InvalidNumOfPlayersException extends Exception {
 
@@ -30,6 +38,16 @@ public class Core {
         Coordinates(double x, double y) {
             this.x = x;
             this.y = y;
+        }
+    }
+
+    public static class Drawable {
+        public Coordinates coord;
+        public Image image;
+
+        Drawable(Coordinates coord, Image image) {
+            this.coord = coord;
+            this.image = image;
         }
     }
 
@@ -53,7 +71,7 @@ public class Core {
         ritual = new Ritual(this);
         entityBase = new EntityBase(var.factionsList);
         factionBase = new FactionBase(this);
-        ct = new NewCommandTree(this);
+        ct = new CommandTree(this);
 
         rightBookCoordinates = new ArrayList<>();
         rightBookCoordinates.add(new Coordinates(0.506, 0.241));
@@ -75,24 +93,34 @@ public class Core {
         return var.numOfPlayers;
     }
 
+    // toDeleteLater
     public ArrayList<Entity> getEntityList() {
         return entityBase.entityList;
     }
 
+    // toDeleteLater
     public ArrayList<Location> getLocationsList() {
         return map.locations;
     }
 
+    // toDeleteLater
     public ArrayList<Entity> getEntityListInLocation(Location location) {
         return map.getEntityListInLocation(location);
     }
 
-    public void addEntity(Location location, Entity entity) {
+    // toDeleteLater
+    void addEntity(Location location, Entity entity) {
         location.entityList.add(entity);
     }
 
-    public void deleteEntity(Location location, Entity entity) {
+    // toDeleteLater
+    void deleteEntity(Location location, Entity entity) {
         location.entityList.remove(entity);
+    }
+
+    // toDeleteLater
+    public ArrayList<Drawable> getEntitiesToDraw() {
+        return null;
     }
 
     public Image getMapIcon() {
@@ -167,11 +195,4 @@ public class Core {
         return rightBookCoordinates;
     }
 
-    Faction getCurFact() {
-        return factionBase.getFactionFromEnum(var.factionsList.get(var.turn));
-    }
-
-    Faction getSomeFact(int i) {
-        return factionBase.getFactionFromEnum(var.factionsList.get(i));
-    }
 }
