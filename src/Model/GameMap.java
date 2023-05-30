@@ -7,14 +7,14 @@ import Model.Faction.FactionType;
 import Model.Location.Segment;
 import javafx.scene.image.Image;
 
-public class GameMap {
+class GameMap {
 
     ArrayList<Location> locations;
     Image mapIcon;
     static int minNumOfPlayers = 2;
     static int maxNumOfPlayers = 6;
     Core core;
-    //core.factionslist - arraylist enum(фракций)
+    // core.factionslist - arraylist enum(фракций)
 
     ArrayList<Segment> BeringSea() {
         ArrayList<Segment> BeringSea = new ArrayList<>();

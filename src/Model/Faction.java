@@ -26,6 +26,10 @@ public class Faction {
     ArrayList<String> bookNames;
     boolean isRitualPerformed;
 
+    class Mob {
+        Entity entity;
+    }
+
     void fillFactionNames() {
         bookNames.add("Aboba");
         bookNames.add("Aboba");
