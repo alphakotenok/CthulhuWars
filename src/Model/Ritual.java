@@ -21,20 +21,21 @@ class Ritual {
             elderSignPool.add(Integer.valueOf(2));
         for (int i = 0; i < 6; ++i)
             elderSignPool.add(Integer.valueOf(3));
-        if (core.numOfPlayers <= 3)
+        if (core.var.numOfPlayers <= 3)
             ritualTrack = new ArrayList<>(Arrays.asList(5, 6, 7, 8, 9, 10));
-        if (core.numOfPlayers == 4)
+        if (core.var.numOfPlayers == 4)
             ritualTrack = new ArrayList<>(Arrays.asList(5, 6, 7, 7, 8, 8, 9, 10));
-        if (core.numOfPlayers == 5)
+        if (core.var.numOfPlayers == 5)
             ritualTrack = new ArrayList<>(Arrays.asList(5, 6, 6, 7, 7, 8, 8, 9, 9, 10));
-        if (core.numOfPlayers == 6)
+        if (core.var.numOfPlayers == 6)
             ritualTrack = new ArrayList<>(Arrays.asList(5, 6, 6, 7, 7, 7, 8, 8, 8, 9, 9, 10));
         ritualState = 0;
 
     }
 
-    boolean canPerformRItual(FactionType faction) {
-        return core.factionBase.getFactionFromEnum(faction).energy >= ritualTrack.get(ritualState);
+    boolean canPerformRitual(FactionType faction) {
+        Faction fact = core.factionBase.getFactionFromEnum(faction);
+        return (fact.energy >= ritualTrack.get(ritualState) && !fact.isRitualPerformed);
     }
 
     void performRitual(FactionType faction) {
@@ -46,8 +47,9 @@ class Ritual {
         ++ritualState;
         if (ritualState >= ritualTrack.size()) {
             --ritualState;
-            core.endOfTheGame = true;
+            core.var.endOfTheGame = true;
         }
+        curFac.isRitualPerformed = true;
     }
 
     int getSign() {

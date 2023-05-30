@@ -23,9 +23,19 @@ public class Faction {
     ArrayList<Integer> elderSignList;
     ArrayList<Integer> openedBooks;
     ArrayList<Image> bookImages;
+    ArrayList<String> bookNames;
+    boolean isRitualPerformed;
+
+    void fillFactionNames() {
+        bookNames.add("Aboba");
+        bookNames.add("Aboba");
+        bookNames.add("Aboba");
+        bookNames.add("Aboba");
+        bookNames.add("Aboba");
+        bookNames.add("Aboba");
+    }
 
     Faction(String name, Core core) {
-        elderSignList = new ArrayList<>();
         this.core = core;
         this.name = name;
         energy = 8;
@@ -35,12 +45,16 @@ public class Faction {
         activeGOO = 0;
         victoryPoints = 0;
         skip = false;
+        isRitualPerformed = false;
         openedBooks = new ArrayList<>();
+        bookNames = new ArrayList<>();
+        elderSignList = new ArrayList<>();
         for (int i = 0; i < 6; ++i) {
             openedBooks.add(-1);
         }
         bookImages = new ArrayList<>();
         loadBooksImages();
+        getElderSign();
     }
 
     void loadBooksImages() {
@@ -66,13 +80,8 @@ public class Faction {
         return ans;
     }
 
-    boolean isQuestComplete(int questNum) {
+    boolean isQuestCompletedEarlier(int questNum) {
         return ((int) openedBooks.get(questNum)) != -1;
-    }
-
-    void recountEnergy() {
-        energy = cultistAlive + unitsCaptured + 2 * gatesControlled + core.entityBase.neutralGateExists;
-        unitsCaptured = 0;
     }
 
     void getElderSign() {
@@ -84,4 +93,27 @@ public class Faction {
         elderSignList.add(sign);
     }
 
+    boolean isQuestCompleted(int questNum) {
+        return false;
+    }
+
+    void recountEnergy() {
+        energy = cultistAlive + unitsCaptured + 2 * gatesControlled + core.entityBase.neutralGateExists;
+        unitsCaptured = 0;
+    }
+
+    void recountPoints() {
+        victoryPoints += gatesControlled;
+    }
+
+    void prepareForNextRound() {
+        recountEnergy();
+        skip = false;
+        recountPoints();
+    }
+
+    void revealSign(int num) {
+        victoryPoints += elderSignList.get(num);
+        elderSignList.remove(num);
+    }
 }

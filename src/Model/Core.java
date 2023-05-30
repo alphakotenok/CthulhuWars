@@ -9,15 +9,11 @@ import javafx.scene.image.Image;
 public class Core {
     GameMap map;
     EntityBase entityBase;
-    int numOfPlayers;
-    ArrayList<FactionType> factionsList;
-    CommandTree ct;
+    NewCommandTree ct;
     FactionBase factionBase;
     Ritual ritual;
-    int turn;
-    boolean correcrtWay;
-    int firstPlayer;
-    boolean endOfTheGame;
+    GameVariables var;
+
     ArrayList<Coordinates> rightBookCoordinates;
 
     public class InvalidNumOfPlayersException extends Exception {
@@ -52,22 +48,13 @@ public class Core {
                 }
             }
         }
-        factionsList = new ArrayList<>();
-        for (FactionType factionType : factions) {
-            factionsList.add(factionType);
-        }
-
-        this.numOfPlayers = numOfPlayers;
-        map = new GameMap(numOfPlayers, this);
-
-        entityBase = new EntityBase(factionsList);
-        factionBase = new FactionBase(this);
-        ct = new CommandTree(this);
+        var = new GameVariables(numOfPlayers, factions);
+        map = new GameMap(this);
         ritual = new Ritual(this);
-        turn = 0;
-        correcrtWay = true;
-        firstPlayer = 0;
-        endOfTheGame = false;
+        entityBase = new EntityBase(var.factionsList);
+        factionBase = new FactionBase(this);
+        ct = new NewCommandTree(this);
+
         rightBookCoordinates = new ArrayList<>();
         rightBookCoordinates.add(new Coordinates(0.506, 0.241));
         rightBookCoordinates.add(new Coordinates(0.742, 0.241));
@@ -78,7 +65,7 @@ public class Core {
     }
 
     public int getNumOfPlayers() {
-        return numOfPlayers;
+        return var.numOfPlayers;
     }
 
     public ArrayList<Entity> getEntityList() {
@@ -106,7 +93,7 @@ public class Core {
     }
 
     public ArrayList<FactionType> getFactions() {
-        return factionsList;
+        return var.factionsList;
     }
 
     public ArrayList<String> getCommandList() {
@@ -122,38 +109,32 @@ public class Core {
     }
 
     public String getCommandDescription() {
-        return ct.curNode.desc;
-    }
-
-    int getNextTurn(int who) {
-        if (correcrtWay)
-            return (who + 1) % numOfPlayers;
-        return (who - 1 + numOfPlayers) % numOfPlayers;
+        return ct.curNode.name;
     }
 
     public ArrayList<Integer> getPowerList() {
         ArrayList<Integer> ans = new ArrayList<>();
-        for (int i = 0; i < numOfPlayers; ++i)
-            ans.add(factionBase.factList.get(factionsList.get(i).ordinal()).energy);
+        for (int i = 0; i < var.numOfPlayers; ++i)
+            ans.add(factionBase.factList.get(var.factionsList.get(i).ordinal()).energy);
         return ans;
     }
 
     public ArrayList<Integer> getDoomList() {
         ArrayList<Integer> ans = new ArrayList<>();
-        for (int i = 0; i < numOfPlayers; ++i)
-            ans.add(factionBase.factList.get(factionsList.get(i).ordinal()).victoryPoints);
+        for (int i = 0; i < var.numOfPlayers; ++i)
+            ans.add(factionBase.factList.get(var.factionsList.get(i).ordinal()).victoryPoints);
         return ans;
     }
 
     public ArrayList<Integer> getElderSignList() {
         ArrayList<Integer> ans = new ArrayList<>();
-        for (int i = 0; i < numOfPlayers; ++i)
-            ans.add(factionBase.factList.get(factionsList.get(i).ordinal()).elderSignList.size());
+        for (int i = 0; i < var.numOfPlayers; ++i)
+            ans.add(factionBase.factList.get(var.factionsList.get(i).ordinal()).elderSignList.size());
         return ans;
     }
 
     public ArrayList<Integer> getRitualData() {
-        if (endOfTheGame) {
+        if (var.endOfTheGame) {
             return new ArrayList<Integer>(
                     Arrays.asList(ritual.ritualTrack.get(ritual.ritualState), ritual.ritualTrack.size(),
                             ritual.ritualTrack.size()));
@@ -177,5 +158,13 @@ public class Core {
 
     public ArrayList<Coordinates> getRightBookCoordinates() {
         return rightBookCoordinates;
+    }
+
+    Faction getCurFact() {
+        return factionBase.getFactionFromEnum(var.factionsList.get(var.turn));
+    }
+
+    Faction getSomeFact(int i) {
+        return factionBase.getFactionFromEnum(var.factionsList.get(i));
     }
 }
