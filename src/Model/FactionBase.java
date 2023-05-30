@@ -2,12 +2,10 @@ package Model;
 
 import java.util.ArrayList;
 
-import Model.Faction.FactionType;
+import Model.FactionEnum.FactionType;
 
 class FactionBase {
     ArrayList<Faction> factList;
-
-    int totalSkip;
 
     FactionBase(Core core) {
         factList = new ArrayList<>();
@@ -18,7 +16,6 @@ class FactionBase {
         factList.add(new OpenerOfTheWay("OpenerOfTheWay", core));
         factList.add(new Sleeper("Sleeper", core));
         factList.add(new Windwalker("Windwalker", core));
-        totalSkip = 0;
     }
 
     Faction getFactionFromEnum(FactionType faction) {

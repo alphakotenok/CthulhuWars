@@ -4,7 +4,7 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 
 import Model.Entity.EntityType;
-import Model.Faction.FactionType;
+import Model.FactionEnum.FactionType;
 import javafx.scene.image.Image;
 
 public class EntityBase {

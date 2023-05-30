@@ -6,7 +6,7 @@ import Model.Core;
 import Model.Variables;
 import Model.Core.InvalidFactionsSetException;
 import Model.Core.InvalidNumOfPlayersException;
-import Model.Faction.FactionType;
+import Model.FactionEnum.FactionType;
 import View.ActionsMisc;
 import View.ButtonVisualizer;
 import View.Visualizer;
@@ -22,6 +22,7 @@ public class Game {
         Variables.core = null;
         Visualizer.displayStartGameButton();
     }
+
     public static void startCore(int numberOfPlayers, ArrayList<FactionType> factionList) {
         try {
             Variables.core = new Core(numberOfPlayers, factionList);

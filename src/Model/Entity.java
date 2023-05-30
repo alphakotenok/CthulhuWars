@@ -1,6 +1,6 @@
 package Model;
 
-import Model.Faction.FactionType;
+import Model.FactionEnum.FactionType;
 import javafx.scene.image.Image;
 
 public class Entity {
@@ -12,9 +12,10 @@ public class Entity {
     public String name;
     public Image icon;
     public EntityType entityType;
-    public Faction.FactionType faction;
+    public FactionType faction;
     public int cost;
     public int combat;
+    int limit;
     Entity gateOwner;
 
     public Entity(String name, Image icon, EntityType entityType, FactionType faction, int cost, int combat) {

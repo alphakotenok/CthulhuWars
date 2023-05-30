@@ -4,99 +4,459 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import Model.Faction.FactionType;
-
-class nextPermutation {
-
-    public static void swap(ArrayList<Integer> data, int left, int right) {
-        Integer temp = data.get(left);
-        data.set(left, data.get(right));
-        data.set(right, temp);
-    }
-
-    public static void reverse(ArrayList<Integer> data, int left, int right) {
-        while (left < right) {
-            Integer temp = data.get(left);
-            data.set(left++, data.get(right));
-            data.set(right--, temp);
-        }
-    }
-
-    public static boolean findNextPermutation(ArrayList<Integer> data) {
-
-        if (data.size() <= 1)
-            return false;
-
-        int last = data.size() - 2;
-        while (last >= 0) {
-            if (data.get(last) < data.get(last + 1)) {
-                break;
-            }
-            last--;
-        }
-
-        if (last < 0)
-            return false;
-
-        int nextGreater = data.size() - 1;
-
-        for (int i = data.size() - 1; i > last; i--) {
-            if (data.get(i) > data.get(last)) {
-                nextGreater = i;
-                break;
-            }
-        }
-
-        swap(data, nextGreater, last);
-
-        reverse(data, last + 1, data.size() - 1);
-
-        return true;
-    }
-}
+import Model.FactionEnum.FactionType;
 
 class CommandTree {
 
-    Node curNode;
-    Core core;
+    @FunctionalInterface
+    static interface EgdeFunctionContainer {
+        void activate(Core core);
+    }
+
+    @FunctionalInterface
+    static interface NodeNameFunctionContainer {
+        String activate(Core core);
+    }
+
+    @FunctionalInterface
+    static interface EdgeNameFunctionContainer {
+        String activate(ArrayList<Integer> data, Core core);
+    }
+
+    @FunctionalInterface
+    static interface DataGeneratorFunctionContainer {
+        ArrayList<ArrayList<Integer>> activate(Core core);
+    }
+
+    @FunctionalInterface
+    static interface AccumulatorFunctionContainer {
+        void activate(ArrayList<Integer> data, Core core);
+    }
+
+    @FunctionalInterface
+    static interface EdgeCreatorCheckerContainer {
+        boolean activate(Core core);
+    }
 
     static class InvalidNodeNumberException extends Exception {
 
     }
 
-    @FunctionalInterface
-    static interface FunctionContainer {
-        void activate(ArrayList<Integer> args, Core core, Node curNode);
-    }
+    Node curNode;
+    Node phantommedNode;
+    Core core;
+    Node openBookNode = new Node(NodeNameTreeFunctions::receiveSpellbookText);
 
-    static class Node {
-        String desc;
-        String name;
-        ArrayList<Node> adj;
-        FunctionContainer func;
-        ArrayList<Integer> data;
-        Core core;
+    Node startNode = new Node(NodeNameTreeFunctions.constName("Choose players order"));
+    Node startLocChooseNode = new Node(NodeNameTreeFunctions::startLocChoose);
+    Node actionChooseNode = new Node(NodeNameTreeFunctions::actionChoose);
+    Node firstPlayerSelectionNode = new Node(NodeNameTreeFunctions::firstPlayerSelectionText);
+    Node ritualNode = new Node(NodeNameTreeFunctions::ritualText);
+    Node viewElderSignsNode = new Node(NodeNameTreeFunctions::viewElderSignsText);
 
-        Node(String name, String desc, FunctionContainer func, ArrayList<Integer> data, Core core) {
-            this.name = name;
-            this.func = func;
-            this.data = data;
-            this.core = core;
-            this.desc = desc;
-            adj = new ArrayList<>();
-        }
+    void prepareEdgeCreators() {
+        openBookNode.addEdgeCreator(null, DataGeneratorTreeFunctions::booksToOpen,
+                EdgeNameTreeFunctions::bookToOpenName, AccumulatorTreeFunctions::accumulateBookOpening,
+                EdgeTreeFunctions::openBook, EdgeCreatorTreeChecker::always);
+        startNode.addEdgeCreator(startLocChooseNode, DataGeneratorTreeFunctions::permutationGenerator,
+                EdgeNameTreeFunctions::permutationName, AccumulatorTreeFunctions::accumulatePerm,
+                EdgeTreeFunctions::permutateFactions,
+                EdgeCreatorTreeChecker::always);
+        startLocChooseNode.addEdgeCreator(startLocChooseNode, DataGeneratorTreeFunctions::startLocGenerator,
+                EdgeNameTreeFunctions::locationName, AccumulatorTreeFunctions::accumulateLocation,
+                EdgeTreeFunctions::startLocPlacement,
+                EdgeCreatorTreeChecker.opposite(EdgeCreatorTreeChecker::isLastPlayerDoing));
+        startLocChooseNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::startLocGenerator,
+                EdgeNameTreeFunctions::locationName, AccumulatorTreeFunctions::accumulateLocation,
+                EdgeTreeFunctions::startLocPlacementAlter,
+                EdgeCreatorTreeChecker::isLastPlayerDoing);
+        actionChooseNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::justOne,
+                EdgeNameTreeFunctions.constName("Pass and lose remaining energy"), AccumulatorTreeFunctions::none,
+                EdgeTreeFunctions::passTurn,
+                EdgeCreatorTreeChecker.opposite(EdgeCreatorTreeChecker::isLastPlayerDoing));
+        actionChooseNode.addEdgeCreator(firstPlayerSelectionNode, DataGeneratorTreeFunctions::justOne,
+                EdgeNameTreeFunctions.constName("Pass and lose remaining energy"), AccumulatorTreeFunctions::none,
+                EdgeTreeFunctions::lastPassTurn,
+                EdgeCreatorTreeChecker::isLastPlayerDoing);
+        firstPlayerSelectionNode.addEdgeCreator(firstPlayerSelectionNode,
+                DataGeneratorTreeFunctions::firstPlayerCandidates, EdgeNameTreeFunctions::factionName,
+                AccumulatorTreeFunctions::accumulateFirstPlayer, EdgeTreeFunctions::none,
+                EdgeCreatorTreeChecker.opposite(EdgeCreatorTreeChecker::isfirstPlayerDetermined));
+        firstPlayerSelectionNode.addEdgeCreator(ritualNode,
+                DataGeneratorTreeFunctions::wayGenerator, EdgeNameTreeFunctions::wayName,
+                AccumulatorTreeFunctions::accumulateWay, EdgeTreeFunctions::none,
+                EdgeCreatorTreeChecker::isfirstPlayerDetermined);
+        ritualNode.addEdgeCreator(ritualNode,
+                DataGeneratorTreeFunctions::justOne, EdgeNameTreeFunctions.constName("Perform ritual"),
+                AccumulatorTreeFunctions::none, EdgeTreeFunctions::performRitual,
+                EdgeCreatorTreeChecker::canPerformRitual);
+        ritualNode.addEdgeCreator(viewElderSignsNode,
+                DataGeneratorTreeFunctions::justOne, EdgeNameTreeFunctions.constName("View Elder Signs"),
+                AccumulatorTreeFunctions::none, EdgeTreeFunctions::none,
+                EdgeCreatorTreeChecker::always);
+        ritualNode.addEdgeCreator(actionChooseNode,
+                DataGeneratorTreeFunctions::justOne, EdgeNameTreeFunctions.constName("Done"),
+                AccumulatorTreeFunctions::none, EdgeTreeFunctions::lastDoneRitual,
+                EdgeCreatorTreeChecker::isLastPlayerDoing);
+        ritualNode.addEdgeCreator(ritualNode,
+                DataGeneratorTreeFunctions::justOne, EdgeNameTreeFunctions.constName("Done"),
+                AccumulatorTreeFunctions::none, EdgeTreeFunctions::doneRitual,
+                EdgeCreatorTreeChecker.opposite(EdgeCreatorTreeChecker::isLastPlayerDoing));
+        viewElderSignsNode.addBackButton(ritualNode);
+        viewElderSignsNode.addEdgeCreator(viewElderSignsNode,
+                DataGeneratorTreeFunctions::elderSigns, EdgeNameTreeFunctions::elderSignRevealName,
+                AccumulatorTreeFunctions::accumulateSignReveal, EdgeTreeFunctions::revealElderSign,
+                EdgeCreatorTreeChecker::always);
 
-        void activate() {
-            func.activate(data, core, this);
-        }
     }
 
     CommandTree(Core core) {
         this.core = core;
-        curNode = new Node("Start node", "Choose players order", null, null, core);
+        curNode = startNode;
+        openBookNode.bookNode = true;
+        prepareEdgeCreators();
+        curNode.prepareNode();
+    }
+
+    class Node {
+        String name;
+        ArrayList<Edge> edges;
+        ArrayList<EdgeCreator> edgeCreators;
+        NodeNameFunctionContainer nameFunction;
+        boolean bookNode = false;
+        Node prevNode;
+        boolean hasBackButton = false;
+
+        Node(NodeNameFunctionContainer nameFunction) {
+            this.nameFunction = nameFunction;
+            name = "";
+            edgeCreators = new ArrayList<>();
+        }
+
+        void prepareNode() {
+
+            if (!bookNode) {
+                for (int i = 0; i < core.var.numOfPlayers; ++i) {
+                    Faction fact = core.factionBase.getFactionFromEnum(core.var.factionsList.get(i));
+                    for (int j = 0; j < 6; ++j) {
+                        if (!fact.isQuestCompletedEarlier(j) && fact.isQuestCompleted(j)) {
+                            core.var.bookReceiver = fact.faction;
+                            core.var.bookSlot = j;
+                            phantommedNode = this;
+                            openBookNode.prepareNode();
+                            return;
+                        }
+                    }
+                }
+            } else {
+                for (EdgeCreator ec : edgeCreators) {
+                    ec.to = phantommedNode;
+                }
+            }
+            name = nameFunction.activate(core);
+            edges = new ArrayList<>();
+            for (EdgeCreator ec : edgeCreators) {
+                edges.addAll(ec.createEdges());
+            }
+            if (hasBackButton) {
+                edges.add(new Edge("Back", AccumulatorTreeFunctions::none, EdgeTreeFunctions::none, prevNode, null));
+            }
+            curNode = this;
+        }
+
+        void moveByEdge(int edgeNum) {
+            edges.get(edgeNum).run();
+        }
+
+        void addEdgeCreator(Node to, DataGeneratorFunctionContainer dataGeneratorFunction,
+                EdgeNameFunctionContainer edgeNameFunction,
+                AccumulatorFunctionContainer accumulatorFunction,
+                EgdeFunctionContainer egdeFunction, EdgeCreatorCheckerContainer edgeCreatorChecker) {
+            edgeCreators.add(new EdgeCreator(to, dataGeneratorFunction, edgeNameFunction,
+                    accumulatorFunction, egdeFunction, edgeCreatorChecker));
+        }
+
+        void addBackButton(Node prevNode) {
+            hasBackButton = true;
+            this.prevNode = prevNode;
+        }
+
+    }
+
+    class Edge {
+        String name;
+        AccumulatorFunctionContainer accumulatorFunction;
+        EgdeFunctionContainer edgeFunction;
+        Node to;
+        ArrayList<Integer> data;
+
+        Edge(String name, AccumulatorFunctionContainer accumulatorFunction, EgdeFunctionContainer edgeFunction, Node to,
+                ArrayList<Integer> data) {
+            this.name = name;
+            this.accumulatorFunction = accumulatorFunction;
+            this.edgeFunction = edgeFunction;
+            this.to = to;
+            this.data = data;
+        }
+
+        void run() {
+            accumulatorFunction.activate(data, core);
+            edgeFunction.activate(core);
+            to.prepareNode();
+        }
+    }
+
+    class EdgeCreator {
+        Node to;
+        DataGeneratorFunctionContainer dataGeneratorFunction;
+        EdgeNameFunctionContainer edgeNameFunction;
+        AccumulatorFunctionContainer accumulatorFunction;
+        EgdeFunctionContainer edgeFunction;
+        EdgeCreatorCheckerContainer edgeCreatorChecker;
+
+        EdgeCreator(Node to, DataGeneratorFunctionContainer dataGeneratorFunction,
+                EdgeNameFunctionContainer edgeNameFunction, AccumulatorFunctionContainer accumulatorFunction,
+                EgdeFunctionContainer edgeFunction, EdgeCreatorCheckerContainer edgeCreatorChecker) {
+            this.to = to;
+            this.dataGeneratorFunction = dataGeneratorFunction;
+            this.edgeNameFunction = edgeNameFunction;
+            this.accumulatorFunction = accumulatorFunction;
+            this.edgeFunction = edgeFunction;
+            this.edgeCreatorChecker = edgeCreatorChecker;
+        }
+
+        ArrayList<Edge> createEdges() {
+            if (!edgeCreatorChecker.activate(core))
+                return new ArrayList<>();
+            ArrayList<ArrayList<Integer>> dataSet = dataGeneratorFunction.activate(core);
+            ArrayList<Edge> ans = new ArrayList<>();
+            for (ArrayList<Integer> data : dataSet) {
+                String edgeName = edgeNameFunction.activate(data, core);
+                ans.add(new Edge(edgeName, accumulatorFunction, edgeFunction, to, data));
+            }
+            return ans;
+        }
+    }
+
+    ArrayList<String> getCommandList() {
+        ArrayList<String> ans = new ArrayList<>();
+        for (Edge e : curNode.edges) {
+            ans.add(e.name);
+        }
+        return ans;
+    }
+
+    void execute(int num) throws InvalidNodeNumberException {
+        if (num < 0 || num >= curNode.edges.size()) {
+            throw new InvalidNodeNumberException();
+        }
+        curNode.moveByEdge(num);
+    }
+}
+
+class NodeNameTreeFunctions {
+    static CommandTree.NodeNameFunctionContainer constName(String name) {
+        return (core -> name);
+    }
+
+    static String startLocChoose(Core core) {
+        return "Choose " + core.factionBase.getFactionNameFromEnum(core.var.factionsList.get(core.var.turn))
+                + " start location";
+    }
+
+    static String actionChoose(Core core) {
+        return core.factionBase.getFactionNameFromEnum(core.var.factionsList.get(core.var.turn)) + " action";
+    }
+
+    static String ritualText(Core core) {
+        return core.factionBase.getFactionNameFromEnum(core.var.factionsList.get(core.var.turn))
+                + " can perform ritual";
+    }
+
+    static String receiveSpellbookText(Core core) {
+        return core.factionBase.getFactionNameFromEnum(core.var.bookReceiver) + " receive spellbook";
+    }
+
+    static String firstPlayerSelectionText(Core core) {
+        if (EdgeCreatorTreeChecker.isfirstPlayerDetermined(core)) {
+            return core.factionBase.getFactionNameFromEnum(core.var.factionsList.get(core.var.firstPlayer))
+                    + " choose the order of moves in the next round";
+        }
+        return core.factionBase.getFactionNameFromEnum(core.var.factionsList.get(core.var.firstPlayer))
+                + " choose the first player in the next round";
+    }
+
+    static String viewElderSignsText(Core core) {
+        return core.getCurFact().name + " Elder Signs";
+    }
+}
+
+class EdgeNameTreeFunctions {
+    static CommandTree.EdgeNameFunctionContainer constName(String name) {
+        return ((data, core) -> name);
+    }
+
+    static String permutationName(ArrayList<Integer> data, Core core) {
+        String ans = "";
+        for (int i = 0; i < core.var.numOfPlayers; ++i) {
+            ans += data.get(i).toString();
+        }
+        return ans;
+    }
+
+    static String locationName(ArrayList<Integer> data, Core core) {
+        return core.map.locations.get(data.get(0)).name;
+    }
+
+    static String bookToOpenName(ArrayList<Integer> data, Core core) {
+        return core.factionBase.getFactionFromEnum(core.var.bookReceiver).bookNames.get(data.get(0));
+    }
+
+    static String factionName(ArrayList<Integer> data, Core core) {
+        return core.factionBase.getFactionNameFromEnum(core.var.factionsList.get(data.get(0)));
+    }
+
+    static String wayName(ArrayList<Integer> data, Core core) {
+        if (data.get(0) == 0)
+            return "<<<<<";
+        else
+            return ">>>>>";
+    }
+
+    static String elderSignRevealName(ArrayList<Integer> data, Core core) {
+        return core.getCurFact().elderSignList.get(data.get(0)) + ", reveal it";
+    }
+}
+
+class AccumulatorTreeFunctions {
+    static void none(ArrayList<Integer> data, Core core) {
+
+    };
+
+    static void accumulatePerm(ArrayList<Integer> data, Core core) {
+        core.var.chosenPerm = data;
+    }
+
+    static void accumulateLocation(ArrayList<Integer> data, Core core) {
+        core.var.chosenLocation = core.map.locations.get(data.get(0));
+    }
+
+    static void accumulateBookOpening(ArrayList<Integer> data, Core core) {
+        core.var.bookNum = data.get(0);
+    }
+
+    static void accumulateFirstPlayer(ArrayList<Integer> data, Core core) {
+        core.var.firstPlayer = data.get(0);
+        core.var.firstPlayerCandidates = new ArrayList<>(Arrays.asList(data.get(0)));
+    }
+
+    static void accumulateWay(ArrayList<Integer> data, Core core) {
+        if (data.get(0) == 0) {
+            core.var.correcrtWay = false;
+        } else
+            core.var.correcrtWay = true;
+        core.var.turn = core.var.firstPlayer;
+    }
+
+    static void accumulateSignReveal(ArrayList<Integer> data, Core core) {
+        core.var.signToReveal = data.get(0);
+    }
+}
+
+class EdgeTreeFunctions {
+    static void none(Core core) {
+
+    };
+
+    static void permutateFactions(Core core) {
+        core.var.factionsList.clear();
+        for (int i = 0; i < core.var.numOfPlayers; ++i) {
+            core.var.factionsList.add(FactionType.values()[core.var.chosenPerm.get(i)]);
+        }
+        core.var.playerCounter = 0;
+    };
+
+    static void startLocPlacement(Core core) {
+        core.map.setStartUnits(core.var.factionsList.get(core.var.turn), core.var.chosenLocation);
+        core.var.turn = core.var.getNextTurn(core.var.turn);
+        ++core.var.playerCounter;
+    }
+
+    static void startLocPlacementAlter(Core core) {
+        core.map.setStartUnits(core.var.factionsList.get(core.var.turn), core.var.chosenLocation);
+        core.var.turn = core.var.firstPlayer;
+        core.var.playerCounter = 0;
+    }
+
+    static void openBook(Core core) {
+        core.factionBase.getFactionFromEnum(core.var.bookReceiver).openedBooks.set(core.var.bookSlot, core.var.bookNum);
+        core.var.bookReceiver = null;
+    }
+
+    static void passTurn(Core core) {
+        core.getCurFact().skip = true;
+        core.getCurFact().energy = 0;
+        while (core.getCurFact().skip)
+            core.var.turn = core.var.getNextTurn(core.var.turn);
+        ++core.var.playerCounter;
+    }
+
+    static void lastPassTurn(Core core) {
+        core.var.playerCounter = 0;
+        int maxEnergy = 0;
+        for (int i = 0; i < core.var.numOfPlayers; ++i) {
+            Faction fact = core.factionBase.getFactionFromEnum(core.var.factionsList.get(i));
+            fact.prepareForNextRound();
+            maxEnergy = Math.max(maxEnergy, fact.energy);
+        }
+        core.var.totalSkip = 0;
+        core.var.firstPlayerCandidates = new ArrayList<>();
+        for (int i = 0; i < core.var.numOfPlayers; ++i) {
+            Faction fact = core.factionBase.getFactionFromEnum(core.var.factionsList.get(i));
+            if (maxEnergy == fact.energy) {
+                core.var.firstPlayerCandidates.add(core.var.factionsList.indexOf(fact.faction));
+            }
+        }
+        if (core.var.firstPlayerCandidates.size() == 1) {
+            core.var.firstPlayer = core.var.firstPlayerCandidates.get(0);
+        }
+    }
+
+    static void doneRitual(Core core) {
+        core.var.turn = core.var.getNextTurn(core.var.turn);
+        ++core.var.playerCounter;
+    }
+
+    static void lastDoneRitual(Core core) {
+        core.var.turn = core.var.firstPlayer;
+        core.var.playerCounter = 0;
+        for (int i = 0; i < core.var.numOfPlayers; ++i) {
+            Faction fact = core.getSomeFact(i);
+            fact.isRitualPerformed = false;
+        }
+    }
+
+    static void performRitual(Core core) {
+        core.ritual.performRitual(core.var.factionsList.get(core.var.turn));
+    }
+
+    static void revealElderSign(Core core) {
+        core.getCurFact().revealSign(core.var.signToReveal);
+    }
+}
+
+class DataGeneratorTreeFunctions {
+    static ArrayList<ArrayList<Integer>> justOne(Core core) {
+        ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
+        ans.add(new ArrayList<>(Arrays.asList(0)));
+        return ans;
+    }
+
+    static ArrayList<ArrayList<Integer>> permutationGenerator(Core core) {
+        ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
         int CthulhuPlace = -1;
-        for (int i = 0; i < core.numOfPlayers; ++i) {
-            if (core.factionsList.get(i).equals(FactionType.GreatCthulhu)) {
+        for (int i = 0; i < core.var.numOfPlayers; ++i) {
+            if (core.var.factionsList.get(i).equals(FactionType.GreatCthulhu)) {
                 CthulhuPlace = i;
             }
         }
@@ -104,197 +464,88 @@ class CommandTree {
         if (CthulhuPlace != -1)
             order.add(Integer.valueOf(0));
         ArrayList<Integer> order2 = new ArrayList<>();
-        for (int i = 0; i < core.numOfPlayers; ++i) {
+        for (int i = 0; i < core.var.numOfPlayers; ++i) {
             if (i != CthulhuPlace)
-                order2.add(Integer.valueOf(core.factionsList.get(i).ordinal()));
+                order2.add(Integer.valueOf(core.var.factionsList.get(i).ordinal()));
         }
         Collections.sort(order2);
         ArrayList<Integer> order3 = new ArrayList<>();
         order3.addAll(order);
         order3.addAll(order2);
-        String k = "";
-        for (int i = 0; i < core.numOfPlayers; ++i) {
-            k += order3.get(i).toString();
-        }
-        Node n = new Node(k,
-                "Choose " + core.factionBase.getFactionNameFromEnum(FactionType.values()[order3.get(0)])
-                        + " start location",
-                CommandTree::chooseFactionPermutation, order3, core);
-        curNode.adj.add(n);
-        while (nextPermutation.findNextPermutation(order2)) {
+        ans.add(order3);
+        while (Permutation.findNextPermutation(order2)) {
             order3 = new ArrayList<>();
             order3.addAll(order);
             order3.addAll(order2);
-            k = "";
-            for (int i = 0; i < core.numOfPlayers; ++i) {
-                k += order3.get(i).toString();
-            }
-            n = new Node(k,
-                    "Choose " + core.factionBase.getFactionNameFromEnum(FactionType.values()[order3.get(0)])
-                            + " start location",
-                    CommandTree::chooseFactionPermutation, order3, core);
-            curNode.adj.add(n);
-        }
-    }
-
-    ArrayList<String> getCommandList() {
-        ArrayList<String> ans = new ArrayList<>();
-        for (Node n : curNode.adj) {
-            ans.add(n.name);
+            ans.add(order3);
         }
         return ans;
     }
 
-    void execute(int num) throws InvalidNodeNumberException {
-        if (num < 0 || num >= curNode.adj.size()) {
-            throw new InvalidNodeNumberException();
-        }
-        curNode = curNode.adj.get(num);
-        curNode.activate();
+    static ArrayList<ArrayList<Integer>> startLocGenerator(Core core) {
+        ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
+        ArrayList<Location> loc = core.map.startLoc.get(core.var.factionsList.get(core.var.turn).ordinal());
+        for (Location l : loc)
+            ans.add(new ArrayList<>(Arrays.asList(core.map.locations.indexOf(l))));
+        return ans;
     }
 
-    static void chooseFactionPermutation(ArrayList<Integer> perm, Core core, Node curNode) {
-        core.factionsList.clear();
-        for (int i = 0; i < core.numOfPlayers; ++i) {
-            core.factionsList.add(FactionType.values()[perm.get(i)]);
-        }
-
-        for (int j = 0; j < core.map.startLoc.get(core.factionsList.get(0).ordinal()).size(); ++j) {
-
-            Node n = new Node(core.map.startLoc.get(core.factionsList.get(0).ordinal()).get(j).name,
-                    "Choose " + core.factionBase.getFactionNameFromEnum(core.factionsList.get(1)) + " start location",
-                    CommandTree::placeStart, new ArrayList<Integer>(Arrays.asList(0, j)), core);
-            curNode.adj.add(n);
-        }
-    }
-
-    static void placeStart(ArrayList<Integer> data, Core core, Node curNode) {
-        core.map.setStartUnits(core.factionsList.get(data.get(0)),
-                core.map.startLoc.get(core.factionsList.get(data.get(0)).ordinal()).get(data.get(1)));
-        int num = data.get(0) + 1;
-        if (num >= core.numOfPlayers) {
-            prepareActionSet(null, core, curNode);
-            return;
-        }
-        for (int j = 0; j < core.map.startLoc.get(core.factionsList.get(num).ordinal()).size(); ++j) {
-            String desc;
-            if (num == core.numOfPlayers - 1)
-                desc = core.factionBase.getFactionNameFromEnum(core.factionsList.get(core.turn)) + " action";
-            else
-                desc = "Choose " + core.factionBase.getFactionNameFromEnum(core.factionsList.get(num + 1))
-                        + " start location";
-            Node n = new Node(core.map.startLoc.get(core.factionsList.get(num).ordinal()).get(j).name, desc,
-                    CommandTree::placeStart, new ArrayList<Integer>(Arrays.asList(num, j)), core);
-            curNode.adj.add(n);
-        }
-    }
-
-    static void prepareActionSet(ArrayList<Integer> data, Core core, Node curNode) {
-        Faction faction = core.factionBase.getFactionFromEnum(core.factionsList.get(core.turn));
-        if (faction.skip) {
-            if (core.factionBase.totalSkip == core.numOfPlayers) {
-                energyRecount(core);
-                chooseFirstPlayer(core);
-                core.turn = core.firstPlayer;
-                // who + how much already was
-                curNode.desc = core.factionBase.getFactionNameFromEnum(core.factionsList.get(core.firstPlayer))
-                        + " can perform ritual";
-                createRitualAsk(core, curNode, core.firstPlayer, 0);
-                return;
+    static ArrayList<ArrayList<Integer>> booksToOpen(Core core) {
+        ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
+        for (int i = 0; i < 6; ++i) {
+            if (core.factionBase.getFactionFromEnum(core.var.bookReceiver).isBookOpened(i)) {
+                continue;
             }
-            Node n = new Node("Skip",
-                    core.factionBase.getFactionNameFromEnum(core.factionsList.get(core.getNextTurn(core.turn)))
-                            + " action",
-                    CommandTree::prepareActionSet, null, core);
-            curNode.adj.add(n);
-            core.turn = core.getNextTurn(core.turn);
-        } else {
-
-            // TODO: delete this temp code
-            if (core.factionBase.getFactionFromEnum(core.factionsList.get(core.turn)).energy > 0) {
-                Node n = new Node("Some action to spend one energy",
-                        core.factionBase.getFactionNameFromEnum(core.factionsList.get(core.getNextTurn(core.turn)))
-                                + " action",
-                        CommandTree::tempFunc, data, core);
-                curNode.adj.add(n);
-            }
-            Node n = new Node("Pass and lose remaining power",
-                    core.factionBase.getFactionNameFromEnum(core.factionsList.get(core.getNextTurn(core.turn)))
-                            + " action",
-                    CommandTree::passTurn, data, core);
-            curNode.adj.add(n);
+            ans.add(new ArrayList<>(Arrays.asList(i)));
         }
+        return ans;
     }
 
-    static void tempFunc(ArrayList<Integer> data, Core core, Node curNode) {
-        core.factionBase.getFactionFromEnum(core.factionsList.get(core.turn)).energy -= 1;
-        core.turn = core.getNextTurn(core.turn);
-        prepareActionSet(data, core, curNode);
-    }
-
-    static void passTurn(ArrayList<Integer> data, Core core, Node curNode) {
-        Faction faction = core.factionBase.getFactionFromEnum(core.factionsList.get(core.turn));
-        faction.skip = true;
-        core.factionBase.totalSkip++;
-        faction.energy = 0;
-        core.turn = core.getNextTurn(core.turn);
-        prepareActionSet(data, core, curNode);
-    }
-
-    static void energyRecount(Core core) {
-        for (int i = 0; i < core.numOfPlayers; ++i) {
-            Faction faction = core.factionBase.factList.get(core.factionsList.get(i).ordinal());
-            faction.recountEnergy();
-            faction.skip = false;
+    static ArrayList<ArrayList<Integer>> firstPlayerCandidates(Core core) {
+        ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
+        for (int i = 0; i < core.var.firstPlayerCandidates.size(); ++i) {
+            ans.add(new ArrayList<>(Arrays.asList(core.var.firstPlayerCandidates.get(i))));
         }
-        core.factionBase.totalSkip = 0;
-
+        return ans;
     }
 
-    static void chooseFirstPlayer(Core core) {
-        // TODO: first player
+    static ArrayList<ArrayList<Integer>> wayGenerator(Core core) {
+        ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
+        ans.add(new ArrayList<>(Arrays.asList(0)));
+        ans.add(new ArrayList<>(Arrays.asList(1)));
+        return ans;
     }
 
-    static boolean checkPlayersDoom() {
-        // TODO: this func
-        return false;
-    }
-
-    static void createRitualAsk(Core core, Node curNode, int who, int num) {
-        if (num == core.numOfPlayers) {
-            if (core.endOfTheGame || checkPlayersDoom()) {
-                // TODO: end handler
-                curNode.desc = "end";
-                return;
-            }
-            curNode.desc = core.factionBase.getFactionNameFromEnum(core.factionsList.get(core.firstPlayer))
-                    + " action";
-            prepareActionSet(null, core, curNode);
-            return;
+    static ArrayList<ArrayList<Integer>> elderSigns(Core core) {
+        ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
+        Faction fact = core.getCurFact();
+        for (int i = 0; i < fact.elderSignList.size(); ++i) {
+            ans.add(new ArrayList<>(Arrays.asList(i)));
         }
-        if (core.ritual.canPerformRItual(core.factionsList.get(who))) {
-            Node n = new Node("PerformRitual",
-                    core.factionBase.getFactionNameFromEnum(core.factionsList.get(core.getNextTurn(who)))
-                            + " can perform ritual",
-                    CommandTree::performRitual, new ArrayList<>(Arrays.asList(who, num)), core);
-            curNode.adj.add(n);
-        }
-
-        // TODO: add elder sign check
-
-        Node n = new Node("Done",
-                core.factionBase.getFactionNameFromEnum(core.factionsList.get(core.getNextTurn(who)))
-                        + " can perform ritual",
-                CommandTree::skipRitual, new ArrayList<>(Arrays.asList(who, num)), core);
-        curNode.adj.add(n);
+        return ans;
     }
 
-    static void performRitual(ArrayList<Integer> data, Core core, Node curNode) {
-        core.ritual.performRitual(core.factionsList.get(data.get(0)));
-        createRitualAsk(core, curNode, core.getNextTurn(data.get(0)), data.get(1) + 1);
+}
+
+class EdgeCreatorTreeChecker {
+
+    static CommandTree.EdgeCreatorCheckerContainer opposite(CommandTree.EdgeCreatorCheckerContainer checker) {
+        return (core -> !checker.activate(core));
     }
 
-    static void skipRitual(ArrayList<Integer> data, Core core, Node curNode) {
-        createRitualAsk(core, curNode, core.getNextTurn(data.get(0)), data.get(1) + 1);
+    static boolean always(Core core) {
+        return true;
+    }
+
+    static boolean isLastPlayerDoing(Core core) {
+        return core.var.playerCounter == core.var.numOfPlayers - 1;
+    }
+
+    static boolean isfirstPlayerDetermined(Core core) {
+        return core.var.firstPlayerCandidates.size() == 1;
+    }
+
+    static boolean canPerformRitual(Core core) {
+        return core.ritual.canPerformRitual(core.var.factionsList.get(core.var.turn));
     }
 }

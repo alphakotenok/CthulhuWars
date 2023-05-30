@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 
 import Model.Variables;
 import Model.Core.Coordinates;
-import Model.Faction.FactionType;
+import Model.FactionEnum.FactionType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
