@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import Model.Entity;
 import Model.Location;
 import Model.Variables;
-import Model.Location.RatioCoordinates;
+import Model.Core.Coordinates;;
 
 public class EntityVisualizer {
     public static void placeEntitiesOnMap(Location continent) {
@@ -13,7 +13,7 @@ public class EntityVisualizer {
             Entity entity = entities.get(entityID);
             MapImageEntity mapImageEntity = new MapImageEntity(continent, entity);
             mapImageEntity.setImage(entity.icon);
-            RatioCoordinates z = continent.getEntityPosition(entityID);
+            Coordinates z = continent.getEntityPosition(entityID);
             double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
             double widthEntity = entity.icon.getWidth() * Variables.PROCENT * 0.5;
             double heightEntity = entity.icon.getHeight() * Variables.PROCENT * 0.5;
