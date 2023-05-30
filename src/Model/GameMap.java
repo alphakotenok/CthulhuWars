@@ -5,6 +5,7 @@ import java.util.*;
 import Model.Entity.EntityType;
 import Model.FactionEnum.FactionType;
 import Model.Location.Segment;
+import javafx.scene.control.skin.CellSkinBase;
 import javafx.scene.image.Image;
 
 class GameMap {
@@ -322,9 +323,7 @@ class GameMap {
             Europe.adj.add(ArcticOcean);
             Europe.adj.add(NorthAtlantic);
             Europe.adj.add(Asia);
-        }
 
-        if (numOfPlayers <= 3) {
             Asia.adj.add(NorthPacific);
             Asia.adj.add(ArcticOcean);
             Asia.adj.add(Europe);
@@ -333,53 +332,79 @@ class GameMap {
             Asia.adj.add(IndianOcean);
         }
 
-        if (numOfPlayers <= 3) {
-            ArcticOcean.adj.add(Asia);
-            ArcticOcean.adj.add(Europe);
+        if(numOfPlayers <= 5){
+            if (numOfPlayers <= 3) {
+                ArcticOcean.adj.add(Asia);
+                ArcticOcean.adj.add(Europe);
+            }
+            if (numOfPlayers <= 4) ArcticOcean.adj.add(NorthAmerica);
+            ArcticOcean.adj.add(NorthPacific);
+            ArcticOcean.adj.add(NorthAtlantic);
+            if (numOfPlayers >= 4) {
+                ArcticOcean.adj.add(Scandinavia);
+                ArcticOcean.adj.add(NorthAsia);
+            }
+            if (numOfPlayers >= 5) {
+                ArcticOcean.adj.add(NorthAmericaEast);
+                ArcticOcean.adj.add(NorthAmericaWest);
+            }
         }
-        if (numOfPlayers <= 4)
-            ArcticOcean.adj.add(NorthAmerica);
-        ArcticOcean.adj.add(NorthPacific);
-        ArcticOcean.adj.add(NorthAtlantic);
-        if (numOfPlayers >= 4) {
-            ArcticOcean.adj.add(Scandinavia);
-            ArcticOcean.adj.add(NorthAsia);
-        }
-        if (numOfPlayers >= 5) {
-            ArcticOcean.adj.add(NorthAmericaEast);
-            ArcticOcean.adj.add(NorthAmericaWest);
+
+        if(numOfPlayers >= 6){
+            ArcticOceanSmall.adj.add(NorthAmericaEast);
+            ArcticOceanSmall.adj.add(BeringSea);
+            ArcticOceanSmall.adj.add(NorthAtlanticSmall);
+            ArcticOceanSmall.adj.add(Scandinavia);
+            ArcticOceanSmall.adj.add(NorthAsia);
+
+            BeringSea.adj.add(NorthAsia);
+            BeringSea.adj.add(NorthPacific);
+            BeringSea.adj.add(NorthAmericaEast);
+            BeringSea.adj.add(NorthAmericaWest);
         }
 
         if (numOfPlayers >= 4) {
-            Scandinavia.adj.add(ArcticOcean);
+            if (numOfPlayers <= 5){
+                Scandinavia.adj.add(ArcticOcean);
+                Scandinavia.adj.add(NorthAtlantic);
+            }
             Scandinavia.adj.add(NorthAsia);
             Scandinavia.adj.add(EuropeSmall);
-            Scandinavia.adj.add(NorthAtlantic);
+            if (numOfPlayers >= 6){
+                Scandinavia.adj.add(ArcticOceanSmall);
+                Scandinavia.adj.add(NorthAtlanticSmall);
+            }
 
-            NorthAsia.adj.add(ArcticOcean);
+            if (numOfPlayers <= 5) NorthAsia.adj.add(ArcticOcean);
             NorthAsia.adj.add(Scandinavia);
             NorthAsia.adj.add(EuropeSmall);
             NorthAsia.adj.add(NorthPacific);
             NorthAsia.adj.add(SouthAsia);
             NorthAsia.adj.add(Arabia);
+            if(numOfPlayers >= 6) NorthAsia.adj.add(ArcticOceanSmall);
 
             SouthAsia.adj.add(Arabia);
             SouthAsia.adj.add(NorthAsia);
             SouthAsia.adj.add(NorthPacific);
             SouthAsia.adj.add(IndianOcean);
 
+            if (numOfPlayers <= 5) Arabia.adj.add(NorthAtlantic);
             Arabia.adj.add(EuropeSmall);
             Arabia.adj.add(NorthAsia);
             Arabia.adj.add(SouthAsia);
             Arabia.adj.add(IndianOcean);
             Arabia.adj.add(EastAfrica);
             Arabia.adj.add(WestAfrica);
-            Arabia.adj.add(NorthAtlantic);
+            if(numOfPlayers >= 6) Arabia.adj.add(MediterraneanSea);
 
-            EuropeSmall.adj.add(NorthAtlantic);
+            if (numOfPlayers <= 5) EuropeSmall.adj.add(NorthAtlantic);
             EuropeSmall.adj.add(Scandinavia);
             EuropeSmall.adj.add(NorthAsia);
             EuropeSmall.adj.add(Arabia);
+            if(numOfPlayers >= 6) {
+                EuropeSmall.adj.add(NorthAtlanticSmall);
+                EuropeSmall.adj.add(MediterraneanSea);
+            }
         }
 
         if (numOfPlayers <= 3)
@@ -388,10 +413,12 @@ class GameMap {
             NorthPacific.adj.add(NorthAmerica);
             NorthPacific.adj.add(SouthAmerica);
         }
-        NorthPacific.adj.add(ArcticOcean);
+        if(numOfPlayers <= 5){
+            NorthPacific.adj.add(ArcticOcean);
+            NorthPacific.adj.add(NorthAtlantic);
+        }
         NorthPacific.adj.add(IndianOcean);
         NorthPacific.adj.add(SouthPacific);
-        NorthPacific.adj.add(NorthAtlantic);
         if (numOfPlayers >= 4) {
             NorthPacific.adj.add(NorthAsia);
             NorthPacific.adj.add(SouthAsia);
@@ -400,6 +427,10 @@ class GameMap {
             NorthPacific.adj.add(NorthAmericaWest);
             NorthPacific.adj.add(CentralAmerica);
             NorthPacific.adj.add(SouthAmericaWest);
+        }
+        if (numOfPlayers >= 6) {
+            NorthPacific.adj.add(BeringSea);
+            NorthPacific.adj.add(NorthAtlanticSmall);
         }
 
         if (numOfPlayers <= 4) {
@@ -410,90 +441,173 @@ class GameMap {
         }
 
         if (numOfPlayers >= 5) {
-            NorthAmericaEast.adj.add(NorthAtlantic);
-            NorthAmericaEast.adj.add(ArcticOcean);
+            if(numOfPlayers <= 5){
+                NorthAmericaEast.adj.add(NorthAtlantic);
+                NorthAmericaEast.adj.add(ArcticOcean);
+            }
             NorthAmericaEast.adj.add(NorthAmericaWest);
+            if(numOfPlayers >= 6){
+                NorthAmericaEast.adj.add(NorthAtlanticSmall);
+                NorthAmericaEast.adj.add(BeringSea);
+                NorthAmericaEast.adj.add(ArcticOceanSmall);
+            }
 
+            if(numOfPlayers <= 5){
+                NorthAmericaWest.adj.add(ArcticOcean);
+                NorthAmericaWest.adj.add(NorthAtlantic);
+            }
             NorthAmericaWest.adj.add(NorthAmericaEast);
-            NorthAmericaWest.adj.add(ArcticOcean);
-            NorthAmericaWest.adj.add(NorthAtlantic);
             NorthAmericaWest.adj.add(CentralAmerica);
             NorthAmericaWest.adj.add(NorthPacific);
+            if(numOfPlayers >= 6){
+                NorthAmericaWest.adj.add(NorthAtlanticSmall);
+                NorthAmericaWest.adj.add(BeringSea);
+            }
 
+            if(numOfPlayers <= 5) CentralAmerica.adj.add(NorthAtlantic);
             CentralAmerica.adj.add(NorthPacific);
             CentralAmerica.adj.add(NorthAmericaWest);
-            CentralAmerica.adj.add(NorthAtlantic);
             CentralAmerica.adj.add(SouthAmericaEast);
             CentralAmerica.adj.add(SouthAmericaWest);
+            if(numOfPlayers >= 6) CentralAmerica.adj.add(NorthAtlanticSmall);
         }
 
-        if (numOfPlayers <= 3) {
-            NorthAtlantic.adj.add(Europe);
-            NorthAtlantic.adj.add(Asia);
-            NorthAtlantic.adj.add(Africa);
-        }
-        if (numOfPlayers <= 4) {
-            NorthAtlantic.adj.add(NorthAmerica);
-            NorthAtlantic.adj.add(SouthAmerica);
-        }
-        NorthAtlantic.adj.add(NorthPacific);
-        NorthAtlantic.adj.add(ArcticOcean);
-        NorthAtlantic.adj.add(SouthAtlantic);
-        if (numOfPlayers >= 4) {
-            NorthAtlantic.adj.add(Scandinavia);
-            NorthAtlantic.adj.add(EuropeSmall);
-            NorthAtlantic.adj.add(Arabia);
-            NorthAtlantic.adj.add(WestAfrica);
-        }
-        if (numOfPlayers >= 5) {
-            NorthAtlantic.adj.add(NorthAmericaEast);
-            NorthAtlantic.adj.add(NorthAmericaWest);
-            NorthAtlantic.adj.add(CentralAmerica);
-            NorthAtlantic.adj.add(SouthAmericaEast);
+        if(numOfPlayers <= 5){
+            if (numOfPlayers <= 3) {
+                NorthAtlantic.adj.add(Europe);
+                NorthAtlantic.adj.add(Asia);
+                NorthAtlantic.adj.add(Africa);
+            }
+            if (numOfPlayers <= 4) {
+                NorthAtlantic.adj.add(NorthAmerica);
+                NorthAtlantic.adj.add(SouthAmerica);
+            }
+            NorthAtlantic.adj.add(NorthPacific);
+            NorthAtlantic.adj.add(ArcticOcean);
+            NorthAtlantic.adj.add(SouthAtlantic);
+            if (numOfPlayers >= 4) {
+                NorthAtlantic.adj.add(Scandinavia);
+                NorthAtlantic.adj.add(EuropeSmall);
+                NorthAtlantic.adj.add(Arabia);
+                NorthAtlantic.adj.add(WestAfrica);
+            }
+            if (numOfPlayers >= 5) {
+                NorthAtlantic.adj.add(NorthAmericaEast);
+                NorthAtlantic.adj.add(NorthAmericaWest);
+                NorthAtlantic.adj.add(CentralAmerica);
+                NorthAtlantic.adj.add(SouthAmericaEast);
+            }
         }
 
-        // Stopped here
+        if(numOfPlayers >= 6){
+            NorthAtlanticSmall.adj.add(NorthAmericaEast);
+            NorthAtlanticSmall.adj.add(NorthAmericaWest);
+            NorthAtlanticSmall.adj.add(CentralAmerica);
+            NorthAtlanticSmall.adj.add(ArcticOceanSmall);
+            NorthAtlanticSmall.adj.add(Scandinavia);
+            NorthAtlanticSmall.adj.add(EuropeSmall);
+            NorthAtlanticSmall.adj.add(MediterraneanSea);
+            NorthAtlanticSmall.adj.add(WestAfrica);
+            NorthAtlanticSmall.adj.add(SouthAtlantic);
+            NorthAtlanticSmall.adj.add(SouthAmericaEast);
+            NorthAtlanticSmall.adj.add(NorthPacific);
+
+            MediterraneanSea.adj.add(EuropeSmall);
+            MediterraneanSea.adj.add(NorthAtlanticSmall);
+            MediterraneanSea.adj.add(WestAfrica);
+            MediterraneanSea.adj.add(Arabia);
+        }
+
         if (numOfPlayers <= 3) {
             IndianOcean.adj.add(Asia);
             IndianOcean.adj.add(Africa);
         }
-        IndianOcean.adj.add(Australia);
+        if (numOfPlayers <= 4) IndianOcean.adj.add(Australia);
+        if (numOfPlayers <= 5) IndianOcean.adj.add(Antarctica);
         IndianOcean.adj.add(NorthPacific);
         IndianOcean.adj.add(SouthAtlantic);
-        IndianOcean.adj.add(Antarctica);
         IndianOcean.adj.add(SouthPacific);
         if (numOfPlayers >= 4) {
             IndianOcean.adj.add(SouthAsia);
             IndianOcean.adj.add(Arabia);
             IndianOcean.adj.add(EastAfrica);
         }
+        if (numOfPlayers >= 5){
+            IndianOcean.adj.add(AustraliaSmall);
+            IndianOcean.adj.add(NewZealand);
+        }
+        if (numOfPlayers >= 6) IndianOcean.adj.add(MountainsofMadness);
 
-        Australia.adj.add(SouthPacific);
-        Australia.adj.add(IndianOcean);
+        if(numOfPlayers <= 4){
+            Australia.adj.add(SouthPacific);
+            Australia.adj.add(IndianOcean);
+        }
 
-        SouthPacific.adj.add(Australia);
+        if(numOfPlayers >= 5){
+            AustraliaSmall.adj.add(IndianOcean);
+            AustraliaSmall.adj.add(NewZealand);
+
+            NewZealand.adj.add(AustraliaSmall);
+            NewZealand.adj.add(IndianOcean);
+            NewZealand.adj.add(SouthPacific);
+        }
+
+        if(numOfPlayers <= 4){
+            SouthPacific.adj.add(Australia);
+            SouthPacific.adj.add(SouthAmerica);
+        }
+        if(numOfPlayers <= 5) SouthPacific.adj.add(Antarctica);
         SouthPacific.adj.add(NorthPacific);
-        SouthPacific.adj.add(SouthAmerica);
         SouthPacific.adj.add(SouthAtlantic);
-        SouthPacific.adj.add(Antarctica);
         SouthPacific.adj.add(IndianOcean);
+        if(numOfPlayers >= 5){
+            SouthPacific.adj.add(AustraliaSmall);
+            SouthPacific.adj.add(SouthAmericaWest);
+        }
+        if(numOfPlayers >= 6) SouthPacific.adj.add(AntarcticaSmall);
 
-        SouthAmerica.adj.add(NorthAmerica);
-        SouthAmerica.adj.add(NorthAtlantic);
-        SouthAmerica.adj.add(SouthAtlantic);
-        SouthAmerica.adj.add(SouthPacific);
-        SouthAmerica.adj.add(NorthPacific);
+        if(numOfPlayers <= 4){
+            SouthAmerica.adj.add(NorthAmerica);
+            SouthAmerica.adj.add(NorthAtlantic);
+            SouthAmerica.adj.add(SouthAtlantic);
+            SouthAmerica.adj.add(SouthPacific);
+            SouthAmerica.adj.add(NorthPacific);
+        }
 
-        if (numOfPlayers <= 3)
-            SouthAtlantic.adj.add(Africa);
-        SouthAtlantic.adj.add(SouthAmerica);
-        SouthAtlantic.adj.add(NorthAtlantic);
+        if(numOfPlayers >= 5){
+            SouthAmericaWest.adj.add(CentralAmerica);
+            SouthAmericaWest.adj.add(SouthAmericaEast);
+            SouthAmericaWest.adj.add(SouthAtlantic);
+            SouthAmericaWest.adj.add(SouthPacific);
+            SouthAmericaWest.adj.add(NorthPacific);
+
+            if(numOfPlayers <= 5) SouthAmericaEast.adj.add(NorthAtlantic);
+            SouthAmericaEast.adj.add(CentralAmerica);
+            SouthAmericaEast.adj.add(SouthAtlantic);
+            SouthAmericaEast.adj.add(SouthAmericaWest);
+            if(numOfPlayers >= 6) SouthAmericaEast.adj.add(NorthAtlanticSmall);
+        }
+
+        if (numOfPlayers <= 3) SouthAtlantic.adj.add(Africa);
+        if (numOfPlayers <= 4) SouthAtlantic.adj.add(SouthAmerica);
+        if (numOfPlayers <= 5){
+            SouthAtlantic.adj.add(NorthAtlantic);
+            SouthAtlantic.adj.add(Antarctica);
+        }
         SouthAtlantic.adj.add(IndianOcean);
-        SouthAtlantic.adj.add(Antarctica);
         SouthAtlantic.adj.add(SouthPacific);
         if (numOfPlayers >= 4) {
             SouthAtlantic.adj.add(WestAfrica);
             SouthAtlantic.adj.add(EastAfrica);
+        }
+        if (numOfPlayers >= 5) {
+            SouthAtlantic.adj.add(SouthAmericaEast);
+            SouthAtlantic.adj.add(SouthAmericaWest);
+        }
+        if (numOfPlayers >= 6) {
+            SouthAtlantic.adj.add(NorthAtlanticSmall);
+            SouthAtlantic.adj.add(AntarcticaSmall);
+            SouthAtlantic.adj.add(MountainsofMadness);
         }
 
         if (numOfPlayers <= 3) {
@@ -504,10 +618,14 @@ class GameMap {
         }
 
         if (numOfPlayers >= 4) {
-            WestAfrica.adj.add(NorthAtlantic);
+            if (numOfPlayers <= 5) WestAfrica.adj.add(NorthAtlantic);
             WestAfrica.adj.add(Arabia);
             WestAfrica.adj.add(EastAfrica);
             WestAfrica.adj.add(SouthAtlantic);
+            if (numOfPlayers >= 6) {
+                WestAfrica.adj.add(NorthAtlanticSmall);
+                WestAfrica.adj.add(MediterraneanSea);
+            }
 
             EastAfrica.adj.add(SouthAtlantic);
             EastAfrica.adj.add(Arabia);
@@ -515,9 +633,21 @@ class GameMap {
             EastAfrica.adj.add(WestAfrica);
         }
 
-        Antarctica.adj.add(IndianOcean);
-        Antarctica.adj.add(SouthAtlantic);
-        Antarctica.adj.add(SouthPacific);
+        if (numOfPlayers <= 5){
+            Antarctica.adj.add(IndianOcean);
+            Antarctica.adj.add(SouthAtlantic);
+            Antarctica.adj.add(SouthPacific);
+        }
+
+        if(numOfPlayers >= 6){
+            AntarcticaSmall.adj.add(SouthPacific);
+            AntarcticaSmall.adj.add(SouthAtlantic);
+            AntarcticaSmall.adj.add(MountainsofMadness);
+
+            MountainsofMadness.adj.add(AntarcticaSmall);
+            MountainsofMadness.adj.add(SouthAtlantic);
+            MountainsofMadness.adj.add(IndianOcean);
+        }
     }
 
     GameMap(Core core) {
