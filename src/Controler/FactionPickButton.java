@@ -5,7 +5,7 @@ import javafx.event.EventHandler;
 import java.util.ArrayList;
 
 import javafx.event.ActionEvent;
-import Model.Faction.FactionType;
+import Model.FactionEnum.FactionType;
 import View.ButtonVisualizer;
 import View.ActionsMisc;
 
@@ -26,7 +26,7 @@ public class FactionPickButton implements EventHandler<ActionEvent> {
         if (playerID == numberOfPlayers) {
             ActionsMisc.removeButtons(FactionPickButton.class);
             ActionsMisc.removeLabelByText("player " + numberOfPlayers);
-            Game.startCore(numberOfPlayers,factionList);
+            Game.startCore(numberOfPlayers, factionList);
         }
     }
 }

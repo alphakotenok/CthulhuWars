@@ -1,7 +1,7 @@
 package Controler;
 
 import Model.Entity.EntityType;
-import Model.Faction.FactionType;
+import Model.FactionEnum.FactionType;
 
 public class MiscFunctions {
     public static EntityType getEntityByID(int entityID) {

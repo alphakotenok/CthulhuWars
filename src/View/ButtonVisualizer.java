@@ -13,7 +13,7 @@ import Controler.MenuButton;
 import Controler.MiscFunctions;
 import Controler.CommandButton;
 import Model.Variables;
-import Model.Faction.FactionType;
+import Model.FactionEnum.FactionType;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

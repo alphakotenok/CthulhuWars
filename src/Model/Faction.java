@@ -4,11 +4,9 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 
 import javafx.scene.image.Image;
+import Model.FactionEnum.FactionType;
 
-public class Faction {
-    public enum FactionType {
-        GreatCthulhu, CrawlingChaos, BlackGoat, YellowSign, OpenerOfTheWay, Sleeper, Windwalker
-    }
+class Faction {
 
     String name;
     int energy;
