@@ -8,34 +8,25 @@ import javafx.event.ActionEvent;
 import Model.Faction.FactionType;
 import View.ButtonVisualizer;
 import View.ActionsMisc;
-import View.Visualizer;
 
 public class FactionPickButton implements EventHandler<ActionEvent> {
-    private int numberOfPlayers;
-    public int playerID;
+    public static int numberOfPlayers;
+    public static int playerID;
     public int factionID;
-    static ArrayList<FactionType> factionList = new ArrayList<>();
+    public static ArrayList<FactionType> factionList = new ArrayList<>();
 
-    public FactionPickButton(int numberOfPlayers, int factionID, int playerID) {
-        this.numberOfPlayers = numberOfPlayers;
-        this.playerID = playerID;
+    public FactionPickButton(int factionID) {
         this.factionID = factionID;
-        factionList.clear();
     }
 
     @Override
     public void handle(ActionEvent event) {
-        ButtonVisualizer.rebuildFactionPickButtons(factionID);
         factionList.add(MiscFunctions.getFactionByID(factionID));
-
-        if (playerID + 1 == numberOfPlayers) {
+        ButtonVisualizer.rebuildFactionPickButtons(factionID);
+        if (playerID == numberOfPlayers) {
             ActionsMisc.removeButtons(FactionPickButton.class);
             ActionsMisc.removeLabelByText("player " + numberOfPlayers);
-            Visualizer.startCore(numberOfPlayers,factionList);
+            Game.startCore(numberOfPlayers,factionList);
         }
-    }
-
-    public void nextPlayer() {
-        playerID++;
     }
 }

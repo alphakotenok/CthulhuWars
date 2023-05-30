@@ -1,7 +1,6 @@
 package Controler;
 
 import java.io.FileNotFoundException;
-
 import Model.Variables;
 import View.ActionsMisc;
 import View.ImageMisc;
@@ -11,6 +10,7 @@ import javafx.event.EventHandler;
 
 public class FactionSheetButton implements EventHandler<ActionEvent> {
     private int factionID;
+    public static Boolean[] buttonState = new Boolean[Variables.NUMBER_OF_FACTIONS];
 
     public FactionSheetButton(int factionID) {
         this.factionID = factionID;
@@ -26,29 +26,32 @@ public class FactionSheetButton implements EventHandler<ActionEvent> {
         }
         for (int i = 0; i < Variables.NUMBER_OF_FACTIONS; i++) {
             if (i != factionID) {
-                if (Variables.factionSheetButtonState[i] == true) {
+                if (buttonState[i] == true) {
                     try {
                         ActionsMisc.removeImage(ImageMisc.getFactionSheetImage(i));
+                        ActionsMisc.removeBooks(i);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
                 }
-                Variables.factionSheetButtonState[i] = false;
+                buttonState[i] = false;
             }
         }
 
-        Variables.factionSheetButtonState[factionID] = !Variables.factionSheetButtonState[factionID];
-        if (Variables.factionSheetButtonState[factionID] == true) {
+        buttonState[factionID] = !buttonState[factionID];
+        if (buttonState[factionID] == true) {
             ActionsMisc.disableButtons(CommandButton.class);
             try {
-                Visualizer.displayfactionSheet(factionID);
+                Visualizer.displayFactionSheet(factionID);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+            Visualizer.displayOpenBookSheet(factionID);
         } else {
             ActionsMisc.enableButtons(CommandButton.class);
             try {
                 ActionsMisc.removeImage(ImageMisc.getFactionSheetImage(factionID));
+                ActionsMisc.removeBooks(factionID);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }

@@ -11,6 +11,7 @@ import javafx.event.EventHandler;
 
 public class SpellBookButton implements EventHandler<ActionEvent> {
     private int factionID;
+    public static Boolean[] buttonState = new Boolean[Variables.NUMBER_OF_FACTIONS];
 
     public SpellBookButton(int factionID) {
         this.factionID = factionID;
@@ -18,16 +19,18 @@ public class SpellBookButton implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent event) {
-        Variables.spellBookButtonState[factionID] = !Variables.spellBookButtonState[factionID];
-        if (Variables.spellBookButtonState[factionID] == true) {
+        buttonState[factionID] = !buttonState[factionID];
+        if (buttonState[factionID] == true) {
             try {
                 Visualizer.displaySpellBookSheet(factionID);
+                Visualizer.displayUnopenedBookSheet(factionID);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         } else {
             try {
                 ActionsMisc.removeImage(ImageMisc.getSpellBookSheetImage());
+                ActionsMisc.removeUnopenedBooks(factionID);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }

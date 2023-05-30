@@ -1,10 +1,6 @@
 package View;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import javafx.scene.Node;
-
 import Model.Entity;
 import Model.Location;
 import Model.Variables;
@@ -19,29 +15,24 @@ public class EntityVisualizer {
             mapImageEntity.setImage(entity.icon);
             RatioCoordinates z = continent.getEntityPosition(entityID);
             double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
-            double widthEntity = entity.icon.getWidth() * Variables.PROCENT * 0.7;
-            double heightEntity = entity.icon.getHeight() * Variables.PROCENT * 0.7;
+            double widthEntity = entity.icon.getWidth() * Variables.PROCENT * 0.5;
+            double heightEntity = entity.icon.getHeight() * Variables.PROCENT * 0.5;
             double x = z.x * Variables.SCREEN_WIDTH * Variables.PROCENT;
             double y = (Variables.SCREEN_HEIGHT - height) / 2 + height * z.y;
 
             mapImageEntity.setLayoutX(x - widthEntity / 2);
             mapImageEntity.setLayoutY(y - heightEntity / 2);
-            mapImageEntity.setFitWidth(entity.icon.getWidth() * Variables.PROCENT * 0.7 * 0.5);
-            mapImageEntity.setFitWidth(entity.icon.getWidth() * Variables.PROCENT / 2);
+            mapImageEntity.setFitWidth(widthEntity);
             mapImageEntity.setPreserveRatio(true);
-            Variables.root.getChildren().add(mapImageEntity);
+            ActionsMisc.display(mapImageEntity);
         }
         return;
     }
 
     public static void removeEntitiesFromMap(Location continent) {
-        List<Node> removeNodes = new ArrayList<>();
-        for (Node node : Variables.root.getChildren()) {
-            if (node instanceof MapImageEntity && ((MapImageEntity) node).continent.equals(continent)) {
-                removeNodes.add(node);
-            }
-        }
-        Variables.root.getChildren().removeAll(removeNodes);
+        ActionsMisc.removeByFilter(node -> {
+            return node instanceof MapImageEntity && ((MapImageEntity) node).continent.equals(continent);
+        });
         return;
     }
 }

@@ -26,7 +26,7 @@ public class CommandButton implements EventHandler<ActionEvent> {
         Variables.core.activateCommand(commandID);
         ButtonVisualizer.displayCommandButtons();
         Visualizer.initializeLabels();
-        Visualizer.ritual();
+        Visualizer.displayRitualLabel();
 
         for (Location location : Variables.core.getLocationsList()) {
             EntityVisualizer.removeEntitiesFromMap(location);

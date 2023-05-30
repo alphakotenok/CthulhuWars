@@ -14,7 +14,7 @@ public class MenuButton implements EventHandler<ActionEvent> {
     @Override
     public void handle(ActionEvent event) {
         ActionsMisc.removeButtons(MenuButton.class);
-        
+        FactionPickButton.playerID = 0;
         View.ButtonVisualizer.displayFactionPickButtons(numberOfPlayers);
     }
 }

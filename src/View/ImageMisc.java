@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import Model.Variables;
+import Model.Core.Coordinates;
 import Model.Faction.FactionType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -11,10 +12,7 @@ import javafx.scene.image.PixelReader;
 
 public class ImageMisc {
     public static ImageView getFactionSheetImageView(int factionID) throws FileNotFoundException {
-        String factionName = "images/FactionSheet/FactionCard_" + Variables.NAME_OF_FACTIONS[factionID] + ".png";
-
-        FileInputStream inputStream = new FileInputStream(factionName);
-        Image sheet = new Image(inputStream);
+        Image sheet = getFactionSheetImage(factionID);
 
         ImageView sheetView = new ImageView(sheet);
         double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
@@ -57,33 +55,46 @@ public class ImageMisc {
     }
 
     public static Image getSpellBookSheetImage() throws FileNotFoundException {
-        String spellBookSheetName = "images/SpeelBookSheet.png";
+        String spellBookSheetName = "images/SpellBooks/SpellBookSheet.png";
         FileInputStream inputStream = new FileInputStream(spellBookSheetName);
         Image spellBookSheet = new Image(inputStream);
         return spellBookSheet;
     }
 
     public static ImageView getSpellBookSheetImageView() throws FileNotFoundException {
-        String spellBookSheetName = "images/SpeelBookSheet.png";
-        FileInputStream inputStream = new FileInputStream(spellBookSheetName);
-        Image spellBookSheet = new Image(inputStream);
+        Image spellBookSheet = getSpellBookSheetImage();
 
         ImageView sheetView = new ImageView(spellBookSheet);
         double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
-        sheetView.setY((Variables.SCREEN_HEIGHT - height) / 2 + 140 * Variables.PROCENT);
+        sheetView.setY((Variables.SCREEN_HEIGHT - height) / 2 + 137 * Variables.PROCENT);
         sheetView.setX(Variables.PROCENT * 20);
         sheetView.setFitWidth(Variables.SCREEN_WIDTH * Variables.PROCENT / 2 - Variables.PROCENT * 40);
-        sheetView.setFitHeight(height - 160 * Variables.PROCENT);
+        sheetView.setFitHeight(height - 158 * Variables.PROCENT);
         return sheetView;
     }
 
     public static ImageView getGameIconImageView() throws FileNotFoundException {
-        String pathToImage = "Images/Cthulhu_Wars.png";
+        String pathToImage = "Images/logo/Cthulhu_Wars.png";
         FileInputStream inputStream;
         inputStream = new FileInputStream(pathToImage);
         Image image = new Image(inputStream);
         ImageView imageView = new ImageView(image);
         return imageView;
+    }
+
+    public static ImageView getOpenedSpellBookImageView(Image bookImage, Coordinates bookCoordinates) {
+        double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
+        double heightBook = bookImage.getHeight() * Variables.PROCENT;
+        double widthBook = heightBook * Variables.mapRatio;
+        double x = bookCoordinates.x * Variables.SCREEN_WIDTH * Variables.PROCENT;
+        double y = (Variables.SCREEN_HEIGHT - height) / 2 + height * bookCoordinates.y;
+
+        ImageView bookView = new ImageView(bookImage);
+        bookView.setY(y);
+        bookView.setX(x);
+        bookView.setFitWidth(widthBook);
+        bookView.setFitHeight(heightBook);
+        return bookView;
     }
 
     public static Boolean imagesAreEqual(Image image1, Image image2) {

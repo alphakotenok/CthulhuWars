@@ -3,7 +3,6 @@ package View;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
 import Controler.OrderChooseButton;
@@ -11,13 +10,11 @@ import Controler.SpellBookButton;
 import Controler.FactionPickButton;
 import Controler.FactionSheetButton;
 import Controler.MenuButton;
+import Controler.MiscFunctions;
 import Controler.CommandButton;
 import Model.Variables;
 import Model.Faction.FactionType;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -30,43 +27,24 @@ import javafx.scene.text.TextFlow;
 
 public class ButtonVisualizer {
     public static void rebuildFactionPickButtons(int choosenFaction) {
-        List<Node> nodeList = new ArrayList<>();
-        List<Button> buttonList = new ArrayList<>();
-        int playerID = 0;
-        for (Node node : Variables.root.getChildren()) {
-            if (node instanceof Button) {
-                EventHandler<ActionEvent> onAction = ((Button) node).getOnAction();
-                if (onAction != null && onAction instanceof FactionPickButton) {
-                    nodeList.add(node);
-                    if (((FactionPickButton) onAction).factionID != choosenFaction)
-                        buttonList.add((Button) node);
-                    playerID = ((FactionPickButton) onAction).playerID;
-                }
-            }
-        }
-        Variables.root.getChildren().removeAll(nodeList);
+        int playerID = FactionPickButton.playerID;
         double thisHeight = Variables.SCREEN_HEIGHT / (Variables.NUMBER_OF_FACTIONS + 1);
+
+        ActionsMisc.removeButtons(FactionPickButton.class);
+
+        displayFactionPickButtons(FactionPickButton.numberOfPlayers);
 
         ActionsMisc.removeLabelByText("player " + playerID);
 
-        int factionId = 0;
-
-        for (Button FactionPickButton : buttonList) {
-            FactionPickButton onAction = (FactionPickButton) FactionPickButton
-                    .getOnAction();
-            onAction.nextPlayer();
-
-            FactionPickButton.setLayoutY((factionId + 1) * thisHeight);
-            Variables.root.getChildren().add(FactionPickButton);
-            factionId++;
-        }
+        FactionPickButton.playerID++;
 
         Label label = new Label("player " + (playerID + 1));
         label.setPrefHeight(thisHeight);
         label.setPrefWidth(Variables.SCREEN_WIDTH);
         label.setAlignment(Pos.CENTER);
         label.setFont(Font.font("Arial", 40));
-        Variables.root.getChildren().add(label);
+
+        ActionsMisc.display(label);
         return;
     }
 
@@ -88,7 +66,7 @@ public class ButtonVisualizer {
             gameButton[i].setGraphic(logoView);
             gameButton[i].setOnAction(new FactionSheetButton(orderFactions.get(i).ordinal()));
 
-            Variables.root.getChildren().add(gameButton[i]);
+            ActionsMisc.display(gameButton[i]);
         }
     }
 
@@ -106,32 +84,40 @@ public class ButtonVisualizer {
             btnCountOfPlyers[countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS]
                     .setOnAction(new MenuButton(countOfPlayers));
 
-            Variables.root.getChildren().add(btnCountOfPlyers[countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS]);
+            ActionsMisc.display(btnCountOfPlyers[countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS]);
         }
     }
 
     public static void displayFactionPickButtons(int numberOfPlayers) {
         double thisHeight = Variables.SCREEN_HEIGHT / (Variables.NUMBER_OF_FACTIONS + 1);
 
-        Label label = new Label("player " + 0);
+        Label label = new Label("player " + FactionPickButton.playerID);
         label.setPrefHeight(thisHeight);
         label.setPrefWidth(Variables.SCREEN_WIDTH);
         label.setAlignment(Pos.CENTER);
         label.setFont(Font.font("Arial", 40));
-        Variables.root.getChildren().add(label);
+
+        ActionsMisc.display(label);
+
         Button[] factionPickButtons = new Button[Variables.NUMBER_OF_FACTIONS];
+
+        FactionPickButton.numberOfPlayers = numberOfPlayers;
+        int id = 0;
+
         for (int factionId = 0; factionId < Variables.NUMBER_OF_FACTIONS; factionId++) {
+            if (FactionPickButton.factionList.contains(MiscFunctions.getFactionByID(factionId)))
+                continue;
             factionPickButtons[factionId] = new Button();
             factionPickButtons[factionId].setTextFill(Variables.COLOR_OF_FACTIONS[factionId]);
             factionPickButtons[factionId].setText(Variables.NAME_OF_FACTIONS[factionId]);
             factionPickButtons[factionId].setFont(Font.font("Arial", 40));
             factionPickButtons[factionId].setPrefHeight(thisHeight);
-            factionPickButtons[factionId].setLayoutY((factionId + 1) * thisHeight);
+            factionPickButtons[factionId].setLayoutY((id + 1) * thisHeight);
             factionPickButtons[factionId].setPrefWidth(Variables.SCREEN_WIDTH);
             factionPickButtons[factionId]
-                    .setOnAction(new FactionPickButton(numberOfPlayers, factionId, 0));
-
-            Variables.root.getChildren().add(factionPickButtons[factionId]);
+                    .setOnAction(new FactionPickButton(factionId));
+            id++;
+            ActionsMisc.display(factionPickButtons[factionId]);
         }
     }
 
@@ -149,7 +135,7 @@ public class ButtonVisualizer {
         label.setPrefWidth(Variables.SCREEN_WIDTH);
         label.setAlignment(Pos.CENTER);
         label.setFont(Font.font("Arial", 40));
-        Variables.root.getChildren().add(label);
+        ActionsMisc.display(label);
 
         Button[] commandButton = new Button[countOfCommands];
         for (int idx = 0; idx < countOfCommands; idx++) {
@@ -177,13 +163,12 @@ public class ButtonVisualizer {
             commandButton[idx].setPrefWidth(Variables.SCREEN_WIDTH);
             commandButton[idx].setOnAction(new OrderChooseButton(orderID));
 
-            Variables.root.getChildren().add(commandButton[idx]);
+            ActionsMisc.display(commandButton[idx]);
         }
     }
 
     public static void displayCommandButtons() {
         ArrayList<String> commands = Variables.core.getCommandList();
-        // System.out.println(commands.size());
         double thisHeight = Variables.SCREEN_HEIGHT / (commands.size() + 1);
         Label label = new Label(Variables.core.getCommandDescription());
         label.setPrefHeight(thisHeight);
@@ -191,7 +176,7 @@ public class ButtonVisualizer {
         label.setLayoutX(Variables.SCREEN_WIDTH - 300);
         label.setAlignment(Pos.CENTER);
         label.setFont(Font.font("Arial", 16));
-        Variables.root.getChildren().add(label);
+        ActionsMisc.display(label);
 
         Button[] commandButton = new Button[commands.size()];
         for (int commandID = 0; commandID < commands.size(); commandID++) {
@@ -204,7 +189,7 @@ public class ButtonVisualizer {
             commandButton[commandID].setLayoutX(Variables.SCREEN_WIDTH - 300);
             commandButton[commandID].setOnAction(new CommandButton(commandID));
 
-            Variables.root.getChildren().add(commandButton[commandID]);
+            ActionsMisc.display(commandButton[commandID]);
         }
     }
 
@@ -213,12 +198,13 @@ public class ButtonVisualizer {
         double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
         Button spellBookButton = new Button();
         spellBookButton.setText("About spellbooks");
+        spellBookButton.setFont(Font.font("Arial", 25));
         spellBookButton.setPrefHeight(100 * Variables.PROCENT);
         spellBookButton.setLayoutY((Variables.SCREEN_HEIGHT - height) / 2 + 20 * Variables.PROCENT);
         spellBookButton.setPrefWidth(300 * Variables.PROCENT);
         spellBookButton.setLayoutX(width / 2 + 160 * Variables.PROCENT);
         spellBookButton.setOnAction(new SpellBookButton(factionID));
 
-        Variables.root.getChildren().add(spellBookButton);
+        ActionsMisc.display(spellBookButton);
     }
 }
