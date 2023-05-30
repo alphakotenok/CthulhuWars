@@ -175,6 +175,7 @@ public class ButtonVisualizer {
         label.setPrefWidth(300);
         label.setLayoutX(Variables.SCREEN_WIDTH - 300);
         label.setAlignment(Pos.CENTER);
+        label.setWrapText(true);
         label.setFont(Font.font("Arial", 16));
         ActionsMisc.display(label);
 
