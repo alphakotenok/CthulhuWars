@@ -14,6 +14,7 @@ public class GameMap {
     static int minNumOfPlayers = 2;
     static int maxNumOfPlayers = 6;
     Core core;
+    //core.factionslist - arraylist enum(фракций)
 
     ArrayList<Segment> BeringSea() {
         ArrayList<Segment> BeringSea = new ArrayList<>();
