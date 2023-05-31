@@ -25,13 +25,13 @@ public class Location {
         this.segments = curSegments;
     }
 
-    public Coordinates getEntityPosition(int entityNum) {
-        int entityTotal = entityList.size() + 1;
+    public Coordinates getEntityPosition(int entityNum, int entityTotal) {
+        ++entityTotal;
         int segTotal = segments.size();
         double lengthOfSegments[] = new double[segTotal];
         double sumOfLength = 0;
         for (int i = 0; i < segTotal; i++) {
-            lengthOfSegments[i] =  Math.sqrt((segments.get(i).left.x - segments.get(i).right.x)
+            lengthOfSegments[i] = Math.sqrt((segments.get(i).left.x - segments.get(i).right.x)
                     * (segments.get(i).left.x - segments.get(i).right.x)
                     + (segments.get(i).left.y - segments.get(i).right.y)
                             * (segments.get(i).left.y - segments.get(i).right.y));
@@ -40,7 +40,7 @@ public class Location {
         double avLength = sumOfLength / entityTotal;
         int colEnt[] = new int[segTotal];
         for (int i = 0; i < segTotal; i++) {
-            colEnt[i] = (int)((lengthOfSegments[i] + avLength / 2.0) / avLength);
+            colEnt[i] = (int) ((lengthOfSegments[i] + avLength / 2.0) / avLength);
             entityTotal -= colEnt[i];
         }
         for (int i = 0; i < segTotal; i++) {

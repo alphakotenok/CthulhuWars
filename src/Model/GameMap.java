@@ -11,9 +11,8 @@ class GameMap {
 
     ArrayList<Location> locations;
     Image mapIcon;
-    static int minNumOfPlayers = 2;
-    static int maxNumOfPlayers = 6;
     Core core;
+    ArrayList<ArrayList<Location>> startLoc = new ArrayList<>();
 
     ArrayList<Segment> BeringSea() {
         ArrayList<Segment> BeringSea = new ArrayList<>();
@@ -778,8 +777,6 @@ class GameMap {
         startLoc.add(Sleeper);
         startLoc.add(Windwalker);
     }
-
-    ArrayList<ArrayList<Location>> startLoc = new ArrayList<>();
 
     void setStartUnits(FactionType faction, Location location) {
         ArrayList<Entity> units = core.entityBase.getUnitsOfFaction(faction);
