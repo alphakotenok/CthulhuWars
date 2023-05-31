@@ -9,7 +9,6 @@ import javafx.scene.image.Image;
 
 public class Core {
     GameMap map;
-    EntityBase entityBase;
     CommandTree ct;
     FactionBase factionBase;
     Ritual ritual;
@@ -71,7 +70,6 @@ public class Core {
         var = new GameVariables(numOfPlayers, factions);
         map = new GameMap(this);
         ritual = new Ritual(this);
-        entityBase = new EntityBase(var.factionsList);
         factionBase = new FactionBase(this);
         ct = new CommandTree(this);
         gates = new Gates(this);

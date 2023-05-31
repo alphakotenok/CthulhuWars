@@ -53,6 +53,7 @@ class CommandTree {
     Node firstPlayerSelectionNode = new Node(NodeNameTreeFunctions::firstPlayerSelectionText);
     Node ritualNode = new Node(NodeNameTreeFunctions::ritualText);
     Node viewElderSignsNode = new Node(NodeNameTreeFunctions::viewElderSignsText);
+    Node chooseEntityToMoveNode = new Node(NodeNameTreeFunctions.constName("Choose Unit"));
 
     void prepareEdgeCreators() {
         openBookNode.addEdgeCreator(null, DataGeneratorTreeFunctions::booksToOpen,
@@ -68,7 +69,7 @@ class CommandTree {
                 EdgeCreatorTreeChecker.opposite(EdgeCreatorTreeChecker::isLastPlayerDoing));
         startLocChooseNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::startLocGenerator,
                 EdgeNameTreeFunctions::locationName, AccumulatorTreeFunctions::accumulateLocation,
-                EdgeTreeFunctions::startLocPlacementAlter,
+                EdgeTreeFunctions::startLocLastPlacement,
                 EdgeCreatorTreeChecker::isLastPlayerDoing);
         actionChooseNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::justOne,
                 EdgeNameTreeFunctions.constName("Pass and lose remaining energy"), AccumulatorTreeFunctions::none,
@@ -382,7 +383,7 @@ class EdgeTreeFunctions {
         ++core.var.playerCounter;
     }
 
-    static void startLocPlacementAlter(Core core) {
+    static void startLocLastPlacement(Core core) {
         core.getCurFact().setStartEntities(core.var.chosenLocation);
         core.var.turn = core.var.firstPlayer;
         core.var.playerCounter = 0;

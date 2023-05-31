@@ -89,8 +89,9 @@ class Gates {
     }
 
     void checkGate(Location location) {
-        if (!isGateInLocation(location))
+        if (!isGateInLocation(location)) {
             return;
+        }
         Gate g = getGate(location);
         if (g.controlledBy == null) {
             Faction fact = core.getCurFact();

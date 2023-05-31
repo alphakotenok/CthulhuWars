@@ -37,6 +37,7 @@ class EntitySet {
         this.faction = faction;
         this.icon = icon;
         this.limit = limit;
+        this.core = core;
     }
 
     void move(Location from, Location to) {
@@ -74,7 +75,7 @@ class EntitySet {
     void kill(Location loc) {
         int index = positions.indexOf(loc);
         if (index == -1) {
-            System.out.println("Move Error");
+            System.out.println("Kill Error");
             return;
         }
         positions.remove(index);

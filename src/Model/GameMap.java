@@ -735,10 +735,6 @@ class GameMap {
         fillStartLocArray();
     }
 
-    ArrayList<Entity> getEntityListInLocation(Location location) {
-        return location.entityList;
-    }
-
     void fillStartLocArray() {
         ArrayList<Location> GreatCthulhu = new ArrayList<>();
         ArrayList<Location> CrawlingChaos = new ArrayList<>();
