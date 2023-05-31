@@ -1,6 +1,5 @@
 package Controler;
 
-import Model.Location;
 import Model.Variables;
 import View.ButtonVisualizer;
 import View.EntityVisualizer;
@@ -28,10 +27,8 @@ public class CommandButton implements EventHandler<ActionEvent> {
         Visualizer.initializeLabels();
         Visualizer.displayRitualLabel();
 
-        for (Location location : Variables.core.getLocationsList()) {
-            EntityVisualizer.removeEntitiesFromMap(location);
-            EntityVisualizer.placeEntitiesOnMap(location);
-        }
+        EntityVisualizer.removeEntitiesFromMap();
+        EntityVisualizer.placeEntitiesOnMap();
         return;
     }
 

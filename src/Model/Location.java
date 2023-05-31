@@ -25,7 +25,7 @@ public class Location {
         this.segments = curSegments;
     }
 
-    Coordinates getEntityPosition(int entityNum, int entityTotal) {
+    public Coordinates getEntityPosition(int entityNum, int entityTotal) {
         ++entityTotal;
         int segTotal = segments.size();
         double lengthOfSegments[] = new double[segTotal];

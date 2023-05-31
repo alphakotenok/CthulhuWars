@@ -377,13 +377,11 @@ class EdgeTreeFunctions {
     };
 
     static void startLocPlacement(Core core) {
-        core.getCurFact().setStartEntities(core.var.chosenLocation);
         core.var.turn = core.var.getNextTurn(core.var.turn);
         ++core.var.playerCounter;
     }
 
     static void startLocPlacementAlter(Core core) {
-        core.getCurFact().setStartEntities(core.var.chosenLocation);
         core.var.turn = core.var.firstPlayer;
         core.var.playerCounter = 0;
     }

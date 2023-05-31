@@ -1,6 +1,5 @@
 package Model;
 
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -75,13 +74,6 @@ public class Core {
         factionBase = new FactionBase(this);
         ct = new CommandTree(this);
         gates = new Gates();
-        try {
-            String path = "images/Entities/Gates.png";
-            FileInputStream fileStream = new FileInputStream(path);
-            Image gateIcon = new Image(fileStream);
-            gates.icon = gateIcon;
-        } catch (Exception e) {
-        }
 
         rightBookCoordinates = new ArrayList<>();
         rightBookCoordinates.add(new Coordinates(0.506, 0.241));
@@ -117,25 +109,10 @@ public class Core {
             int locationSize = entityList.size();
             if (gates.isGateInLocation(loc)) {
                 if (gates.isGateControlled(loc)) {
-                    EntitySet controller = gates.getGateController(loc);
-                    for (int i = 0; i < entityList.size(); ++i) {
-                        if (controller == entityList.get(i)) {
-                            numOfController = i;
-                            break;
-                        }
-                    }
+
                 } else {
                     ++locationSize;
                     subAns.add(new Drawable(loc.getEntityPosition(subAns.size(), locationSize), gates.icon));
-                }
-            }
-            for (int i = 0; i < entityList.size(); ++i) {
-                if (numOfController == i) {
-                    subAns.add(new Drawable(loc.getEntityPosition(subAns.size(), locationSize),
-                            entityList.get(i).iconOnGate));
-                } else {
-                    subAns.add(new Drawable(loc.getEntityPosition(subAns.size(), locationSize),
-                            entityList.get(i).icon));
                 }
             }
             ans.addAll(subAns);
