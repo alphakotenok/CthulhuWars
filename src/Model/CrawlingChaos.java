@@ -18,5 +18,6 @@ class CrawlingChaos extends Faction {
         entitySetsList.add(new EntitySet(core, "Flying Polyp", Category.Monster, faction, entityIcons.get(2), 3));
         entitySetsList.add(new EntitySet(core, "Hunting Horror", Category.Monster, faction, entityIcons.get(3), 2));
         entitySetsList.add(new EntitySet(core, "Nyarlathotep", Category.GOO, faction, entityIcons.get(4), 1));
+        getEntitySetByName("Cultist").iconOnGate = Core.getImage("images/Entities/Gates with Acolyte (blue).png");
     }
 }

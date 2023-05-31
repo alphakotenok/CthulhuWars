@@ -17,5 +17,6 @@ class Sleeper extends Faction {
         entitySetsList.add(new EntitySet(core, "Serpent Man", Category.Monster, faction, entityIcons.get(2), 3));
         entitySetsList.add(new EntitySet(core, "Formless Spawn", Category.Monster, faction, entityIcons.get(3), 4));
         entitySetsList.add(new EntitySet(core, "Tsathoggua", Category.GOO, faction, entityIcons.get(4), 1));
+        getEntitySetByName("Cultist").iconOnGate = Core.getImage("images/Entities/Gates with Acolyte (orange).png");
     }
 }

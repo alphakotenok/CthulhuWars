@@ -17,5 +17,6 @@ class OpenerOfTheWay extends Faction {
         entitySetsList.add(new EntitySet(core, "Abomination", Category.Monster, faction, entityIcons.get(2), 3));
         entitySetsList.add(new EntitySet(core, "Spawn of Yog-Sothoth", Category.Monster, faction, entityIcons.get(3), 2));
         entitySetsList.add(new EntitySet(core, "Yog-Sothoth", Category.GOO, faction, entityIcons.get(4), 1));
+        getEntitySetByName("Cultist").iconOnGate = Core.getImage("images/Entities/Gates with Acolyte (purple).png");
     }
 }

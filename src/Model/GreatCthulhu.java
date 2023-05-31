@@ -17,5 +17,6 @@ class GreatCthulhu extends Faction {
         entitySetsList.add(new EntitySet(core, "Shoggoth", Category.Monster, faction, entityIcons.get(2), 4));
         entitySetsList.add(new EntitySet(core, "Star Spawn", Category.Monster, faction, entityIcons.get(3), 2));
         entitySetsList.add(new EntitySet(core, "Cthulhu", Category.GOO, faction, entityIcons.get(4), 1));
+        getEntitySetByName("Cultist").iconOnGate = Core.getImage("images/Entities/Gates with Acolyte (green).png");
     }
 }

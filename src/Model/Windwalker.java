@@ -17,5 +17,6 @@ class Windwalker extends Faction {
         entitySetsList.add(new EntitySet(core, "Gnoph-Keh", Category.Monster, faction, entityIcons.get(2), 4));
         entitySetsList.add(new EntitySet(core, "Rhan Tegoth", Category.GOO, faction, entityIcons.get(3), 1));
         entitySetsList.add(new EntitySet(core, "Ithaqua", Category.GOO, faction, entityIcons.get(4), 1));
+        getEntitySetByName("Cultist").iconOnGate = Core.getImage("images/Entities/Gates with Acolyte (white).png");
     }
 }
