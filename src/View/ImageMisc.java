@@ -88,7 +88,7 @@ public class ImageMisc {
         double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
         double width = Variables.SCREEN_WIDTH * Variables.PROCENT;
         double heightBook = bookImage.getHeight() * height / Variables.factionSheetHeight;
-        double widthBook = bookImage.getWidth() * width / Variables.factionSheetWidth;
+        double widthBook = (bookImage.getWidth() - 15) * width / Variables.factionSheetWidth;
         double x = bookCoordinates.x * width;
         double y = (Variables.SCREEN_HEIGHT - height) / 2 + height * bookCoordinates.y;
 
