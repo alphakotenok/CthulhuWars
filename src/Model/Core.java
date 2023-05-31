@@ -118,7 +118,6 @@ public class Core {
         location.entityList.remove(entity);
     }
 
-    // toDeleteLater
     public ArrayList<Drawable> getEntitiesToDraw() {
         return null;
     }
