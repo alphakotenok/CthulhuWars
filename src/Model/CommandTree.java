@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import Model.FactionEnum.FactionType;
+import Model.GameVariables.PerformedAction;
 
 class CommandTree {
 
@@ -72,6 +73,7 @@ class CommandTree {
                 EdgeNameTreeFunctions::locationName, AccumulatorTreeFunctions::accumulateLocation,
                 EdgeTreeFunctions::startLocLastPlacement,
                 EdgeCreatorTreeChecker::isLastPlayerDoing);
+        actionChooseNode.addMover(chooseEntityToMoveNode, "Move", EdgeCreatorTreeChecker::canMove);
         actionChooseNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::justOne,
                 EdgeNameTreeFunctions.constName("Pass and lose remaining energy"), AccumulatorTreeFunctions::none,
                 EdgeTreeFunctions::passTurn,
@@ -104,12 +106,22 @@ class CommandTree {
                 DataGeneratorTreeFunctions::justOne, EdgeNameTreeFunctions.constName("Done"),
                 AccumulatorTreeFunctions::none, EdgeTreeFunctions::doneRitual,
                 EdgeCreatorTreeChecker.opposite(EdgeCreatorTreeChecker::isLastPlayerDoing));
-        viewElderSignsNode.addBackButton(ritualNode);
         viewElderSignsNode.addEdgeCreator(viewElderSignsNode,
                 DataGeneratorTreeFunctions::elderSigns, EdgeNameTreeFunctions::elderSignRevealName,
                 AccumulatorTreeFunctions::accumulateSignReveal, EdgeTreeFunctions::revealElderSign,
                 EdgeCreatorTreeChecker::always);
-
+        viewElderSignsNode.addMover(ritualNode, "Back", EdgeCreatorTreeChecker::always);
+        chooseEntityToMoveNode.addMover(actionChooseNode, "Cancel", EdgeCreatorTreeChecker::isFirstMovement);
+        chooseEntityToMoveNode.addMover(actionChooseNode, "Done",
+                EdgeCreatorTreeChecker.opposite(EdgeCreatorTreeChecker::isFirstMovement));
+        chooseEntityToMoveNode.addEdgeCreator(chooseLocationToMoveNode,
+                DataGeneratorTreeFunctions::enableToMoveGenerator, EdgeNameTreeFunctions::fullEntityName,
+                AccumulatorTreeFunctions::accumulateEntityToMove, EdgeTreeFunctions::none,
+                EdgeCreatorTreeChecker::canMove);
+        chooseLocationToMoveNode.addMover(chooseEntityToMoveNode, "Back", EdgeCreatorTreeChecker::always);
+        chooseLocationToMoveNode.addEdgeCreator(chooseEntityToMoveNode, DataGeneratorTreeFunctions::adjLocations,
+                EdgeNameTreeFunctions::locationName, AccumulatorTreeFunctions::accumulateDestination,
+                EdgeTreeFunctions::performMovement, EdgeCreatorTreeChecker::always);
     }
 
     CommandTree(Core core) {
@@ -126,8 +138,7 @@ class CommandTree {
         ArrayList<EdgeCreator> edgeCreators;
         NodeNameFunctionContainer nameFunction;
         boolean bookNode = false;
-        Node prevNode;
-        boolean hasBackButton = false;
+        ArrayList<Edge> constEdges;
 
         Node(NodeNameFunctionContainer nameFunction) {
             this.nameFunction = nameFunction;
@@ -160,9 +171,6 @@ class CommandTree {
             for (EdgeCreator ec : edgeCreators) {
                 edges.addAll(ec.createEdges());
             }
-            if (hasBackButton) {
-                edges.add(new Edge("Back", AccumulatorTreeFunctions::none, EdgeTreeFunctions::none, prevNode, null));
-            }
             curNode = this;
         }
 
@@ -178,9 +186,10 @@ class CommandTree {
                     accumulatorFunction, egdeFunction, edgeCreatorChecker));
         }
 
-        void addBackButton(Node prevNode) {
-            hasBackButton = true;
-            this.prevNode = prevNode;
+        void addMover(Node to, String name, EdgeCreatorCheckerContainer edgeCreatorChecker) {
+            edgeCreators
+                    .add(new EdgeCreator(to, DataGeneratorTreeFunctions::justOne, EdgeNameTreeFunctions.constName(name),
+                            AccumulatorTreeFunctions::none, EdgeTreeFunctions::none, edgeCreatorChecker));
         }
 
     }
@@ -328,6 +337,11 @@ class EdgeNameTreeFunctions {
     static String elderSignRevealName(ArrayList<Integer> data, Core core) {
         return core.getCurFact().elderSignList.get(data.get(0)) + ", reveal it";
     }
+
+    static String fullEntityName(ArrayList<Integer> data, Core core) {
+        return core.getCurFact().entitySetsList.get(data.get(0)).name + " from "
+                + core.map.locations.get(data.get(1)).name;
+    }
 }
 
 class AccumulatorTreeFunctions {
@@ -363,9 +377,26 @@ class AccumulatorTreeFunctions {
     static void accumulateSignReveal(ArrayList<Integer> data, Core core) {
         core.var.signToReveal = data.get(0);
     }
+
+    static void accumulateEntityToMove(ArrayList<Integer> data, Core core) {
+        core.var.chosenEntity = core.getCurFact().entitySetsList.get(data.get(0));
+        core.var.chosenLocation = core.map.locations.get(data.get(1));
+    }
+
+    static void accumulateDestination(ArrayList<Integer> data, Core core) {
+        core.var.chosenDestination = core.map.locations.get(data.get(0));
+    }
 }
 
 class EdgeTreeFunctions {
+
+    static void nextPlayerMovePreparation(Core core) {
+
+        core.var.action = PerformedAction.None;
+        core.getCurFact().clearMovedEntities();
+        core.gates.generalGatesCheck();
+    }
+
     static void none(Core core) {
 
     };
@@ -388,6 +419,8 @@ class EdgeTreeFunctions {
         core.getCurFact().setStartEntities(core.var.chosenLocation);
         core.var.turn = core.var.firstPlayer;
         core.var.playerCounter = 0;
+
+        nextPlayerMovePreparation(core);
     }
 
     static void openBook(Core core) {
@@ -401,6 +434,7 @@ class EdgeTreeFunctions {
         while (core.getCurFact().skip)
             core.var.turn = core.var.getNextTurn(core.var.turn);
         ++core.var.playerCounter;
+        nextPlayerMovePreparation(core);
     }
 
     static void lastPassTurn(Core core) {
@@ -436,6 +470,8 @@ class EdgeTreeFunctions {
             Faction fact = core.getSomeFact(i);
             fact.isRitualPerformed = false;
         }
+
+        nextPlayerMovePreparation(core);
     }
 
     static void performRitual(Core core) {
@@ -444,6 +480,11 @@ class EdgeTreeFunctions {
 
     static void revealElderSign(Core core) {
         core.getCurFact().revealSign(core.var.signToReveal);
+    }
+
+    static void performMovement(Core core) {
+        core.var.chosenEntity.performMovement(core.var.chosenLocation, core.var.chosenDestination);
+        core.getCurFact().energy--;
     }
 }
 
@@ -527,6 +568,27 @@ class DataGeneratorTreeFunctions {
         return ans;
     }
 
+    static ArrayList<ArrayList<Integer>> enableToMoveGenerator(Core core) {
+        ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
+        Faction fact = core.getCurFact();
+        for (int i = 0; i < fact.entitySetsList.size(); ++i) {
+            EntitySet entity = fact.entitySetsList.get(i);
+            ArrayList<Location> loc = entity.getEnableToMoveEnities();
+            for (Location l : loc) {
+                ans.add(new ArrayList<>(Arrays.asList(i, core.map.locations.indexOf(l))));
+            }
+        }
+        return ans;
+    }
+
+    static ArrayList<ArrayList<Integer>> adjLocations(Core core) {
+        ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
+        ArrayList<Location> locList = core.var.chosenLocation.adj;
+        for (Location loc : locList) {
+            ans.add(new ArrayList<>(Arrays.asList(core.map.locations.indexOf(loc))));
+        }
+        return ans;
+    }
 }
 
 class EdgeCreatorTreeChecker {
@@ -549,5 +611,14 @@ class EdgeCreatorTreeChecker {
 
     static boolean canPerformRitual(Core core) {
         return core.ritual.canPerformRitual(core.var.factionsList.get(core.var.turn));
+    }
+
+    static boolean isFirstMovement(Core core) {
+        return core.var.action == PerformedAction.None && core.getCurFact().energy > 0;
+    }
+
+    static boolean canMove(Core core) {
+        return (core.var.action == PerformedAction.None || core.var.action == PerformedAction.Move)
+                && core.getCurFact().energy > 0;
     }
 }

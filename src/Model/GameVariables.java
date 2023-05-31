@@ -16,6 +16,7 @@ class GameVariables {
     int playerCounter;
     ArrayList<Integer> chosenPerm;
     Location chosenLocation;
+    Location chosenDestination;
     EntitySet chosenEntity;
     int totalSkip = 0;
     FactionType bookReceiver;
@@ -23,6 +24,12 @@ class GameVariables {
     int bookNum;
     ArrayList<Integer> firstPlayerCandidates;
     int signToReveal;
+
+    enum PerformedAction {
+        None, Move, Summon, GateBuilding, Extra
+    }
+
+    PerformedAction action;
 
     GameVariables(int numOfPlayers, ArrayList<FactionType> factionsList) {
         this.numOfPlayers = numOfPlayers;

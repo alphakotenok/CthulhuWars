@@ -1,6 +1,5 @@
 package Model;
 
-import java.io.FileInputStream;
 import java.util.ArrayList;
 
 import javafx.scene.image.Image;
@@ -43,8 +42,6 @@ class Faction {
         this.name = name;
         this.faction = faction;
         energy = 8;
-        cultistAlive = 6;
-        gatesControlled = 1;
         unitsCaptured = 0;
         activeGOO = 0;
         victoryPoints = 0;
@@ -61,24 +58,17 @@ class Faction {
     void loadBooksImages() {
         for (int i = 0; i < 6; ++i) {
             String path = "images/Spellbooks/" + name + "/" + i + ".png";
-            try {
-                FileInputStream fileStream = new FileInputStream(path);
-                Image icon = new Image(fileStream);
-                bookImages.add(icon);
-            } catch (Exception e) {
-            }
+            bookImages.add(Core.getImage(path));
         }
     }
 
     boolean isBookOpened(int bookNum) {
-        boolean ans = false;
         for (int i : openedBooks) {
             if (i == bookNum) {
-                ans = true;
-                break;
+                return true;
             }
         }
-        return ans;
+        return false;
     }
 
     boolean isQuestCompletedEarlier(int questNum) {
@@ -99,12 +89,14 @@ class Faction {
     }
 
     void recountEnergy() {
-        energy = cultistAlive + unitsCaptured + 2 * gatesControlled + core.gates.getLocationsWithFreeGates().size();
+        energy = getEntitySetByName("Cultist").positions.size() + unitsCaptured
+                + 2 * core.gates.getNumOfControlledGates(faction)
+                + core.gates.getLocationsWithFreeGates().size();
         unitsCaptured = 0;
     }
 
     void recountPoints() {
-        victoryPoints += gatesControlled;
+        victoryPoints += core.gates.getNumOfControlledGates(faction);
     }
 
     void prepareForNextRound() {
@@ -157,4 +149,9 @@ class Faction {
         return ans;
     }
 
+    void clearMovedEntities() {
+        for (EntitySet entity : entitySetsList) {
+            entity.moved.clear();
+        }
+    }
 }
