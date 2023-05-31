@@ -18,28 +18,30 @@ class Faction {
     Core core;
     FactionType faction;
     int victoryPoints;
-    ArrayList<Integer> elderSignList;
-    ArrayList<Integer> openedBooks;
-    ArrayList<Image> bookImages;
-    ArrayList<String> bookNames;
+    ArrayList<Integer> elderSignList = new ArrayList<>();
+
+    // will be better
+    ArrayList<Integer> openedBooks = new ArrayList<>();
+    ArrayList<Image> bookImages = new ArrayList<>();
+    ArrayList<String> bookNames = new ArrayList<>();
+
     boolean isRitualPerformed;
 
-    class Mob {
-        Entity entity;
+    ArrayList<EntitySet> entitySetsList = new ArrayList<>();
+
+    void fillBookNames() {
+        bookNames.add("Aboba");
+        bookNames.add("Aboba");
+        bookNames.add("Aboba");
+        bookNames.add("Aboba");
+        bookNames.add("Aboba");
+        bookNames.add("Aboba");
     }
 
-    void fillFactionNames() {
-        bookNames.add("Aboba");
-        bookNames.add("Aboba");
-        bookNames.add("Aboba");
-        bookNames.add("Aboba");
-        bookNames.add("Aboba");
-        bookNames.add("Aboba");
-    }
-
-    Faction(String name, Core core) {
+    Faction(String name, FactionType faction, Core core) {
         this.core = core;
         this.name = name;
+        this.faction = faction;
         energy = 8;
         cultistAlive = 6;
         gatesControlled = 1;
@@ -48,15 +50,12 @@ class Faction {
         victoryPoints = 0;
         skip = false;
         isRitualPerformed = false;
-        openedBooks = new ArrayList<>();
-        bookNames = new ArrayList<>();
-        elderSignList = new ArrayList<>();
         for (int i = 0; i < 6; ++i) {
             openedBooks.add(-1);
         }
-        bookImages = new ArrayList<>();
         loadBooksImages();
         getElderSign();
+        fillBookNames();
     }
 
     void loadBooksImages() {
@@ -86,6 +85,10 @@ class Faction {
         return ((int) openedBooks.get(questNum)) != -1;
     }
 
+    boolean isQuestCompleted(int questNum) {
+        return false;
+    }
+
     void getElderSign() {
         int sign = core.ritual.getSign();
         if (sign == -1) {
@@ -95,12 +98,8 @@ class Faction {
         elderSignList.add(sign);
     }
 
-    boolean isQuestCompleted(int questNum) {
-        return false;
-    }
-
     void recountEnergy() {
-        energy = cultistAlive + unitsCaptured + 2 * gatesControlled + core.entityBase.neutralGateExists;
+        energy = cultistAlive + unitsCaptured + 2 * gatesControlled + core.gates.getLocationsWithFreeGates().size();
         unitsCaptured = 0;
     }
 
@@ -118,4 +117,49 @@ class Faction {
         victoryPoints += elderSignList.get(num);
         elderSignList.remove(num);
     }
+
+    static ArrayList<Image> getEntityImages(ArrayList<String> names) {
+        ArrayList<Image> ans = new ArrayList<>();
+        for (String name : names) {
+            String path = "images/Entities/" + name + ".png";
+            try {
+                FileInputStream fileStream = new FileInputStream(path);
+                Image icon = new Image(fileStream);
+                ans.add(icon);
+            } catch (Exception e) {
+            }
+        }
+        return ans;
+    }
+
+    EntitySet getEntitySetByName(String name) {
+        for (EntitySet entity : entitySetsList) {
+            if (entity.name.equals(name)) {
+                return entity;
+            }
+        }
+        return null;
+    }
+
+    void setStartEntities(Location loc) {
+        EntitySet cultist = getEntitySetByName("Cultist");
+        if (cultist == null)
+            return;
+        for (int i = 0; i < 6; ++i) {
+            cultist.spawn(loc);
+        }
+        // core.gates.buildGate(loc);
+    }
+
+    ArrayList<EntitySet> getEntitiesInLocation(Location loc) {
+        ArrayList<EntitySet> ans = new ArrayList<>();
+        for (EntitySet entity : entitySetsList) {
+            int num = entity.countInLocation(loc);
+            for (int i = 0; i < num; ++i) {
+                ans.add(entity);
+            }
+        }
+        return ans;
+    }
+
 }

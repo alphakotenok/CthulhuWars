@@ -2,7 +2,6 @@ package Model;
 
 import java.util.*;
 
-import Model.Entity.EntityType;
 import Model.FactionEnum.FactionType;
 import Model.Location.Segment;
 import javafx.scene.image.Image;
@@ -11,9 +10,8 @@ class GameMap {
 
     ArrayList<Location> locations;
     Image mapIcon;
-    static int minNumOfPlayers = 2;
-    static int maxNumOfPlayers = 6;
     Core core;
+    ArrayList<ArrayList<Location>> startLoc = new ArrayList<>();
 
     ArrayList<Segment> BeringSea() {
         ArrayList<Segment> BeringSea = new ArrayList<>();
@@ -331,12 +329,13 @@ class GameMap {
             Asia.adj.add(IndianOcean);
         }
 
-        if(numOfPlayers <= 5){
+        if (numOfPlayers <= 5) {
             if (numOfPlayers <= 3) {
                 ArcticOcean.adj.add(Asia);
                 ArcticOcean.adj.add(Europe);
             }
-            if (numOfPlayers <= 4) ArcticOcean.adj.add(NorthAmerica);
+            if (numOfPlayers <= 4)
+                ArcticOcean.adj.add(NorthAmerica);
             ArcticOcean.adj.add(NorthPacific);
             ArcticOcean.adj.add(NorthAtlantic);
             if (numOfPlayers >= 4) {
@@ -349,7 +348,7 @@ class GameMap {
             }
         }
 
-        if(numOfPlayers >= 6){
+        if (numOfPlayers >= 6) {
             ArcticOceanSmall.adj.add(NorthAmericaEast);
             ArcticOceanSmall.adj.add(BeringSea);
             ArcticOceanSmall.adj.add(NorthAtlanticSmall);
@@ -363,44 +362,49 @@ class GameMap {
         }
 
         if (numOfPlayers >= 4) {
-            if (numOfPlayers <= 5){
+            if (numOfPlayers <= 5) {
                 Scandinavia.adj.add(ArcticOcean);
                 Scandinavia.adj.add(NorthAtlantic);
             }
             Scandinavia.adj.add(NorthAsia);
             Scandinavia.adj.add(EuropeSmall);
-            if (numOfPlayers >= 6){
+            if (numOfPlayers >= 6) {
                 Scandinavia.adj.add(ArcticOceanSmall);
                 Scandinavia.adj.add(NorthAtlanticSmall);
             }
 
-            if (numOfPlayers <= 5) NorthAsia.adj.add(ArcticOcean);
+            if (numOfPlayers <= 5)
+                NorthAsia.adj.add(ArcticOcean);
             NorthAsia.adj.add(Scandinavia);
             NorthAsia.adj.add(EuropeSmall);
             NorthAsia.adj.add(NorthPacific);
             NorthAsia.adj.add(SouthAsia);
             NorthAsia.adj.add(Arabia);
-            if(numOfPlayers >= 6) NorthAsia.adj.add(ArcticOceanSmall);
+            if (numOfPlayers >= 6)
+                NorthAsia.adj.add(ArcticOceanSmall);
 
             SouthAsia.adj.add(Arabia);
             SouthAsia.adj.add(NorthAsia);
             SouthAsia.adj.add(NorthPacific);
             SouthAsia.adj.add(IndianOcean);
 
-            if (numOfPlayers <= 5) Arabia.adj.add(NorthAtlantic);
+            if (numOfPlayers <= 5)
+                Arabia.adj.add(NorthAtlantic);
             Arabia.adj.add(EuropeSmall);
             Arabia.adj.add(NorthAsia);
             Arabia.adj.add(SouthAsia);
             Arabia.adj.add(IndianOcean);
             Arabia.adj.add(EastAfrica);
             Arabia.adj.add(WestAfrica);
-            if(numOfPlayers >= 6) Arabia.adj.add(MediterraneanSea);
+            if (numOfPlayers >= 6)
+                Arabia.adj.add(MediterraneanSea);
 
-            if (numOfPlayers <= 5) EuropeSmall.adj.add(NorthAtlantic);
+            if (numOfPlayers <= 5)
+                EuropeSmall.adj.add(NorthAtlantic);
             EuropeSmall.adj.add(Scandinavia);
             EuropeSmall.adj.add(NorthAsia);
             EuropeSmall.adj.add(Arabia);
-            if(numOfPlayers >= 6) {
+            if (numOfPlayers >= 6) {
                 EuropeSmall.adj.add(NorthAtlanticSmall);
                 EuropeSmall.adj.add(MediterraneanSea);
             }
@@ -412,7 +416,7 @@ class GameMap {
             NorthPacific.adj.add(NorthAmerica);
             NorthPacific.adj.add(SouthAmerica);
         }
-        if(numOfPlayers <= 5){
+        if (numOfPlayers <= 5) {
             NorthPacific.adj.add(ArcticOcean);
             NorthPacific.adj.add(NorthAtlantic);
         }
@@ -440,38 +444,40 @@ class GameMap {
         }
 
         if (numOfPlayers >= 5) {
-            if(numOfPlayers <= 5){
+            if (numOfPlayers <= 5) {
                 NorthAmericaEast.adj.add(NorthAtlantic);
                 NorthAmericaEast.adj.add(ArcticOcean);
             }
             NorthAmericaEast.adj.add(NorthAmericaWest);
-            if(numOfPlayers >= 6){
+            if (numOfPlayers >= 6) {
                 NorthAmericaEast.adj.add(NorthAtlanticSmall);
                 NorthAmericaEast.adj.add(BeringSea);
                 NorthAmericaEast.adj.add(ArcticOceanSmall);
             }
 
-            if(numOfPlayers <= 5){
+            if (numOfPlayers <= 5) {
                 NorthAmericaWest.adj.add(ArcticOcean);
                 NorthAmericaWest.adj.add(NorthAtlantic);
             }
             NorthAmericaWest.adj.add(NorthAmericaEast);
             NorthAmericaWest.adj.add(CentralAmerica);
             NorthAmericaWest.adj.add(NorthPacific);
-            if(numOfPlayers >= 6){
+            if (numOfPlayers >= 6) {
                 NorthAmericaWest.adj.add(NorthAtlanticSmall);
                 NorthAmericaWest.adj.add(BeringSea);
             }
 
-            if(numOfPlayers <= 5) CentralAmerica.adj.add(NorthAtlantic);
+            if (numOfPlayers <= 5)
+                CentralAmerica.adj.add(NorthAtlantic);
             CentralAmerica.adj.add(NorthPacific);
             CentralAmerica.adj.add(NorthAmericaWest);
             CentralAmerica.adj.add(SouthAmericaEast);
             CentralAmerica.adj.add(SouthAmericaWest);
-            if(numOfPlayers >= 6) CentralAmerica.adj.add(NorthAtlanticSmall);
+            if (numOfPlayers >= 6)
+                CentralAmerica.adj.add(NorthAtlanticSmall);
         }
 
-        if(numOfPlayers <= 5){
+        if (numOfPlayers <= 5) {
             if (numOfPlayers <= 3) {
                 NorthAtlantic.adj.add(Europe);
                 NorthAtlantic.adj.add(Asia);
@@ -498,7 +504,7 @@ class GameMap {
             }
         }
 
-        if(numOfPlayers >= 6){
+        if (numOfPlayers >= 6) {
             NorthAtlanticSmall.adj.add(NorthAmericaEast);
             NorthAtlanticSmall.adj.add(NorthAmericaWest);
             NorthAtlanticSmall.adj.add(CentralAmerica);
@@ -521,8 +527,10 @@ class GameMap {
             IndianOcean.adj.add(Asia);
             IndianOcean.adj.add(Africa);
         }
-        if (numOfPlayers <= 4) IndianOcean.adj.add(Australia);
-        if (numOfPlayers <= 5) IndianOcean.adj.add(Antarctica);
+        if (numOfPlayers <= 4)
+            IndianOcean.adj.add(Australia);
+        if (numOfPlayers <= 5)
+            IndianOcean.adj.add(Antarctica);
         IndianOcean.adj.add(NorthPacific);
         IndianOcean.adj.add(SouthAtlantic);
         IndianOcean.adj.add(SouthPacific);
@@ -531,18 +539,19 @@ class GameMap {
             IndianOcean.adj.add(Arabia);
             IndianOcean.adj.add(EastAfrica);
         }
-        if (numOfPlayers >= 5){
+        if (numOfPlayers >= 5) {
             IndianOcean.adj.add(AustraliaSmall);
             IndianOcean.adj.add(NewZealand);
         }
-        if (numOfPlayers >= 6) IndianOcean.adj.add(MountainsofMadness);
+        if (numOfPlayers >= 6)
+            IndianOcean.adj.add(MountainsofMadness);
 
-        if(numOfPlayers <= 4){
+        if (numOfPlayers <= 4) {
             Australia.adj.add(SouthPacific);
             Australia.adj.add(IndianOcean);
         }
 
-        if(numOfPlayers >= 5){
+        if (numOfPlayers >= 5) {
             AustraliaSmall.adj.add(IndianOcean);
             AustraliaSmall.adj.add(NewZealand);
 
@@ -551,21 +560,23 @@ class GameMap {
             NewZealand.adj.add(SouthPacific);
         }
 
-        if(numOfPlayers <= 4){
+        if (numOfPlayers <= 4) {
             SouthPacific.adj.add(Australia);
             SouthPacific.adj.add(SouthAmerica);
         }
-        if(numOfPlayers <= 5) SouthPacific.adj.add(Antarctica);
+        if (numOfPlayers <= 5)
+            SouthPacific.adj.add(Antarctica);
         SouthPacific.adj.add(NorthPacific);
         SouthPacific.adj.add(SouthAtlantic);
         SouthPacific.adj.add(IndianOcean);
-        if(numOfPlayers >= 5){
+        if (numOfPlayers >= 5) {
             SouthPacific.adj.add(AustraliaSmall);
             SouthPacific.adj.add(SouthAmericaWest);
         }
-        if(numOfPlayers >= 6) SouthPacific.adj.add(AntarcticaSmall);
+        if (numOfPlayers >= 6)
+            SouthPacific.adj.add(AntarcticaSmall);
 
-        if(numOfPlayers <= 4){
+        if (numOfPlayers <= 4) {
             SouthAmerica.adj.add(NorthAmerica);
             SouthAmerica.adj.add(NorthAtlantic);
             SouthAmerica.adj.add(SouthAtlantic);
@@ -573,23 +584,27 @@ class GameMap {
             SouthAmerica.adj.add(NorthPacific);
         }
 
-        if(numOfPlayers >= 5){
+        if (numOfPlayers >= 5) {
             SouthAmericaWest.adj.add(CentralAmerica);
             SouthAmericaWest.adj.add(SouthAmericaEast);
             SouthAmericaWest.adj.add(SouthAtlantic);
             SouthAmericaWest.adj.add(SouthPacific);
             SouthAmericaWest.adj.add(NorthPacific);
 
-            if(numOfPlayers <= 5) SouthAmericaEast.adj.add(NorthAtlantic);
+            if (numOfPlayers <= 5)
+                SouthAmericaEast.adj.add(NorthAtlantic);
             SouthAmericaEast.adj.add(CentralAmerica);
             SouthAmericaEast.adj.add(SouthAtlantic);
             SouthAmericaEast.adj.add(SouthAmericaWest);
-            if(numOfPlayers >= 6) SouthAmericaEast.adj.add(NorthAtlanticSmall);
+            if (numOfPlayers >= 6)
+                SouthAmericaEast.adj.add(NorthAtlanticSmall);
         }
 
-        if (numOfPlayers <= 3) SouthAtlantic.adj.add(Africa);
-        if (numOfPlayers <= 4) SouthAtlantic.adj.add(SouthAmerica);
-        if (numOfPlayers <= 5){
+        if (numOfPlayers <= 3)
+            SouthAtlantic.adj.add(Africa);
+        if (numOfPlayers <= 4)
+            SouthAtlantic.adj.add(SouthAmerica);
+        if (numOfPlayers <= 5) {
             SouthAtlantic.adj.add(NorthAtlantic);
             SouthAtlantic.adj.add(Antarctica);
         }
@@ -617,7 +632,8 @@ class GameMap {
         }
 
         if (numOfPlayers >= 4) {
-            if (numOfPlayers <= 5) WestAfrica.adj.add(NorthAtlantic);
+            if (numOfPlayers <= 5)
+                WestAfrica.adj.add(NorthAtlantic);
             WestAfrica.adj.add(Arabia);
             WestAfrica.adj.add(EastAfrica);
             WestAfrica.adj.add(SouthAtlantic);
@@ -632,13 +648,13 @@ class GameMap {
             EastAfrica.adj.add(WestAfrica);
         }
 
-        if (numOfPlayers <= 5){
+        if (numOfPlayers <= 5) {
             Antarctica.adj.add(IndianOcean);
             Antarctica.adj.add(SouthAtlantic);
             Antarctica.adj.add(SouthPacific);
         }
 
-        if(numOfPlayers >= 6){
+        if (numOfPlayers >= 6) {
             AntarcticaSmall.adj.add(SouthPacific);
             AntarcticaSmall.adj.add(SouthAtlantic);
             AntarcticaSmall.adj.add(MountainsofMadness);
@@ -719,10 +735,6 @@ class GameMap {
         fillStartLocArray();
     }
 
-    ArrayList<Entity> getEntityListInLocation(Location location) {
-        return location.entityList;
-    }
-
     void fillStartLocArray() {
         ArrayList<Location> GreatCthulhu = new ArrayList<>();
         ArrayList<Location> CrawlingChaos = new ArrayList<>();
@@ -733,13 +745,24 @@ class GameMap {
         ArrayList<Location> Windwalker = new ArrayList<>();
         for (int i = 0; i < locations.size(); i++) {
             String s = locations.get(i).name;
-            if (s.equals("South Pacific") && core.var.factionsList.indexOf(FactionType.GreatCthulhu) != -1) GreatCthulhu.add(locations.get(i));
-            else if ((s.equals("Asia") || s.equals("South Asia")) && core.var.factionsList.indexOf(FactionType.CrawlingChaos) != -1) CrawlingChaos.add(locations.get(i));
-            else if ((s.equals("Africa") || s.equals("West Africa")) && core.var.factionsList.indexOf(FactionType.BlackGoat) != -1) BlackGoat.add(locations.get(i));
-            else if (s.equals("Europe") && core.var.factionsList.indexOf(FactionType.YellowSign) != -1) YellowSign.add(locations.get(i));
-            else if ((s.equals("North America") || s.equals("North America West")) && core.var.factionsList.indexOf(FactionType.Sleeper) != -1) Sleeper.add(locations.get(i));
-            else if ((s.equals("Arctic Ocean") || (s.equals("Antarctica") && core.var.numOfPlayers < 6) || s.equals("Mountains of Madness")) && core.var.factionsList.indexOf(FactionType.Windwalker) != -1) Windwalker.add(locations.get(i));
-            else OpenerOfTheWay.add(locations.get(i));
+            if (s.equals("South Pacific") && core.var.factionsList.indexOf(FactionType.GreatCthulhu) != -1)
+                GreatCthulhu.add(locations.get(i));
+            else if ((s.equals("Asia") || s.equals("South Asia"))
+                    && core.var.factionsList.indexOf(FactionType.CrawlingChaos) != -1)
+                CrawlingChaos.add(locations.get(i));
+            else if ((s.equals("Africa") || s.equals("West Africa"))
+                    && core.var.factionsList.indexOf(FactionType.BlackGoat) != -1)
+                BlackGoat.add(locations.get(i));
+            else if (s.equals("Europe") && core.var.factionsList.indexOf(FactionType.YellowSign) != -1)
+                YellowSign.add(locations.get(i));
+            else if ((s.equals("North America") || s.equals("North America West"))
+                    && core.var.factionsList.indexOf(FactionType.Sleeper) != -1)
+                Sleeper.add(locations.get(i));
+            else if ((s.equals("Arctic Ocean") || (s.equals("Antarctica") && core.var.numOfPlayers < 6)
+                    || s.equals("Mountains of Madness")) && core.var.factionsList.indexOf(FactionType.Windwalker) != -1)
+                Windwalker.add(locations.get(i));
+            else
+                OpenerOfTheWay.add(locations.get(i));
         }
         startLoc.add(GreatCthulhu);
         startLoc.add(CrawlingChaos);
@@ -748,18 +771,5 @@ class GameMap {
         startLoc.add(OpenerOfTheWay);
         startLoc.add(Sleeper);
         startLoc.add(Windwalker);
-    }
-
-    ArrayList<ArrayList<Location>> startLoc = new ArrayList<>();
-
-    void setStartUnits(FactionType faction, Location location) {
-        ArrayList<Entity> units = core.entityBase.getUnitsOfFaction(faction);
-        for (Entity en : units) {
-            if (en.entityType == EntityType.Cultist) {
-                for (int i = 0; i < 6; ++i) {
-                    core.addEntity(location, en);
-                }
-            }
-        }
     }
 }

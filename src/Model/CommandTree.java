@@ -68,7 +68,7 @@ class CommandTree {
                 EdgeCreatorTreeChecker.opposite(EdgeCreatorTreeChecker::isLastPlayerDoing));
         startLocChooseNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::startLocGenerator,
                 EdgeNameTreeFunctions::locationName, AccumulatorTreeFunctions::accumulateLocation,
-                EdgeTreeFunctions::startLocPlacementAlter,
+                EdgeTreeFunctions::startLocLastPlacement,
                 EdgeCreatorTreeChecker::isLastPlayerDoing);
         actionChooseNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::justOne,
                 EdgeNameTreeFunctions.constName("Pass and lose remaining energy"), AccumulatorTreeFunctions::none,
@@ -352,9 +352,9 @@ class AccumulatorTreeFunctions {
 
     static void accumulateWay(ArrayList<Integer> data, Core core) {
         if (data.get(0) == 0) {
-            core.var.correcrtWay = false;
+            core.var.correctWay = false;
         } else
-            core.var.correcrtWay = true;
+            core.var.correctWay = true;
         core.var.turn = core.var.firstPlayer;
     }
 
@@ -377,13 +377,13 @@ class EdgeTreeFunctions {
     };
 
     static void startLocPlacement(Core core) {
-        core.map.setStartUnits(core.var.factionsList.get(core.var.turn), core.var.chosenLocation);
+        core.getCurFact().setStartEntities(core.var.chosenLocation);
         core.var.turn = core.var.getNextTurn(core.var.turn);
         ++core.var.playerCounter;
     }
 
-    static void startLocPlacementAlter(Core core) {
-        core.map.setStartUnits(core.var.factionsList.get(core.var.turn), core.var.chosenLocation);
+    static void startLocLastPlacement(Core core) {
+        core.getCurFact().setStartEntities(core.var.chosenLocation);
         core.var.turn = core.var.firstPlayer;
         core.var.playerCounter = 0;
     }

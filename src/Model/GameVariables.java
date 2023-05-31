@@ -6,15 +6,17 @@ import Model.FactionEnum.FactionType;
 
 class GameVariables {
     int numOfPlayers;
+    static int minNumOfPlayers = 2;
+    static int maxNumOfPlayers = 6;
+    ArrayList<FactionType> factionsList;
     int turn = 0;
-    boolean correcrtWay = true;
+    boolean correctWay = true;
     int firstPlayer = 0;
     boolean endOfTheGame = false;
-    ArrayList<FactionType> factionsList;
     int playerCounter;
     ArrayList<Integer> chosenPerm;
     Location chosenLocation;
-    Entity chosenEntity;
+    EntitySet chosenEntity;
     int totalSkip = 0;
     FactionType bookReceiver;
     int bookSlot;
@@ -28,7 +30,7 @@ class GameVariables {
     }
 
     int getNextTurn(int who) {
-        if (correcrtWay)
+        if (correctWay)
             return (who + 1) % numOfPlayers;
         return (who - 1 + numOfPlayers) % numOfPlayers;
     }

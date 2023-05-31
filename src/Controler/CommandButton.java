@@ -1,9 +1,11 @@
 package Controler;
 
-import Model.Location;
+import java.io.FileNotFoundException;
+
 import Model.Variables;
 import View.ButtonVisualizer;
 import View.EntityVisualizer;
+import View.ImageMisc;
 import View.Visualizer;
 import View.ActionsMisc;
 import javafx.event.ActionEvent;
@@ -18,6 +20,12 @@ public class CommandButton implements EventHandler<ActionEvent> {
 
     public void handle(ActionEvent arg0) {
         ActionsMisc.removeButtons(CommandButton.class);
+        try {
+            ActionsMisc.removeImage(ImageMisc.getArrowImage(Variables.core.getWay()));
+        } catch (FileNotFoundException e) {
+
+            e.printStackTrace();
+        }
         ActionsMisc.removeLabelById("Power label");
         ActionsMisc.removeLabelById("Doom label");
         ActionsMisc.removeLabelById("ElderSign label");
@@ -27,11 +35,13 @@ public class CommandButton implements EventHandler<ActionEvent> {
         ButtonVisualizer.displayCommandButtons();
         Visualizer.initializeLabels();
         Visualizer.displayRitualLabel();
-
-        for (Location location : Variables.core.getLocationsList()) {
-            EntityVisualizer.removeEntitiesFromMap(location);
-            EntityVisualizer.placeEntitiesOnMap(location);
+        try {
+            Visualizer.arrowImageView();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
+        EntityVisualizer.removeEntitiesFromMap();
+        EntityVisualizer.placeEntitiesOnMap();
         return;
     }
 

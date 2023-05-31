@@ -20,7 +20,6 @@ import javafx.scene.text.TextFlow;
 import Model.Core.Coordinates;
 
 public class Visualizer {
-    static Boolean zoogCheck = false;
 
     public static ImageView mapInitialization(int countOfPlayers) throws FileNotFoundException, Exception {
 
@@ -32,7 +31,6 @@ public class Visualizer {
         mapView.setY((Variables.SCREEN_HEIGHT - height) / 2);
         mapView.setFitWidth(Variables.SCREEN_WIDTH * Variables.PROCENT);
         mapView.setPreserveRatio(true);
-
         return mapView;
     }
 
@@ -71,6 +69,11 @@ public class Visualizer {
         ActionsMisc.display(finishButton);
     }
 
+    public static void arrowImageView() throws FileNotFoundException {
+        ImageView direction = ImageMisc.getArrowImageView(Variables.core.getWay());
+        ActionsMisc.display(direction);
+    }
+
     public static void createField(int numberOfPlayers) throws Exception {
         try {
             ActionsMisc.display(mapInitialization(numberOfPlayers));
@@ -78,7 +81,7 @@ public class Visualizer {
             displayFinishGameButton();
             ButtonVisualizer.displayCommandButtons();
             displayRitualLabel();
-
+            arrowImageView();
             initializeLabels();
         } catch (Exception e) {
             throw e;
@@ -160,7 +163,7 @@ public class Visualizer {
         ArrayList<Coordinates> rightSpellBooksSheetCoordinates = Variables.core.getRightBookCoordinates();
         for (int i = 0; i < openedBooks.size(); i++) {
             if (!openedBooks.get(i).equals(-1)) {
-                ImageView bookView = ImageMisc.getOpenedSpellBookImageView(imageBooks.get(i),
+                ImageView bookView = ImageMisc.getSpellBookImageView(imageBooks.get(i),
                         rightSpellBooksSheetCoordinates.get(openedBooks.get(i)));
                 ActionsMisc.display(bookView);
             }
@@ -173,7 +176,7 @@ public class Visualizer {
         ArrayList<Coordinates> leftSpellBooksSheetCoordinates = Variables.core.getLeftBookCoordinates();
         for (int i = 0; i < unopenedBooks.size(); i++) {
             if (unopenedBooks.get(i).equals(-1)) {
-                ImageView bookView = ImageMisc.getOpenedSpellBookImageView(imageBooks.get(i),
+                ImageView bookView = ImageMisc.getSpellBookImageView(imageBooks.get(i),
                         leftSpellBooksSheetCoordinates.get(i));
                 ActionsMisc.display(bookView);
             }

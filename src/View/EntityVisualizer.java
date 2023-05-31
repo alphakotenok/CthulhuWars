@@ -1,22 +1,18 @@
 package View;
 
-import java.util.ArrayList;
-import Model.Entity;
-import Model.Location;
 import Model.Variables;
-import Model.Core.Coordinates;;
+import Model.Core.Coordinates;
+import Model.Core.Drawable;;
 
 public class EntityVisualizer {
-    public static void placeEntitiesOnMap(Location continent) {
-        ArrayList<Entity> entities = continent.entityList;
-        for (int entityID = 0; entityID < entities.size(); entityID++) {
-            Entity entity = entities.get(entityID);
-            MapImageEntity mapImageEntity = new MapImageEntity(continent, entity);
-            mapImageEntity.setImage(entity.icon);
-            Coordinates z = continent.getEntityPosition(entityID);
+    public static void placeEntitiesOnMap() {
+        for (Drawable entity : Variables.core.getEntitiesToDraw()) {
+            MapImageEntity mapImageEntity = new MapImageEntity();
+            mapImageEntity.setImage(entity.image);
+            Coordinates z = entity.coord;
             double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
-            double widthEntity = entity.icon.getWidth() * Variables.PROCENT * 0.5;
-            double heightEntity = entity.icon.getHeight() * Variables.PROCENT * 0.5;
+            double widthEntity = entity.image.getWidth() * Variables.PROCENT * 0.5;
+            double heightEntity = entity.image.getHeight() * Variables.PROCENT * 0.5;
             double x = z.x * Variables.SCREEN_WIDTH * Variables.PROCENT;
             double y = (Variables.SCREEN_HEIGHT - height) / 2 + height * z.y;
 
@@ -29,9 +25,9 @@ public class EntityVisualizer {
         return;
     }
 
-    public static void removeEntitiesFromMap(Location continent) {
+    public static void removeEntitiesFromMap() {
         ActionsMisc.removeByFilter(node -> {
-            return node instanceof MapImageEntity && ((MapImageEntity) node).continent.equals(continent);
+            return node instanceof MapImageEntity;
         });
         return;
     }

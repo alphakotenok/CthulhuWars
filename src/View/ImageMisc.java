@@ -13,7 +13,8 @@ import javafx.scene.image.PixelReader;
 public class ImageMisc {
     public static ImageView getFactionSheetImageView(int factionID) throws FileNotFoundException {
         Image sheet = getFactionSheetImage(factionID);
-
+        Variables.factionSheetHeight = sheet.getHeight();
+        Variables.factionSheetWidth = sheet.getWidth();
         ImageView sheetView = new ImageView(sheet);
         double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
         sheetView.setY((Variables.SCREEN_HEIGHT - height) / 2);
@@ -66,10 +67,11 @@ public class ImageMisc {
 
         ImageView sheetView = new ImageView(spellBookSheet);
         double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
-        sheetView.setY((Variables.SCREEN_HEIGHT - height) / 2 + 137 * Variables.PROCENT);
-        sheetView.setX(Variables.PROCENT * 20);
-        sheetView.setFitWidth(Variables.SCREEN_WIDTH * Variables.PROCENT / 2 - Variables.PROCENT * 40);
-        sheetView.setFitHeight(height - 158 * Variables.PROCENT);
+        double width = Variables.SCREEN_WIDTH * Variables.PROCENT;
+        sheetView.setY((Variables.SCREEN_HEIGHT - height) / 2 + 130 * height / Variables.factionSheetHeight);
+        sheetView.setX(15 * width / Variables.factionSheetWidth);
+        sheetView.setFitWidth(width / 2 - 30 * width / Variables.factionSheetWidth);
+        sheetView.setFitHeight(height - 150 * height / Variables.factionSheetHeight);
         return sheetView;
     }
 
@@ -82,11 +84,12 @@ public class ImageMisc {
         return imageView;
     }
 
-    public static ImageView getOpenedSpellBookImageView(Image bookImage, Coordinates bookCoordinates) {
+    public static ImageView getSpellBookImageView(Image bookImage, Coordinates bookCoordinates) {
         double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
-        double heightBook = bookImage.getHeight() * Variables.PROCENT;
-        double widthBook = heightBook * Variables.mapRatio;
-        double x = bookCoordinates.x * Variables.SCREEN_WIDTH * Variables.PROCENT;
+        double width = Variables.SCREEN_WIDTH * Variables.PROCENT;
+        double heightBook = bookImage.getHeight() * height / Variables.factionSheetHeight;
+        double widthBook = (bookImage.getWidth() - 15) * width / Variables.factionSheetWidth;
+        double x = bookCoordinates.x * width;
         double y = (Variables.SCREEN_HEIGHT - height) / 2 + height * bookCoordinates.y;
 
         ImageView bookView = new ImageView(bookImage);
@@ -95,6 +98,30 @@ public class ImageMisc {
         bookView.setFitWidth(widthBook);
         bookView.setFitHeight(heightBook);
         return bookView;
+    }
+
+    public static Image getArrowImage(Boolean direction) throws FileNotFoundException {
+        String arrowName = "error.png";
+        if (direction == true) {
+            arrowName = "images/Arrows/right.png";
+        } else {
+            arrowName = "images/Arrows/left.png";
+        }
+        FileInputStream inputStream = new FileInputStream(arrowName);
+        Image arrow = new Image(inputStream);
+        return arrow;
+    }
+
+    public static ImageView getArrowImageView(Boolean direction) throws FileNotFoundException {
+        Image arrow = getArrowImage(direction);
+        ImageView arrowView = new ImageView(arrow);
+        double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
+
+        arrowView.setY((Variables.SCREEN_HEIGHT + height) / 2);
+        arrowView.setX((Variables.SCREEN_WIDTH - 150) * Variables.PROCENT);
+        arrowView.setFitHeight((Variables.SCREEN_HEIGHT - height) / 2);
+        arrowView.setPreserveRatio(true);
+        return arrowView;
     }
 
     public static Boolean imagesAreEqual(Image image1, Image image2) {

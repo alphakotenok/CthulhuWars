@@ -1,5 +1,6 @@
 package Model;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -8,11 +9,11 @@ import javafx.scene.image.Image;
 
 public class Core {
     GameMap map;
-    EntityBase entityBase;
     CommandTree ct;
     FactionBase factionBase;
     Ritual ritual;
     GameVariables var;
+    Gates gates;
 
     ArrayList<Coordinates> rightBookCoordinates, leftBookCoordinates;
 
@@ -53,7 +54,7 @@ public class Core {
 
     public Core(int numOfPlayers, ArrayList<FactionType> factions)
             throws InvalidNumOfPlayersException, InvalidFactionsSetException {
-        if (numOfPlayers > GameMap.maxNumOfPlayers || numOfPlayers < GameMap.minNumOfPlayers) {
+        if (numOfPlayers > GameVariables.maxNumOfPlayers || numOfPlayers < GameVariables.minNumOfPlayers) {
             throw new InvalidNumOfPlayersException();
         }
         if (factions.size() != numOfPlayers) {
@@ -69,62 +70,75 @@ public class Core {
         var = new GameVariables(numOfPlayers, factions);
         map = new GameMap(this);
         ritual = new Ritual(this);
-        entityBase = new EntityBase(var.factionsList);
         factionBase = new FactionBase(this);
         ct = new CommandTree(this);
+        gates = new Gates(this);
+        try {
+            String path = "images/Entities/Gates.png";
+            FileInputStream fileStream = new FileInputStream(path);
+            Image gateIcon = new Image(fileStream);
+            gates.icon = gateIcon;
+        } catch (Exception e) {
+        }
 
         rightBookCoordinates = new ArrayList<>();
         rightBookCoordinates.add(new Coordinates(0.506, 0.241));
         rightBookCoordinates.add(new Coordinates(0.742, 0.241));
-        rightBookCoordinates.add(new Coordinates(0.506, 0.485));
-        rightBookCoordinates.add(new Coordinates(0.742, 0.485));
-        rightBookCoordinates.add(new Coordinates(0.506, 0.724));
-        rightBookCoordinates.add(new Coordinates(0.742, 0.724));
+        rightBookCoordinates.add(new Coordinates(0.506, 0.477));
+        rightBookCoordinates.add(new Coordinates(0.742, 0.477));
+        rightBookCoordinates.add(new Coordinates(0.506, 0.718));
+        rightBookCoordinates.add(new Coordinates(0.742, 0.718));
         leftBookCoordinates = new ArrayList<>();
         leftBookCoordinates.add(new Coordinates(0.027, 0.241));
         leftBookCoordinates.add(new Coordinates(0.267, 0.241));
-        leftBookCoordinates.add(new Coordinates(0.027, 0.485));
-        leftBookCoordinates.add(new Coordinates(0.267, 0.485));
-        leftBookCoordinates.add(new Coordinates(0.027, 0.724));
-        leftBookCoordinates.add(new Coordinates(0.267, 0.724));
+        leftBookCoordinates.add(new Coordinates(0.027, 0.477));
+        leftBookCoordinates.add(new Coordinates(0.267, 0.477));
+        leftBookCoordinates.add(new Coordinates(0.027, 0.718));
+        leftBookCoordinates.add(new Coordinates(0.267, 0.718));
     }
 
     public int getNumOfPlayers() {
         return var.numOfPlayers;
     }
 
-    // toDeleteLater
-    public ArrayList<Entity> getEntityList() {
-        return entityBase.entityList;
-    }
-
-    // toDeleteLater
-    public ArrayList<Location> getLocationsList() {
-        return map.locations;
-    }
-
-    // toDeleteLater
-    public ArrayList<Entity> getEntityListInLocation(Location location) {
-        return map.getEntityListInLocation(location);
-    }
-
-    // toDeleteLater
-    void addEntity(Location location, Entity entity) {
-        location.entityList.add(entity);
-    }
-
-    // toDeleteLater
-    void deleteEntity(Location location, Entity entity) {
-        location.entityList.remove(entity);
-    }
-
-    // toDeleteLater
     public ArrayList<Drawable> getEntitiesToDraw() {
-        return null;
-    }
-
-    public Image getMapIcon() {
-        return map.mapIcon;
+        ArrayList<Drawable> ans = new ArrayList<>();
+        ArrayList<Drawable> subAns;
+        for (Location loc : map.locations) {
+            int numOfController = -1;
+            subAns = new ArrayList<>();
+            ArrayList<EntitySet> entityList = new ArrayList<>();
+            for (FactionType faction : var.factionsList) {
+                Faction fact = factionBase.getFactionFromEnum(faction);
+                entityList.addAll(fact.getEntitiesInLocation(loc));
+            }
+            int locationSize = entityList.size();
+            if (gates.isGateInLocation(loc)) {
+                if (gates.isGateControlled(loc)) {
+                    EntitySet controller = gates.getGateController(loc);
+                    for (int i = 0; i < entityList.size(); ++i) {
+                        if (controller == entityList.get(i)) {
+                            numOfController = i;
+                            break;
+                        }
+                    }
+                } else {
+                    ++locationSize;
+                    subAns.add(new Drawable(loc.getEntityPosition(subAns.size(), locationSize), gates.icon));
+                }
+            }
+            for (int i = 0; i < entityList.size(); ++i) {
+                if (numOfController == i) {
+                    subAns.add(new Drawable(loc.getEntityPosition(subAns.size(), locationSize),
+                            entityList.get(i).iconOnGate));
+                } else {
+                    subAns.add(new Drawable(loc.getEntityPosition(subAns.size(), locationSize),
+                            entityList.get(i).icon));
+                }
+            }
+            ans.addAll(subAns);
+        }
+        return ans;
     }
 
     public ArrayList<FactionType> getFactions() {
@@ -193,6 +207,10 @@ public class Core {
 
     public ArrayList<Coordinates> getRightBookCoordinates() {
         return rightBookCoordinates;
+    }
+
+    public boolean getWay() {
+        return var.correctWay;
     }
 
 }
