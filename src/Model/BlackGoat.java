@@ -17,5 +17,7 @@ class BlackGoat extends Faction {
         entitySetsList.add(new EntitySet(core, "Fungi from Yuggoth", Category.Monster, faction, entityIcons.get(2), 4));
         entitySetsList.add(new EntitySet(core, "Dark Young", Category.Monster, faction, entityIcons.get(3), 3));
         entitySetsList.add(new EntitySet(core, "Shub-Niggurath", Category.GOO, faction, entityIcons.get(4), 1));
+        getEntitySetByName("Cultist").iconOnGate = Core.getImage("images/Entities/Gates with Acolyte (red).png");
+        getEntitySetByName("Dark Young").iconOnGate = Core.getImage("images/Entities/Gates with Dark Young.png");
     }
 }

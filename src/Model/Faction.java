@@ -122,12 +122,7 @@ class Faction {
         ArrayList<Image> ans = new ArrayList<>();
         for (String name : names) {
             String path = "images/Entities/" + name + ".png";
-            try {
-                FileInputStream fileStream = new FileInputStream(path);
-                Image icon = new Image(fileStream);
-                ans.add(icon);
-            } catch (Exception e) {
-            }
+            ans.add(Core.getImage(path));
         }
         return ans;
     }
@@ -145,10 +140,10 @@ class Faction {
         EntitySet cultist = getEntitySetByName("Cultist");
         if (cultist == null)
             return;
+        core.gates.buildGate(loc);
         for (int i = 0; i < 6; ++i) {
             cultist.spawn(loc);
         }
-        // core.gates.buildGate(loc);
     }
 
     ArrayList<EntitySet> getEntitiesInLocation(Location loc) {
