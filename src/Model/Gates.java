@@ -3,6 +3,7 @@ package Model;
 import java.util.ArrayList;
 
 import Model.EntitySet.Category;
+import Model.FactionEnum.FactionType;
 import javafx.scene.image.Image;
 
 class Gates {
@@ -107,5 +108,17 @@ class Gates {
                 checkGate(location);
             }
         }
+    }
+
+    int getNumberOfGatesForFaction(FactionType faction) {
+        int numberOfGates = 0;
+        for (Gate gate : gateList) {
+            if (gate.controlledBy != null) {
+                if (gate.controlledBy.faction == faction) {
+                    numberOfGates += 1;
+                }
+            }
+        }
+        return numberOfGates;
     }
 }
