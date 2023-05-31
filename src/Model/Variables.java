@@ -14,6 +14,7 @@ public class Variables {
         public static final int NUMBER_OF_PERMUTATIONS = 15;
         public static Group root = new Group();
         public static Core core;
+        public static double factionSheetWidth, factionSheetHeight;
         public static double mapRatio;
         public final static String[] NAME_OF_FACTIONS = { "GreatCthulhu", "CrawlingChaos", "BlackGoat", "YellowSign",
                         "OpenerOfTheWay",

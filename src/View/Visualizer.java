@@ -160,7 +160,7 @@ public class Visualizer {
         ArrayList<Coordinates> rightSpellBooksSheetCoordinates = Variables.core.getRightBookCoordinates();
         for (int i = 0; i < openedBooks.size(); i++) {
             if (!openedBooks.get(i).equals(-1)) {
-                ImageView bookView = ImageMisc.getOpenedSpellBookImageView(imageBooks.get(i),
+                ImageView bookView = ImageMisc.getSpellBookImageView(imageBooks.get(i),
                         rightSpellBooksSheetCoordinates.get(openedBooks.get(i)));
                 ActionsMisc.display(bookView);
             }
@@ -173,7 +173,7 @@ public class Visualizer {
         ArrayList<Coordinates> leftSpellBooksSheetCoordinates = Variables.core.getLeftBookCoordinates();
         for (int i = 0; i < unopenedBooks.size(); i++) {
             if (unopenedBooks.get(i).equals(-1)) {
-                ImageView bookView = ImageMisc.getOpenedSpellBookImageView(imageBooks.get(i),
+                ImageView bookView = ImageMisc.getSpellBookImageView(imageBooks.get(i),
                         leftSpellBooksSheetCoordinates.get(i));
                 ActionsMisc.display(bookView);
             }

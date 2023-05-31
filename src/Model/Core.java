@@ -76,17 +76,17 @@ public class Core {
         rightBookCoordinates = new ArrayList<>();
         rightBookCoordinates.add(new Coordinates(0.506, 0.241));
         rightBookCoordinates.add(new Coordinates(0.742, 0.241));
-        rightBookCoordinates.add(new Coordinates(0.506, 0.485));
-        rightBookCoordinates.add(new Coordinates(0.742, 0.485));
-        rightBookCoordinates.add(new Coordinates(0.506, 0.724));
-        rightBookCoordinates.add(new Coordinates(0.742, 0.724));
+        rightBookCoordinates.add(new Coordinates(0.506, 0.477));
+        rightBookCoordinates.add(new Coordinates(0.742, 0.477));
+        rightBookCoordinates.add(new Coordinates(0.506, 0.718));
+        rightBookCoordinates.add(new Coordinates(0.742, 0.718));
         leftBookCoordinates = new ArrayList<>();
         leftBookCoordinates.add(new Coordinates(0.027, 0.241));
         leftBookCoordinates.add(new Coordinates(0.267, 0.241));
-        leftBookCoordinates.add(new Coordinates(0.027, 0.485));
-        leftBookCoordinates.add(new Coordinates(0.267, 0.485));
-        leftBookCoordinates.add(new Coordinates(0.027, 0.724));
-        leftBookCoordinates.add(new Coordinates(0.267, 0.724));
+        leftBookCoordinates.add(new Coordinates(0.027, 0.477));
+        leftBookCoordinates.add(new Coordinates(0.267, 0.477));
+        leftBookCoordinates.add(new Coordinates(0.027, 0.718));
+        leftBookCoordinates.add(new Coordinates(0.267, 0.718));
     }
 
     public int getNumOfPlayers() {

@@ -30,6 +30,7 @@ public class FactionSheetButton implements EventHandler<ActionEvent> {
                     try {
                         ActionsMisc.removeImage(ImageMisc.getFactionSheetImage(i));
                         ActionsMisc.removeBooks(i);
+                        SpellBookButton.buttonState[i] = false;
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -52,6 +53,7 @@ public class FactionSheetButton implements EventHandler<ActionEvent> {
             try {
                 ActionsMisc.removeImage(ImageMisc.getFactionSheetImage(factionID));
                 ActionsMisc.removeBooks(factionID);
+                SpellBookButton.buttonState[factionID] = false;
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
