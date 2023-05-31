@@ -100,6 +100,30 @@ public class ImageMisc {
         return bookView;
     }
 
+    public static Image getArrowImage(Boolean direction) throws FileNotFoundException {
+        String arrowName = "error.png";
+        if (direction == true) {
+            arrowName = "images/Arrows/right.png";
+        } else {
+            arrowName = "images/Arrows/left.png";
+        }
+        FileInputStream inputStream = new FileInputStream(arrowName);
+        Image arrow = new Image(inputStream);
+        return arrow;
+    }
+
+    public static ImageView getArrowImageView(Boolean direction) throws FileNotFoundException {
+        Image arrow = getArrowImage(direction);
+        ImageView arrowView = new ImageView(arrow);
+        double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
+
+        arrowView.setY((Variables.SCREEN_HEIGHT + height) / 2);
+        arrowView.setX((Variables.SCREEN_WIDTH - 150) * Variables.PROCENT);
+        arrowView.setFitHeight((Variables.SCREEN_HEIGHT - height) / 2);
+        arrowView.setPreserveRatio(true);
+        return arrowView;
+    }
+
     public static Boolean imagesAreEqual(Image image1, Image image2) {
         if (image1 == null)
             return image2 == null;
