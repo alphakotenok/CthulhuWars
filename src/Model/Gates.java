@@ -78,4 +78,10 @@ class Gates {
         return ans;
     }
 
+    EntitySet getGateController(Location location) {
+        if (!isGateInLocation(location))
+            return null;
+        return getGate(location).controlledBy;
+    }
+
 }

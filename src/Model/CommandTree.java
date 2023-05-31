@@ -377,13 +377,13 @@ class EdgeTreeFunctions {
     };
 
     static void startLocPlacement(Core core) {
-        core.map.setStartUnits(core.var.factionsList.get(core.var.turn), core.var.chosenLocation);
+        core.getCurFact().setStartEntities(core.var.chosenLocation);
         core.var.turn = core.var.getNextTurn(core.var.turn);
         ++core.var.playerCounter;
     }
 
     static void startLocPlacementAlter(Core core) {
-        core.map.setStartUnits(core.var.factionsList.get(core.var.turn), core.var.chosenLocation);
+        core.getCurFact().setStartEntities(core.var.chosenLocation);
         core.var.turn = core.var.firstPlayer;
         core.var.playerCounter = 0;
     }

@@ -777,15 +777,4 @@ class GameMap {
         startLoc.add(Sleeper);
         startLoc.add(Windwalker);
     }
-
-    void setStartUnits(FactionType faction, Location location) {
-        ArrayList<Entity> units = core.entityBase.getUnitsOfFaction(faction);
-        for (Entity en : units) {
-            if (en.entityType == EntityType.Cultist) {
-                for (int i = 0; i < 6; ++i) {
-                    core.addEntity(location, en);
-                }
-            }
-        }
-    }
 }
