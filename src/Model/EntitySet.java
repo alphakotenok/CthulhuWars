@@ -37,6 +37,7 @@ class EntitySet {
         this.faction = faction;
         this.icon = icon;
         this.limit = limit;
+        this.core = core;
     }
 
     void move(Location from, Location to) {
