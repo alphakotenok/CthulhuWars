@@ -352,9 +352,9 @@ class AccumulatorTreeFunctions {
 
     static void accumulateWay(ArrayList<Integer> data, Core core) {
         if (data.get(0) == 0) {
-            core.var.correcrtWay = false;
+            core.var.correctWay = false;
         } else
-            core.var.correcrtWay = true;
+            core.var.correctWay = true;
         core.var.turn = core.var.firstPlayer;
     }
 

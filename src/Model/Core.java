@@ -215,4 +215,8 @@ public class Core {
         return rightBookCoordinates;
     }
 
+    public boolean getWay() {
+        return var.correctWay;
+    }
+
 }
