@@ -10,7 +10,7 @@ class GameVariables {
     static int maxNumOfPlayers = 6;
     ArrayList<FactionType> factionsList;
     int turn = 0;
-    boolean correcrtWay = true;
+    boolean correctWay = true;
     int firstPlayer = 0;
     boolean endOfTheGame = false;
     int playerCounter;
@@ -30,7 +30,7 @@ class GameVariables {
     }
 
     int getNextTurn(int who) {
-        if (correcrtWay)
+        if (correctWay)
             return (who + 1) % numOfPlayers;
         return (who - 1 + numOfPlayers) % numOfPlayers;
     }
