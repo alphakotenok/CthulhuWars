@@ -20,4 +20,9 @@ class BlackGoat extends Faction {
         getEntitySetByName("Cultist").iconOnGate = Core.getImage("images/Entities/Gates with Acolyte (red).png");
         getEntitySetByName("Dark Young").iconOnGate = Core.getImage("images/Entities/Gates with Dark Young.png");
     }
+
+    static int getCombatShubNiggurath(Core core) {
+        return core.factionBase.getFactionFromEnum(FactionType.BlackGoat).getEntitySetByName("Cultist").positions.size()
+                + core.gates.getNumberOfGatesForFaction(FactionType.BlackGoat);
+    }
 }
