@@ -12,7 +12,6 @@ class BlackGoat extends Faction {
         super(name, faction, core);
         ArrayList<Image> entityIcons = Faction.getEntityImages(new ArrayList<>(
                 Arrays.asList("Acolyte (red)", "Ghoul", "Fungi from Yuggoth", "Dark Young", "Shub-Niggurath")));
-        System.out.println(entityIcons.get(0));
         entitySetsList.add(new EntitySet(core, "Cultist", Category.Cultist, faction, entityIcons.get(0), 6));
         entitySetsList.add(new EntitySet(core, "Ghoul", Category.Cultist, faction, entityIcons.get(1), 2));
         entitySetsList.add(new EntitySet(core, "Fungi from Yuggoth", Category.Cultist, faction, entityIcons.get(2), 4));

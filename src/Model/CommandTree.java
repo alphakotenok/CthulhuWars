@@ -68,7 +68,7 @@ class CommandTree {
                 EdgeCreatorTreeChecker.opposite(EdgeCreatorTreeChecker::isLastPlayerDoing));
         startLocChooseNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::startLocGenerator,
                 EdgeNameTreeFunctions::locationName, AccumulatorTreeFunctions::accumulateLocation,
-                EdgeTreeFunctions::startLocPlacementAlter,
+                EdgeTreeFunctions::startLocLastPlacement,
                 EdgeCreatorTreeChecker::isLastPlayerDoing);
         actionChooseNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::justOne,
                 EdgeNameTreeFunctions.constName("Pass and lose remaining energy"), AccumulatorTreeFunctions::none,
@@ -382,7 +382,7 @@ class EdgeTreeFunctions {
         ++core.var.playerCounter;
     }
 
-    static void startLocPlacementAlter(Core core) {
+    static void startLocLastPlacement(Core core) {
         core.getCurFact().setStartEntities(core.var.chosenLocation);
         core.var.turn = core.var.firstPlayer;
         core.var.playerCounter = 0;
