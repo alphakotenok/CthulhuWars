@@ -7,7 +7,7 @@ import javafx.scene.image.Image;
 class Gates {
     private class Gate {
         Location location;
-        boolean isControlled = false;
+        EntitySet controlledBy = null;
 
         Gate(Location location) {
             this.location = location;
@@ -31,6 +31,22 @@ class Gates {
         return false;
     }
 
+    boolean isGateControlled(Location location) {
+        if (!isGateInLocation(location))
+            return false;
+        Gate g = getGate(location);
+        return g.controlledBy != null;
+    }
+
+    private Gate getGate(Location location) {
+        for (Gate g : gateList) {
+            if (g.location == location) {
+                return g;
+            }
+        }
+        return null;
+    }
+
     void buildGate(Location location) {
         if (!isGateInLocation(location))
             gateList.add(new Gate(location));
@@ -45,17 +61,21 @@ class Gates {
         }
     }
 
-    void setCotrol(Location location) {
-
+    void setCotrol(Location location, EntitySet entity) {
+        if (!isGateInLocation(location))
+            return;
+        Gate g = getGate(location);
+        g.controlledBy = entity;
     }
 
-    ArrayList<Location> locationsWithFreeGates() {
+    ArrayList<Location> getLocationsWithFreeGates() {
         ArrayList<Location> ans = new ArrayList<>();
         for (Gate g : gateList) {
-            if (!g.isControlled) {
+            if (g.controlledBy == null) {
                 ans.add(g.location);
             }
         }
         return ans;
     }
+
 }

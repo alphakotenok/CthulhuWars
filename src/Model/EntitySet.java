@@ -30,8 +30,6 @@ class EntitySet {
     Image icon;
     Image iconOnGate;
 
-    boolean isControlGate = false;
-
     ArrayList<Location> positions = new ArrayList<>();
 
     EntitySet(String name, Category category, FactionType faction, Image icon) {
@@ -39,5 +37,48 @@ class EntitySet {
         this.category = category;
         this.faction = faction;
         this.icon = icon;
+    }
+
+    void move(Location from, Location to) {
+        int index = positions.indexOf(from);
+        if (index == -1) {
+            System.out.println("Move Error");
+            return;
+        }
+        positions.remove(index);
+        positions.add(to);
+
+        // TODO: check for the gates
+    }
+
+    int countInLocation(Location loc) {
+        int ans = 0;
+        for (Location l : positions) {
+            if (l == loc) {
+                ++ans;
+            }
+        }
+        return ans;
+    }
+
+    void spawn(Location loc) {
+        if (positions.size() == limit) {
+            System.out.println("Spawn Error");
+            return;
+        }
+        positions.add(loc);
+
+        // TODO: check for the gates
+    }
+
+    void kill(Location loc) {
+        int index = positions.indexOf(loc);
+        if (index == -1) {
+            System.out.println("Move Error");
+            return;
+        }
+        positions.remove(index);
+
+        // TODO: check for the gates
     }
 }

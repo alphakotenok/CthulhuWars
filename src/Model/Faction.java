@@ -29,7 +29,7 @@ class Faction {
 
     ArrayList<EntitySet> entitySetsList = new ArrayList<>();
 
-    void fillFactionNames() {
+    void fillBookNames() {
         bookNames.add("Aboba");
         bookNames.add("Aboba");
         bookNames.add("Aboba");
@@ -55,6 +55,7 @@ class Faction {
         }
         loadBooksImages();
         getElderSign();
+        fillBookNames();
     }
 
     void loadBooksImages() {
@@ -84,6 +85,10 @@ class Faction {
         return ((int) openedBooks.get(questNum)) != -1;
     }
 
+    boolean isQuestCompleted(int questNum) {
+        return false;
+    }
+
     void getElderSign() {
         int sign = core.ritual.getSign();
         if (sign == -1) {
@@ -91,10 +96,6 @@ class Faction {
             return;
         }
         elderSignList.add(sign);
-    }
-
-    boolean isQuestCompleted(int questNum) {
-        return false;
     }
 
     void recountEnergy() {
@@ -116,4 +117,47 @@ class Faction {
         victoryPoints += elderSignList.get(num);
         elderSignList.remove(num);
     }
+
+    static ArrayList<Image> getEntityImages(ArrayList<String> names) {
+        ArrayList<Image> ans = new ArrayList<>();
+        for (String name : names) {
+            String path = "images/Entities/" + name + ".png";
+            try {
+                FileInputStream fileStream = new FileInputStream(path);
+                Image icon = new Image(fileStream);
+                ans.add(icon);
+            } catch (Exception e) {
+            }
+        }
+        return ans;
+    }
+
+    EntitySet getEntitySetByName(String name) {
+        for (EntitySet entity : entitySetsList) {
+            if (entity.name.equals(name)) {
+                return entity;
+            }
+        }
+        return null;
+    }
+
+    void setStartEntities(Location loc) {
+        EntitySet cultist = getEntitySetByName("Cultist");
+        for (int i = 0; i < 6; ++i) {
+            cultist.spawn(loc);
+        }
+        core.gates.buildGate(loc);
+    }
+
+    ArrayList<EntitySet> getEntitiesInLocation(Location loc) {
+        ArrayList<EntitySet> ans = new ArrayList<>();
+        for (EntitySet entity : entitySetsList) {
+            int num = entity.countInLocation(loc);
+            for (int i = 0; i < num; ++i) {
+                ans.add(entity);
+            }
+        }
+        return ans;
+    }
+
 }
