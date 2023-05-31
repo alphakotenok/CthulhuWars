@@ -99,7 +99,7 @@ class Faction {
     }
 
     void recountEnergy() {
-        energy = cultistAlive + unitsCaptured + 2 * gatesControlled + core.entityBase.neutralGateExists;
+        energy = cultistAlive + unitsCaptured + 2 * gatesControlled + core.gates.getLocationsWithFreeGates().size();
         unitsCaptured = 0;
     }
 

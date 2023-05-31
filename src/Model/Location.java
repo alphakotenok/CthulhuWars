@@ -7,7 +7,6 @@ import Model.Core.Coordinates;
 public class Location {
     String name;
     ArrayList<Location> adj = new ArrayList<>();
-    public ArrayList<Entity> entityList = new ArrayList<>();
     ArrayList<Segment> segments = new ArrayList<>();
 
     static class Segment {
@@ -25,8 +24,8 @@ public class Location {
         this.segments = curSegments;
     }
 
-    public Coordinates getEntityPosition(int entityNum, int entityTotal) {
-        ++entityTotal;
+    public Coordinates getEntityPosition(int entityNum, int totalInLocation) {
+        int entityTotal = totalInLocation + 1;
         int segTotal = segments.size();
         double lengthOfSegments[] = new double[segTotal];
         double sumOfLength = 0;
@@ -48,7 +47,7 @@ public class Location {
                 colEnt[i]++;
             entityTotal--;
         }
-        entityTotal = entityList.size();
+        entityTotal = totalInLocation;
         for (int i = 0; i < segTotal; i++) {
             if (entityNum >= colEnt[i])
                 entityNum -= colEnt[i];

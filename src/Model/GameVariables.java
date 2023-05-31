@@ -16,7 +16,7 @@ class GameVariables {
     int playerCounter;
     ArrayList<Integer> chosenPerm;
     Location chosenLocation;
-    Entity chosenEntity;
+    EntitySet chosenEntity;
     int totalSkip = 0;
     FactionType bookReceiver;
     int bookSlot;
