@@ -118,7 +118,7 @@ public class ImageMisc {
         double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
 
         arrowView.setY((Variables.SCREEN_HEIGHT + height) / 2);
-        arrowView.setX((Variables.SCREEN_WIDTH - 150) * Variables.PROCENT);
+        arrowView.setX(Variables.SCREEN_WIDTH * Variables.PROCENT - (Variables.SCREEN_HEIGHT - height) / 2 * arrow.getHeight() / arrow.getWidth());
         arrowView.setFitHeight((Variables.SCREEN_HEIGHT - height) / 2);
         arrowView.setPreserveRatio(true);
         return arrowView;
