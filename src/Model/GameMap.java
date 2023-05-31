@@ -5,7 +5,6 @@ import java.util.*;
 import Model.Entity.EntityType;
 import Model.FactionEnum.FactionType;
 import Model.Location.Segment;
-import javafx.scene.control.skin.CellSkinBase;
 import javafx.scene.image.Image;
 
 class GameMap {
