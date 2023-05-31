@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import Model.Core.Coordinates;
 
-public class Location {
+class Location {
     String name;
     ArrayList<Location> adj = new ArrayList<>();
     ArrayList<Segment> segments = new ArrayList<>();
@@ -24,7 +24,7 @@ public class Location {
         this.segments = curSegments;
     }
 
-    public Coordinates getEntityPosition(int entityNum, int totalInLocation) {
+    Coordinates getEntityPosition(int entityNum, int totalInLocation) {
         int entityTotal = totalInLocation + 1;
         int segTotal = segments.size();
         double lengthOfSegments[] = new double[segTotal];
