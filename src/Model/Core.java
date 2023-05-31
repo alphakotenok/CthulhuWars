@@ -8,6 +8,17 @@ import Model.FactionEnum.FactionType;
 import javafx.scene.image.Image;
 
 public class Core {
+
+    static Image getImage(String path) {
+        try {
+            FileInputStream fileStream = new FileInputStream(path);
+            Image image = new Image(fileStream);
+            return image;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     GameMap map;
     CommandTree ct;
     FactionBase factionBase;
@@ -73,13 +84,7 @@ public class Core {
         factionBase = new FactionBase(this);
         ct = new CommandTree(this);
         gates = new Gates(this);
-        try {
-            String path = "images/Entities/Gates.png";
-            FileInputStream fileStream = new FileInputStream(path);
-            Image gateIcon = new Image(fileStream);
-            gates.icon = gateIcon;
-        } catch (Exception e) {
-        }
+        gates.icon = getImage("images/Entities/Gates.png");
 
         rightBookCoordinates = new ArrayList<>();
         rightBookCoordinates.add(new Coordinates(0.506, 0.241));

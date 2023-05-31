@@ -54,6 +54,7 @@ class CommandTree {
     Node ritualNode = new Node(NodeNameTreeFunctions::ritualText);
     Node viewElderSignsNode = new Node(NodeNameTreeFunctions::viewElderSignsText);
     Node chooseEntityToMoveNode = new Node(NodeNameTreeFunctions.constName("Choose Unit"));
+    Node chooseLocationToMoveNode = new Node(NodeNameTreeFunctions.constName("Choose Destination"));
 
     void prepareEdgeCreators() {
         openBookNode.addEdgeCreator(null, DataGeneratorTreeFunctions::booksToOpen,

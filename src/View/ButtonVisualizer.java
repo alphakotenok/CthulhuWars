@@ -186,7 +186,7 @@ public class ButtonVisualizer {
             commandButton[commandID].setText(commands.get(commandID));
             commandButton[commandID].setPrefHeight(thisHeight);
             commandButton[commandID].setLayoutY((commandID + 1) * thisHeight);
-            commandButton[commandID].setPrefWidth(300);
+            commandButton[commandID].setPrefWidth(Variables.SCREEN_WIDTH * (1 - Variables.PROCENT));
             commandButton[commandID].setLayoutX(Variables.SCREEN_WIDTH - 300);
             commandButton[commandID].setOnAction(new CommandButton(commandID));
 
