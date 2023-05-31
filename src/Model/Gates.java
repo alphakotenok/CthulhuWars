@@ -2,9 +2,13 @@ package Model;
 
 import java.util.ArrayList;
 
+import Model.EntitySet.Category;
 import javafx.scene.image.Image;
 
 class Gates {
+
+    private Core core;
+
     private class Gate {
         Location location;
         EntitySet controlledBy = null;
@@ -16,8 +20,8 @@ class Gates {
 
     Image icon;
 
-    Gates() {
-
+    Gates(Core core) {
+        this.core = core;
     }
 
     private ArrayList<Gate> gateList = new ArrayList<>();
@@ -84,4 +88,23 @@ class Gates {
         return getGate(location).controlledBy;
     }
 
+    void checkGate(Location location) {
+        if (!isGateInLocation(location))
+            return;
+        Gate g = getGate(location);
+        if (g.controlledBy == null) {
+            Faction fact = core.getCurFact();
+            for (EntitySet entity : fact.getEntitiesInLocation(location)) {
+                if (entity.category == Category.Cultist) {
+                    g.controlledBy = entity;
+                    break;
+                }
+            }
+        } else {
+            if (g.controlledBy.countInLocation(location) == 0) {
+                g.controlledBy = null;
+                checkGate(location);
+            }
+        }
+    }
 }

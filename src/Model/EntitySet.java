@@ -16,10 +16,9 @@ class EntitySet {
         Cultist, Monster, GOO
     }
 
+    Core core;
     String name;
-
     Category category;
-
     int limit;
 
     intFunctionContainer costFunc = (core -> 0);
@@ -32,7 +31,7 @@ class EntitySet {
 
     ArrayList<Location> positions = new ArrayList<>();
 
-    EntitySet(String name, Category category, FactionType faction, Image icon, int limit) {
+    EntitySet(Core core, String name, Category category, FactionType faction, Image icon, int limit) {
         this.name = name;
         this.category = category;
         this.faction = faction;
@@ -49,7 +48,8 @@ class EntitySet {
         positions.remove(index);
         positions.add(to);
 
-        // TODO: check for the gates
+        core.gates.checkGate(from);
+        core.gates.checkGate(to);
     }
 
     int countInLocation(Location loc) {
@@ -68,7 +68,7 @@ class EntitySet {
             return;
         }
         positions.add(loc);
-        // TODO: check for the gates
+        core.gates.checkGate(loc);
     }
 
     void kill(Location loc) {
@@ -78,7 +78,6 @@ class EntitySet {
             return;
         }
         positions.remove(index);
-
-        // TODO: check for the gates
+        core.gates.checkGate(loc);
     }
 }

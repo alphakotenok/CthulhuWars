@@ -74,7 +74,7 @@ public class Core {
         entityBase = new EntityBase(var.factionsList);
         factionBase = new FactionBase(this);
         ct = new CommandTree(this);
-        gates = new Gates();
+        gates = new Gates(this);
         try {
             String path = "images/Entities/Gates.png";
             FileInputStream fileStream = new FileInputStream(path);
@@ -141,10 +141,6 @@ public class Core {
             ans.addAll(subAns);
         }
         return ans;
-    }
-
-    public Image getMapIcon() {
-        return map.mapIcon;
     }
 
     public ArrayList<FactionType> getFactions() {
