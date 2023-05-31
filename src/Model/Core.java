@@ -13,6 +13,7 @@ public class Core {
     FactionBase factionBase;
     Ritual ritual;
     GameVariables var;
+    Gates gates;
 
     ArrayList<Coordinates> rightBookCoordinates, leftBookCoordinates;
 
@@ -53,7 +54,7 @@ public class Core {
 
     public Core(int numOfPlayers, ArrayList<FactionType> factions)
             throws InvalidNumOfPlayersException, InvalidFactionsSetException {
-        if (numOfPlayers > GameMap.maxNumOfPlayers || numOfPlayers < GameMap.minNumOfPlayers) {
+        if (numOfPlayers > GameVariables.maxNumOfPlayers || numOfPlayers < GameVariables.minNumOfPlayers) {
             throw new InvalidNumOfPlayersException();
         }
         if (factions.size() != numOfPlayers) {
@@ -72,6 +73,7 @@ public class Core {
         entityBase = new EntityBase(var.factionsList);
         factionBase = new FactionBase(this);
         ct = new CommandTree(this);
+        gates = new Gates();
 
         rightBookCoordinates = new ArrayList<>();
         rightBookCoordinates.add(new Coordinates(0.506, 0.241));
@@ -119,7 +121,28 @@ public class Core {
     }
 
     public ArrayList<Drawable> getEntitiesToDraw() {
-        return null;
+        ArrayList<Drawable> ans = new ArrayList<>();
+        ArrayList<Drawable> subAns;
+        for (Location loc : map.locations) {
+            int numOfController = -1;
+            subAns = new ArrayList<>();
+            ArrayList<EntitySet> entityList = new ArrayList<>();
+            for (FactionType faction : var.factionsList) {
+                Faction fact = factionBase.getFactionFromEnum(faction);
+                entityList.addAll(fact.getEntitiesInLocation(loc));
+            }
+            int locationSize = entityList.size();
+            if (gates.isGateInLocation(loc)) {
+                if (gates.isGateControlled(loc)) {
+
+                } else {
+                    ++locationSize;
+                    subAns.add(new Drawable(loc.getEntityPosition(subAns.size(), locationSize), gates.icon));
+                }
+            }
+            ans.addAll(subAns);
+        }
+        return ans;
     }
 
     public Image getMapIcon() {
