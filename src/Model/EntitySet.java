@@ -32,11 +32,12 @@ class EntitySet {
 
     ArrayList<Location> positions = new ArrayList<>();
 
-    EntitySet(String name, Category category, FactionType faction, Image icon) {
+    EntitySet(String name, Category category, FactionType faction, Image icon, int limit) {
         this.name = name;
         this.category = category;
         this.faction = faction;
         this.icon = icon;
+        this.limit = limit;
     }
 
     void move(Location from, Location to) {
@@ -67,7 +68,6 @@ class EntitySet {
             return;
         }
         positions.add(loc);
-
         // TODO: check for the gates
     }
 

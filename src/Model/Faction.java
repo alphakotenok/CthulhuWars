@@ -143,10 +143,12 @@ class Faction {
 
     void setStartEntities(Location loc) {
         EntitySet cultist = getEntitySetByName("Cultist");
+        if (cultist == null)
+            return;
         for (int i = 0; i < 6; ++i) {
             cultist.spawn(loc);
         }
-        core.gates.buildGate(loc);
+        // core.gates.buildGate(loc);
     }
 
     ArrayList<EntitySet> getEntitiesInLocation(Location loc) {
