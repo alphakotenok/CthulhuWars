@@ -73,7 +73,7 @@ class CommandTree {
                 EdgeNameTreeFunctions::locationName, AccumulatorTreeFunctions::accumulateLocation,
                 EdgeTreeFunctions::startLocLastPlacement,
                 EdgeCreatorTreeChecker::isLastPlayerDoing);
-        actionChooseNode.addMover(chooseEntityToMoveNode, "Move", EdgeCreatorTreeChecker::canMove);
+        actionChooseNode.addMover(chooseEntityToMoveNode, "Move", EdgeCreatorTreeChecker::isFirstMovement);
         actionChooseNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::justOne,
                 EdgeNameTreeFunctions.constName("Pass and lose remaining energy"), AccumulatorTreeFunctions::none,
                 EdgeTreeFunctions::passTurn,
