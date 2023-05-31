@@ -23,6 +23,6 @@ class BlackGoat extends Faction {
 
     static int getCombatShubNiggurath(Core core) {
         return core.factionBase.getFactionFromEnum(FactionType.BlackGoat).getEntitySetByName("Cultist").positions.size()
-                + core.gates.getNumberOfGatesForFaction(FactionType.BlackGoat);
+                + core.gates.getNumOfControlledGates(FactionType.BlackGoat);
     }
 }
