@@ -85,6 +85,17 @@ class Gates {
         return ans;
     }
 
+    ArrayList<Location> getControlledGates() {
+        ArrayList<Location> ans = new ArrayList<>();
+        Faction fact = core.getCurFact();
+        for (Gate g : gateList) {
+            if (g.controlledBy.faction == fact.faction) {
+                ans.add(g.location);
+            }
+        }
+        return ans;
+    }
+
     EntitySet getGateController(Location location) {
         if (!isGateInLocation(location))
             return null;

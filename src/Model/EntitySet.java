@@ -1,5 +1,6 @@
 package Model;
 
+import java.sql.Array;
 import java.util.ArrayList;
 
 import Model.FactionEnum.FactionType;
@@ -9,9 +10,14 @@ import javafx.scene.image.Image;
 class EntitySet {
 
     @FunctionalInterface
-    static interface intFunctionContainer {
+    static interface IntFunctionContainer {
         int activate(Core core);
     };
+
+    @FunctionalInterface
+    static interface LocationFunctionContainer {
+        ArrayList<Location> activate(Core core);
+    }
 
     enum Category {
         Cultist, Monster, GOO
@@ -25,8 +31,13 @@ class EntitySet {
     ArrayList<Location> positions = new ArrayList<>();
     ArrayList<Location> moved = new ArrayList<>();
 
-    intFunctionContainer costFunc = (core -> 0);
-    intFunctionContainer combatFunc = (core -> 0);
+    IntFunctionContainer costFunc = (core -> 0);
+    IntFunctionContainer combatFunc = (core -> 0);
+    LocationFunctionContainer spawnPlace = (core -> core.gates.getControlledGates());
+
+    static IntFunctionContainer constFunc(int num) {
+        return (core -> num);
+    }
 
     FactionType faction;
 
@@ -102,4 +113,5 @@ class EntitySet {
         }
         return ans;
     }
+
 }

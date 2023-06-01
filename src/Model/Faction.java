@@ -3,16 +3,14 @@ package Model;
 import java.util.ArrayList;
 
 import javafx.scene.image.Image;
+import Model.EntitySet.Category;
 import Model.FactionEnum.FactionType;
 
 class Faction {
 
     String name;
     int energy;
-    int cultistAlive;
-    int gatesControlled;
     int unitsCaptured;
-    int activeGOO;
     boolean skip;
     Core core;
     FactionType faction;
@@ -43,7 +41,6 @@ class Faction {
         this.faction = faction;
         energy = 8;
         unitsCaptured = 0;
-        activeGOO = 0;
         victoryPoints = 0;
         skip = false;
         isRitualPerformed = false;
@@ -153,5 +150,39 @@ class Faction {
         for (EntitySet entity : entitySetsList) {
             entity.moved.clear();
         }
+    }
+
+    int countGOO() {
+        int ans = 0;
+        for (EntitySet entity : entitySetsList) {
+            if (entity.category != Category.GOO)
+                continue;
+            ans += entity.positions.size();
+        }
+        return ans;
+    }
+
+    boolean canSummonGOO() {
+        return true;
+    }
+
+    ArrayList<Integer> enableToSpawn() {
+        ArrayList<Integer> ans = new ArrayList<>();
+        if (core.gates.getNumOfControlledGates(faction) == 0) {
+            return ans;
+        }
+        for (int i = 0; i < entitySetsList.size(); ++i) {
+            EntitySet entity = entitySetsList.get(i);
+            if (entity.category == Category.GOO) {
+                if (!canSummonGOO())
+                    continue;
+            }
+            if (energy < entity.costFunc.activate(core))
+                continue;
+            if (entity.positions.size() == entity.limit)
+                continue;
+            ans.add(i);
+        }
+        return ans;
     }
 }
