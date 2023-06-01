@@ -25,11 +25,11 @@ class GameVariables {
     ArrayList<Integer> firstPlayerCandidates;
     int signToReveal;
 
-    enum PerformedAction {
+    enum PerformableAction {
         None, Move, Summon, GateBuilding, Extra
     }
 
-    PerformedAction action;
+    PerformableAction action;
 
     GameVariables(int numOfPlayers, ArrayList<FactionType> factionsList) {
         this.numOfPlayers = numOfPlayers;

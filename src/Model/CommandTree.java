@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import Model.FactionEnum.FactionType;
-import Model.GameVariables.PerformedAction;
+import Model.GameVariables.PerformableAction;
 
 class CommandTree {
 
@@ -54,8 +54,10 @@ class CommandTree {
     Node firstPlayerSelectionNode = new Node(NodeNameTreeFunctions::firstPlayerSelectionText);
     Node ritualNode = new Node(NodeNameTreeFunctions::ritualText);
     Node viewElderSignsNode = new Node(NodeNameTreeFunctions::viewElderSignsText);
-    Node chooseEntityToMoveNode = new Node(NodeNameTreeFunctions.constName("Choose Unit"));
+    Node chooseEntityToMoveNode = new Node(NodeNameTreeFunctions.constName("Choose Unit to move for 1 enegry"));
     Node chooseLocationToMoveNode = new Node(NodeNameTreeFunctions.constName("Choose Destination"));
+    Node chooseLocationToBuildGate = new Node(
+            NodeNameTreeFunctions.constName("Choose where to build Gate for 3 energy"));
 
     void prepareEdgeCreators() {
         openBookNode.addEdgeCreator(null, DataGeneratorTreeFunctions::booksToOpen,
@@ -73,7 +75,8 @@ class CommandTree {
                 EdgeNameTreeFunctions::locationName, AccumulatorTreeFunctions::accumulateLocation,
                 EdgeTreeFunctions::startLocLastPlacement,
                 EdgeCreatorTreeChecker::isLastPlayerDoing);
-        actionChooseNode.addMover(chooseEntityToMoveNode, "Move", EdgeCreatorTreeChecker::isFirstMovement);
+        actionChooseNode.addMover(chooseEntityToMoveNode, "Move", EdgeCreatorTreeChecker.isFirstAction(1));
+        actionChooseNode.addMover(chooseLocationToBuildGate, "Build Gate", EdgeCreatorTreeChecker.isFirstAction(3));
         actionChooseNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::justOne,
                 EdgeNameTreeFunctions.constName("Pass and lose remaining energy"), AccumulatorTreeFunctions::none,
                 EdgeTreeFunctions::passTurn,
@@ -117,17 +120,21 @@ class CommandTree {
                 AccumulatorTreeFunctions::accumulateSignReveal, EdgeTreeFunctions::revealElderSign,
                 EdgeCreatorTreeChecker::always);
         viewElderSignsNode.addMover(ritualNode, "Back", EdgeCreatorTreeChecker::always);
-        chooseEntityToMoveNode.addMover(actionChooseNode, "Cancel", EdgeCreatorTreeChecker::isFirstMovement);
+        chooseEntityToMoveNode.addMover(actionChooseNode, "Cancel", EdgeCreatorTreeChecker.isFirstAction(1));
         chooseEntityToMoveNode.addMover(actionChooseNode, "Done",
-                EdgeCreatorTreeChecker.opposite(EdgeCreatorTreeChecker::isFirstMovement));
+                EdgeCreatorTreeChecker.opposite(EdgeCreatorTreeChecker.isFirstAction(1)));
         chooseEntityToMoveNode.addEdgeCreator(chooseLocationToMoveNode,
                 DataGeneratorTreeFunctions::enableToMoveGenerator, EdgeNameTreeFunctions::fullEntityName,
                 AccumulatorTreeFunctions::accumulateEntityToMove, EdgeTreeFunctions::none,
-                EdgeCreatorTreeChecker::canMove);
+                EdgeCreatorTreeChecker::canMoveAgain);
         chooseLocationToMoveNode.addMover(chooseEntityToMoveNode, "Back", EdgeCreatorTreeChecker::always);
         chooseLocationToMoveNode.addEdgeCreator(chooseEntityToMoveNode, DataGeneratorTreeFunctions::adjLocations,
                 EdgeNameTreeFunctions::locationName, AccumulatorTreeFunctions::accumulateDestination,
                 EdgeTreeFunctions::performMovement, EdgeCreatorTreeChecker::always);
+        chooseLocationToBuildGate.addMover(actionChooseNode, "Cancel", EdgeCreatorTreeChecker::always);
+        chooseLocationToBuildGate.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::gatePlacesLocations,
+                EdgeNameTreeFunctions::locationName, AccumulatorTreeFunctions::accumulateLocation,
+                EdgeTreeFunctions::buildGate, EdgeCreatorTreeChecker::always);
     }
 
     CommandTree(Core core) {
@@ -398,7 +405,7 @@ class EdgeTreeFunctions {
 
     static void nextPlayerMovePreparation(Core core) {
 
-        core.var.action = PerformedAction.None;
+        core.var.action = PerformableAction.None;
         core.getCurFact().clearMovedEntities();
         core.gates.generalGatesCheck();
     }
@@ -444,6 +451,7 @@ class EdgeTreeFunctions {
     }
 
     static void doneTurn(Core core) {
+        core.var.turn = core.var.getNextTurn(core.var.turn);
         while (core.getCurFact().skip)
             core.var.turn = core.var.getNextTurn(core.var.turn);
         nextPlayerMovePreparation(core);
@@ -497,6 +505,12 @@ class EdgeTreeFunctions {
     static void performMovement(Core core) {
         core.var.chosenEntity.performMovement(core.var.chosenLocation, core.var.chosenDestination);
         core.getCurFact().energy--;
+    }
+
+    static void buildGate(Core core) {
+        core.gates.buildGate(core.var.chosenLocation);
+        core.getCurFact().energy -= 3;
+        core.var.action = PerformableAction.GateBuilding;
     }
 }
 
@@ -601,6 +615,15 @@ class DataGeneratorTreeFunctions {
         }
         return ans;
     }
+
+    static ArrayList<ArrayList<Integer>> gatePlacesLocations(Core core) {
+        ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
+        ArrayList<Location> locList = core.gates.getPlacesToBuild();
+        for (Location loc : locList) {
+            ans.add(new ArrayList<>(Arrays.asList(core.map.locations.indexOf(loc))));
+        }
+        return ans;
+    }
 }
 
 class EdgeCreatorTreeChecker {
@@ -612,6 +635,10 @@ class EdgeCreatorTreeChecker {
     static CommandTree.EdgeCreatorCheckerContainer combine(CommandTree.EdgeCreatorCheckerContainer checker1,
             CommandTree.EdgeCreatorCheckerContainer checker2) {
         return (core -> (checker1.activate(core) && checker2.activate(core)));
+    }
+
+    static CommandTree.EdgeCreatorCheckerContainer isFirstAction(int cost) {
+        return ((core) -> (core.var.action == PerformableAction.None && core.getCurFact().energy >= cost));
     }
 
     static boolean always(Core core) {
@@ -630,16 +657,12 @@ class EdgeCreatorTreeChecker {
         return core.ritual.canPerformRitual(core.var.factionsList.get(core.var.turn));
     }
 
-    static boolean isFirstMovement(Core core) {
-        return core.var.action == PerformedAction.None && core.getCurFact().energy > 0;
-    }
-
-    static boolean canMove(Core core) {
-        return (core.var.action == PerformedAction.None || core.var.action == PerformedAction.Move)
+    static boolean canMoveAgain(Core core) {
+        return (core.var.action == PerformableAction.None || core.var.action == PerformableAction.Move)
                 && core.getCurFact().energy > 0;
     }
 
     static boolean isActionPerformed(Core core) {
-        return core.var.action != PerformedAction.None;
+        return core.var.action != PerformableAction.None;
     }
 }

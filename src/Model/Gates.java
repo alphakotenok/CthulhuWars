@@ -128,4 +128,17 @@ class Gates {
             checkGate(loc);
         }
     }
+
+    ArrayList<Location> getPlacesToBuild() {
+        ArrayList<Location> ans = new ArrayList<>();
+        Faction fact = core.getCurFact();
+        EntitySet entity = fact.getEntitySetByName("Cultist");
+        System.out.println(entity);
+        for (Location loc : entity.positions) {
+            if (isGateInLocation(loc) || ans.contains(loc))
+                continue;
+            ans.add(loc);
+        }
+        return ans;
+    }
 }

@@ -3,7 +3,7 @@ package Model;
 import java.util.ArrayList;
 
 import Model.FactionEnum.FactionType;
-import Model.GameVariables.PerformedAction;
+import Model.GameVariables.PerformableAction;
 import javafx.scene.image.Image;
 
 class EntitySet {
@@ -50,7 +50,6 @@ class EntitySet {
         }
         positions.remove(index);
         positions.add(to);
-        moved.add(to);
         core.gates.checkGate(from);
         core.gates.checkGate(to);
     }
@@ -58,7 +57,7 @@ class EntitySet {
     void performMovement(Location from, Location to) {
         move(from, to);
         moved.add(to);
-        core.var.action = PerformedAction.Move;
+        core.var.action = PerformableAction.Move;
     }
 
     int countInLocation(Location loc) {
