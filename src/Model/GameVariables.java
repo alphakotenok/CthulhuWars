@@ -26,7 +26,7 @@ class GameVariables {
     int signToReveal;
 
     enum PerformableAction {
-        None, Move, Spawn, GateBuilding, Extra
+        None, Move, Spawn, GateBuilding, Capture, Extra
     }
 
     PerformableAction action;

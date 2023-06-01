@@ -30,7 +30,6 @@ class Ritual {
         if (core.var.numOfPlayers == 6)
             ritualTrack = new ArrayList<>(Arrays.asList(5, 6, 6, 7, 7, 7, 8, 8, 8, 9, 9, 10));
         ritualState = 0;
-
     }
 
     boolean canPerformRitual(FactionType faction) {

@@ -1,6 +1,8 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 import javafx.scene.image.Image;
 import Model.EntitySet.Category;
@@ -10,7 +12,7 @@ class Faction {
 
     String name;
     int energy;
-    int unitsCaptured;
+    ArrayList<EntitySet> entitiesCaptured;
     boolean skip;
     Core core;
     FactionType faction;
@@ -40,7 +42,7 @@ class Faction {
         this.name = name;
         this.faction = faction;
         energy = 8;
-        unitsCaptured = 0;
+        entitiesCaptured = new ArrayList<>();
         victoryPoints = 0;
         skip = false;
         isRitualPerformed = false;
@@ -48,7 +50,6 @@ class Faction {
             openedBooks.add(-1);
         }
         loadBooksImages();
-        getElderSign();
         fillBookNames();
     }
 
@@ -86,10 +87,12 @@ class Faction {
     }
 
     void recountEnergy() {
-        energy = getEntitySetByName("Cultist").positions.size() + unitsCaptured
+        energy = getEntitySetByName("Cultist").positions.size() + entitiesCaptured.size()
                 + 2 * core.gates.getNumOfControlledGates(faction)
                 + core.gates.getLocationsWithFreeGates().size();
-        unitsCaptured = 0;
+        for (EntitySet entity : entitiesCaptured) {
+            ++entity.limit;
+        }
     }
 
     void recountPoints() {
@@ -182,6 +185,52 @@ class Faction {
             if (entity.positions.size() == entity.limit)
                 continue;
             ans.add(i);
+        }
+        return ans;
+    }
+
+    ArrayList<ArrayList<Integer>> getEntitiesToBeCaptured() {
+
+        ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
+        for (int i = 0; i < core.map.locations.size(); ++i) {
+            Location loc = core.map.locations.get(i);
+            int maxEntity = 0;
+            for (int j = 0; j < entitySetsList.size(); ++j) {
+                EntitySet entity = entitySetsList.get(j);
+                if (!entity.positions.contains(loc))
+                    continue;
+                if (entity.category == Category.Monster)
+                    maxEntity = Math.max(maxEntity, 1);
+                if (entity.category == Category.GOO)
+                    maxEntity = Math.max(maxEntity, 2);
+            }
+            for (int j = 0; j < core.factionBase.factList.size(); ++j) {
+                Faction fact = core.factionBase.factList.get(j);
+                if (fact == this)
+                    continue;
+                int maxOpponentEntity = 0;
+                for (int k = 0; k < fact.entitySetsList.size(); ++k) {
+                    EntitySet entity = fact.entitySetsList.get(k);
+                    if (!entity.positions.contains(loc))
+                        continue;
+                    if (entity.category == Category.Monster)
+                        maxOpponentEntity = Math.max(maxOpponentEntity, 1);
+                    if (entity.category == Category.GOO)
+                        maxOpponentEntity = Math.max(maxOpponentEntity, 2);
+                }
+                if (maxOpponentEntity >= maxEntity)
+                    continue;
+                for (int k = 0; k < fact.entitySetsList.size(); ++k) {
+                    EntitySet entity = fact.entitySetsList.get(k);
+                    if (!entity.positions.contains(loc))
+                        continue;
+                    if (entity.category == Category.Cultist) {
+                        for (int t = 0; t < Collections.frequency(entity.positions, loc); ++t) {
+                            ans.add(new ArrayList<>(Arrays.asList(i, j, k)));
+                        }
+                    }
+                }
+            }
         }
         return ans;
     }

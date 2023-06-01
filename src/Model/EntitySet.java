@@ -1,6 +1,5 @@
 package Model;
 
-import java.sql.Array;
 import java.util.ArrayList;
 
 import Model.FactionEnum.FactionType;
@@ -112,6 +111,17 @@ class EntitySet {
             }
         }
         return ans;
+    }
+
+    void getCaptured(Location loc) {
+        int index = positions.indexOf(loc);
+        if (index == -1) {
+            System.out.println("Capture Error");
+            return;
+        }
+        positions.remove(index);
+        core.gates.checkGate(loc);
+        --limit;
     }
 
 }

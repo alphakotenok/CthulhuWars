@@ -55,11 +55,12 @@ class CommandTree {
     Node ritualNode = new Node(NodeNameTreeFunctions::ritualText);
     Node viewElderSignsNode = new Node(NodeNameTreeFunctions::viewElderSignsText);
     Node chooseEntityToMoveNode = new Node(NodeNameTreeFunctions.constName("Choose Unit to move for 1 enegry"));
-    Node chooseLocationToMoveNode = new Node(NodeNameTreeFunctions.constName("Choose Destination"));
+    Node chooseLocationToMoveNode = new Node(NodeNameTreeFunctions.constName("Choose destination"));
     Node chooseLocationToBuildGate = new Node(
-            NodeNameTreeFunctions.constName("Choose where to build Gate for 3 energy"));
+            NodeNameTreeFunctions.constName("Choose where to build a Gate for 3 energy"));
     Node chooseEntityToSpawnNode = new Node(NodeNameTreeFunctions.constName("Choose Unit to spawn"));
     Node chooseLocationToSpawnNode = new Node(NodeNameTreeFunctions.constName("Choose where to spawn"));
+    Node captureNode = new Node(NodeNameTreeFunctions.constName("Choose Unit to capture"));
 
     void prepareEdgeCreators() {
         openBookNode.addEdgeCreator(null, DataGeneratorTreeFunctions::booksToOpen,
@@ -78,9 +79,12 @@ class CommandTree {
                 EdgeTreeFunctions::startLocLastPlacement,
                 EdgeCreatorTreeChecker::isLastPlayerDoing);
         actionChooseNode.addMover(chooseEntityToMoveNode, "Move", EdgeCreatorTreeChecker.isFirstAction(1));
-        actionChooseNode.addMover(chooseLocationToBuildGate, "Build Gate", EdgeCreatorTreeChecker.isFirstAction(3));
+        actionChooseNode.addMover(chooseLocationToBuildGate, "Build Gate", EdgeCreatorTreeChecker
+                .combine(EdgeCreatorTreeChecker::canGateBeBuilt, EdgeCreatorTreeChecker.isFirstAction(3)));
         actionChooseNode.addMover(chooseEntityToSpawnNode, "Spawn", EdgeCreatorTreeChecker
                 .combine(EdgeCreatorTreeChecker::canSummon, EdgeCreatorTreeChecker.isFirstAction(0)));
+        actionChooseNode.addMover(captureNode, "Capture", EdgeCreatorTreeChecker
+                .combine(EdgeCreatorTreeChecker::canCapture, EdgeCreatorTreeChecker.isFirstAction(1)));
         actionChooseNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::justOne,
                 EdgeNameTreeFunctions.constName("Pass and lose remaining energy"), AccumulatorTreeFunctions::none,
                 EdgeTreeFunctions::passTurn,
@@ -147,6 +151,10 @@ class CommandTree {
         chooseLocationToSpawnNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::locationsToSpawn,
                 EdgeNameTreeFunctions::locationName, AccumulatorTreeFunctions::accumulateLocation,
                 EdgeTreeFunctions::spawnEntity, EdgeCreatorTreeChecker::always);
+        captureNode.addMover(actionChooseNode, "Cancel", EdgeCreatorTreeChecker::always);
+        captureNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::entitiesToCapture,
+                EdgeNameTreeFunctions::mulitFactionalFullEntityName, AccumulatorTreeFunctions::accumulateCapture,
+                EdgeTreeFunctions::captureEntity, EdgeCreatorTreeChecker::always);
     }
 
     CommandTree(Core core) {
@@ -372,6 +380,11 @@ class EdgeNameTreeFunctions {
         return core.getCurFact().entitySetsList.get(data.get(0)).name + " for "
                 + core.getCurFact().entitySetsList.get(data.get(0)).costFunc.activate(core) + " energy";
     }
+
+    static String mulitFactionalFullEntityName(ArrayList<Integer> data, Core core) {
+        return core.factionBase.factList.get(data.get(1)).entitySetsList.get(data.get(2)).name + " from "
+                + core.map.locations.get(data.get(0)).name;
+    }
 }
 
 class AccumulatorTreeFunctions {
@@ -419,6 +432,11 @@ class AccumulatorTreeFunctions {
 
     static void accumulateEntityToSpawn(ArrayList<Integer> data, Core core) {
         core.var.chosenEntity = core.getCurFact().entitySetsList.get(data.get(0));
+    }
+
+    static void accumulateCapture(ArrayList<Integer> data, Core core) {
+        core.var.chosenEntity = core.factionBase.factList.get(data.get(1)).entitySetsList.get(data.get(2));
+        core.var.chosenLocation = core.map.locations.get(data.get(0));
     }
 }
 
@@ -538,6 +556,12 @@ class EdgeTreeFunctions {
         core.var.chosenEntity.spawn(core.var.chosenLocation);
         core.getCurFact().energy -= core.var.chosenEntity.costFunc.activate(core);
         core.var.action = PerformableAction.Spawn;
+    }
+
+    static void captureEntity(Core core) {
+        core.var.chosenEntity.getCaptured(core.var.chosenLocation);
+        --core.getCurFact().energy;
+        core.var.action = PerformableAction.Capture;
     }
 }
 
@@ -669,6 +693,10 @@ class DataGeneratorTreeFunctions {
         }
         return ans;
     }
+
+    static ArrayList<ArrayList<Integer>> entitiesToCapture(Core core) {
+        return core.getCurFact().getEntitiesToBeCaptured();
+    }
 }
 
 class EdgeCreatorTreeChecker {
@@ -713,5 +741,13 @@ class EdgeCreatorTreeChecker {
 
     static boolean canSummon(Core core) {
         return core.getCurFact().enableToSpawn().size() > 0;
+    }
+
+    static boolean canGateBeBuilt(Core core) {
+        return core.gates.getPlacesToBuild().size() > 0;
+    }
+
+    static boolean canCapture(Core core) {
+        return core.getCurFact().getEntitiesToBeCaptured().size() > 0;
     }
 }
