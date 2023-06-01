@@ -53,8 +53,10 @@ class Gates {
     }
 
     void buildGate(Location location) {
-        if (!isGateInLocation(location))
+        if (!isGateInLocation(location)) {
             gateList.add(new Gate(location));
+            checkGate(location);
+        }
     }
 
     void destroyGate(Location location) {

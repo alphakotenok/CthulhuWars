@@ -77,11 +77,17 @@ class CommandTree {
         actionChooseNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::justOne,
                 EdgeNameTreeFunctions.constName("Pass and lose remaining energy"), AccumulatorTreeFunctions::none,
                 EdgeTreeFunctions::passTurn,
-                EdgeCreatorTreeChecker.opposite(EdgeCreatorTreeChecker::isLastPlayerDoing));
+                EdgeCreatorTreeChecker.combine(
+                        EdgeCreatorTreeChecker.opposite(EdgeCreatorTreeChecker::isLastPlayerDoing),
+                        EdgeCreatorTreeChecker.opposite(EdgeCreatorTreeChecker::isActionPerformed)));
         actionChooseNode.addEdgeCreator(firstPlayerSelectionNode, DataGeneratorTreeFunctions::justOne,
                 EdgeNameTreeFunctions.constName("Pass and lose remaining energy"), AccumulatorTreeFunctions::none,
                 EdgeTreeFunctions::lastPassTurn,
-                EdgeCreatorTreeChecker::isLastPlayerDoing);
+                EdgeCreatorTreeChecker.combine(EdgeCreatorTreeChecker::isLastPlayerDoing,
+                        EdgeCreatorTreeChecker.opposite(EdgeCreatorTreeChecker::isActionPerformed)));
+        actionChooseNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::justOne,
+                EdgeNameTreeFunctions.constName("Done"), AccumulatorTreeFunctions::none,
+                EdgeTreeFunctions::doneTurn, EdgeCreatorTreeChecker::isActionPerformed);
         firstPlayerSelectionNode.addEdgeCreator(firstPlayerSelectionNode,
                 DataGeneratorTreeFunctions::firstPlayerCandidates, EdgeNameTreeFunctions::factionName,
                 AccumulatorTreeFunctions::accumulateFirstPlayer, EdgeTreeFunctions::none,
@@ -437,6 +443,12 @@ class EdgeTreeFunctions {
         nextPlayerMovePreparation(core);
     }
 
+    static void doneTurn(Core core) {
+        while (core.getCurFact().skip)
+            core.var.turn = core.var.getNextTurn(core.var.turn);
+        nextPlayerMovePreparation(core);
+    }
+
     static void lastPassTurn(Core core) {
         core.var.playerCounter = 0;
         int maxEnergy = 0;
@@ -597,6 +609,11 @@ class EdgeCreatorTreeChecker {
         return (core -> !checker.activate(core));
     }
 
+    static CommandTree.EdgeCreatorCheckerContainer combine(CommandTree.EdgeCreatorCheckerContainer checker1,
+            CommandTree.EdgeCreatorCheckerContainer checker2) {
+        return (core -> (checker1.activate(core) && checker2.activate(core)));
+    }
+
     static boolean always(Core core) {
         return true;
     }
@@ -620,5 +637,9 @@ class EdgeCreatorTreeChecker {
     static boolean canMove(Core core) {
         return (core.var.action == PerformedAction.None || core.var.action == PerformedAction.Move)
                 && core.getCurFact().energy > 0;
+    }
+
+    static boolean isActionPerformed(Core core) {
+        return core.var.action != PerformedAction.None;
     }
 }
