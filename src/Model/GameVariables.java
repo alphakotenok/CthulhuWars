@@ -24,6 +24,9 @@ class GameVariables {
     int bookNum;
     ArrayList<Integer> firstPlayerCandidates;
     int signToReveal;
+    int firstCultistToKillByBlackGoat;
+    int secondCultistToKillByBlackGoat;
+    boolean didBlackGoatKillTwoCultists;
 
     enum PerformableAction {
         None, Move, Spawn, GateBuilding, Capture, Extra
