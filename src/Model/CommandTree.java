@@ -495,7 +495,7 @@ class EdgeTreeFunctions {
 
     static void openBook(Core core) {
         core.factionBase.getFactionFromEnum(core.var.bookReceiver).books
-                .get(core.var.bookSlot).openBook = core.var.bookNum;
+                .get(core.var.bookNum).openBook = core.var.bookSlot;
         core.var.bookReceiver = null;
     }
 
@@ -792,6 +792,6 @@ class EdgeCreatorTreeChecker {
     }
 
     static boolean canBlackGoatKill(Core core) {
-        return core.getCurFact().faction == FactionType.BlackGoat && !core.getCurFact().isBookOpened(3);
+        return core.getCurFact().faction == FactionType.BlackGoat && !core.getCurFact().isQuestCompletedEarlier(3);
     }
 }
