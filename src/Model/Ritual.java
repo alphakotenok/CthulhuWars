@@ -30,7 +30,6 @@ class Ritual {
         if (core.var.numOfPlayers == 6)
             ritualTrack = new ArrayList<>(Arrays.asList(5, 6, 6, 7, 7, 7, 8, 8, 8, 9, 9, 10));
         ritualState = 0;
-
     }
 
     boolean canPerformRitual(FactionType faction) {
@@ -41,8 +40,8 @@ class Ritual {
     void performRitual(FactionType faction) {
         Faction curFac = core.factionBase.getFactionFromEnum(faction);
         curFac.energy -= ritualTrack.get(ritualState);
-        curFac.victoryPoints += curFac.gatesControlled;
-        for (int i = 0; i < curFac.activeGOO; ++i)
+        curFac.victoryPoints += core.gates.getNumOfControlledGates(faction);
+        for (int i = 0; i < curFac.countGOO(); ++i)
             curFac.getElderSign();
         ++ritualState;
         if (ritualState >= ritualTrack.size()) {

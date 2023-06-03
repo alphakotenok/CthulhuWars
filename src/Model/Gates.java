@@ -53,8 +53,10 @@ class Gates {
     }
 
     void buildGate(Location location) {
-        if (!isGateInLocation(location))
+        if (!isGateInLocation(location)) {
             gateList.add(new Gate(location));
+            checkGate(location);
+        }
     }
 
     void destroyGate(Location location) {
@@ -77,6 +79,17 @@ class Gates {
         ArrayList<Location> ans = new ArrayList<>();
         for (Gate g : gateList) {
             if (g.controlledBy == null) {
+                ans.add(g.location);
+            }
+        }
+        return ans;
+    }
+
+    ArrayList<Location> getControlledGates() {
+        ArrayList<Location> ans = new ArrayList<>();
+        Faction fact = core.getCurFact();
+        for (Gate g : gateList) {
+            if (g.controlledBy.faction == fact.faction) {
                 ans.add(g.location);
             }
         }
@@ -125,5 +138,17 @@ class Gates {
         for (Location loc : core.map.locations) {
             checkGate(loc);
         }
+    }
+
+    ArrayList<Location> getPlacesToBuild() {
+        ArrayList<Location> ans = new ArrayList<>();
+        Faction fact = core.getCurFact();
+        EntitySet entity = fact.getEntitySetByName("Cultist");
+        for (Location loc : entity.positions) {
+            if (isGateInLocation(loc) || ans.contains(loc))
+                continue;
+            ans.add(loc);
+        }
+        return ans;
     }
 }

@@ -3,15 +3,20 @@ package Model;
 import java.util.ArrayList;
 
 import Model.FactionEnum.FactionType;
-import Model.GameVariables.PerformedAction;
+import Model.GameVariables.PerformableAction;
 import javafx.scene.image.Image;
 
 class EntitySet {
 
     @FunctionalInterface
-    static interface intFunctionContainer {
+    static interface IntFunctionContainer {
         int activate(Core core);
     };
+
+    @FunctionalInterface
+    static interface LocationFunctionContainer {
+        ArrayList<Location> activate(Core core);
+    }
 
     enum Category {
         Cultist, Monster, GOO
@@ -25,8 +30,13 @@ class EntitySet {
     ArrayList<Location> positions = new ArrayList<>();
     ArrayList<Location> moved = new ArrayList<>();
 
-    intFunctionContainer costFunc = (core -> 0);
-    intFunctionContainer combatFunc = (core -> 0);
+    IntFunctionContainer costFunc = (core -> 0);
+    IntFunctionContainer combatFunc = (core -> 0);
+    LocationFunctionContainer spawnPlace = (core -> core.gates.getControlledGates());
+
+    static IntFunctionContainer constFunc(int num) {
+        return (core -> num);
+    }
 
     FactionType faction;
 
@@ -50,7 +60,6 @@ class EntitySet {
         }
         positions.remove(index);
         positions.add(to);
-        moved.add(to);
         core.gates.checkGate(from);
         core.gates.checkGate(to);
     }
@@ -58,7 +67,7 @@ class EntitySet {
     void performMovement(Location from, Location to) {
         move(from, to);
         moved.add(to);
-        core.var.action = PerformedAction.Move;
+        core.var.action = PerformableAction.Move;
     }
 
     int countInLocation(Location loc) {
@@ -103,4 +112,16 @@ class EntitySet {
         }
         return ans;
     }
+
+    void getCaptured(Location loc) {
+        int index = positions.indexOf(loc);
+        if (index == -1) {
+            System.out.println("Capture Error");
+            return;
+        }
+        positions.remove(index);
+        core.gates.checkGate(loc);
+        --limit;
+    }
+
 }
