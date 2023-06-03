@@ -19,4 +19,14 @@ class YellowSign extends Faction {
         entitySetsList.add(new EntitySet(core, "Hastur", Category.GOO, faction, entityIcons.get(4), 1));
         getEntitySetByName("Cultist").iconOnGate = Core.getImage("images/Entities/Gates with Acolyte (yellow).png");
     }
+
+    @Override
+    void fillBooks() {
+        books.add(new Book(0, FactionType.YellowSign, "He Who is Not to be Named"));
+        books.add(new Book(1, FactionType.YellowSign, "Passion"));
+        books.add(new Book(2, FactionType.YellowSign, "The Screaming Dead"));
+        books.add(new Book(3, FactionType.YellowSign, "Shriek of the Byakhee"));
+        books.add(new Book(4, FactionType.YellowSign, "The Third Eye"));
+        books.add(new Book(5, FactionType.YellowSign, "Zingaya"));
+    }
 }

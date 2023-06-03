@@ -22,11 +22,11 @@ class Sleeper extends Faction {
 
     @Override
     void fillBooks() {
-        books.add(new Book(0, FactionType.Sleeper, "Absorb"));
-        books.add(new Book(1, FactionType.Sleeper, "Devolve"));
-        books.add(new Book(2, FactionType.Sleeper, "Dreams"));
-        books.add(new Book(3, FactionType.Sleeper, "Regenerate"));
-        books.add(new Book(4, FactionType.Sleeper, "Submerge"));
-        books.add(new Book(5, FactionType.Sleeper, "Y'ha Nthlei"));
+        books.add(new Book(0, FactionType.Sleeper, "Ancient Sorcery"));
+        books.add(new Book(1, FactionType.Sleeper, "Burrow"));
+        books.add(new Book(2, FactionType.Sleeper, "Capture Monster"));
+        books.add(new Book(3, FactionType.Sleeper, "Cursed Slumber"));
+        books.add(new Book(4, FactionType.Sleeper, "Demand Sacrifice"));
+        books.add(new Book(5, FactionType.Sleeper, "Energy Nexus"));
     }
 }

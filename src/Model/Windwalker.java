@@ -19,4 +19,14 @@ class Windwalker extends Faction {
         entitySetsList.add(new EntitySet(core, "Ithaqua", Category.GOO, faction, entityIcons.get(4), 1));
         getEntitySetByName("Cultist").iconOnGate = Core.getImage("images/Entities/Gates with Acolyte (white).png");
     }
+
+    @Override
+    void fillBooks() {
+        books.add(new Book(0, FactionType.Windwalker, "Arctic Wind"));
+        books.add(new Book(1, FactionType.Windwalker, "Berserkergang"));
+        books.add(new Book(2, FactionType.Windwalker, "Cannibalism"));
+        books.add(new Book(3, FactionType.Windwalker, "Herald of the Outer Gods"));
+        books.add(new Book(4, FactionType.Windwalker, "Howl"));
+        books.add(new Book(5, FactionType.Windwalker, "Ice Age"));
+    }
 }
