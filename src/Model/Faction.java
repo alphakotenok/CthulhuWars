@@ -18,7 +18,7 @@ class Faction {
     FactionType faction;
     int victoryPoints;
     ArrayList<Integer> elderSignList = new ArrayList<>();
-    
+
     ArrayList<Book> books = new ArrayList<>();
 
     boolean isRitualPerformed;
