@@ -61,6 +61,7 @@ class CommandTree {
     Node chooseEntityToSpawnNode = new Node(NodeNameTreeFunctions.constName("Choose Unit to spawn"));
     Node chooseLocationToSpawnNode = new Node(NodeNameTreeFunctions.constName("Choose where to spawn"));
     Node captureNode = new Node(NodeNameTreeFunctions.constName("Choose Unit to capture"));
+    Node blackGoatKillTwoCultistsNode = new Node(NodeNameTreeFunctions.constName("Choose two cultists to kill"));
 
     void prepareEdgeCreators() {
         openBookNode.addEdgeCreator(null, DataGeneratorTreeFunctions::booksToOpen,
@@ -85,6 +86,8 @@ class CommandTree {
                 .combine(EdgeCreatorTreeChecker::canSummon, EdgeCreatorTreeChecker.isFirstAction(0)));
         actionChooseNode.addMover(captureNode, "Capture", EdgeCreatorTreeChecker
                 .combine(EdgeCreatorTreeChecker::canCapture, EdgeCreatorTreeChecker.isFirstAction(1)));
+        actionChooseNode.addMover(blackGoatKillTwoCultistsNode, "Kill two cultists to get the spellbook", 
+        EdgeCreatorTreeChecker.combine(EdgeCreatorTreeChecker.isFirstAction(0), EdgeCreatorTreeChecker::canBlackGoatKill));
         actionChooseNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::justOne,
                 EdgeNameTreeFunctions.constName("Pass and lose remaining energy"), AccumulatorTreeFunctions::none,
                 EdgeTreeFunctions::passTurn,
@@ -155,6 +158,10 @@ class CommandTree {
         captureNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::entitiesToCapture,
                 EdgeNameTreeFunctions::mulitFactionalFullEntityName, AccumulatorTreeFunctions::accumulateCapture,
                 EdgeTreeFunctions::captureEntity, EdgeCreatorTreeChecker::always);
+        blackGoatKillTwoCultistsNode.addMover(actionChooseNode, "Cancel", EdgeCreatorTreeChecker::always);
+        blackGoatKillTwoCultistsNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::generatePairOfCultistToKill, 
+        EdgeNameTreeFunctions::killCultistsName, AccumulatorTreeFunctions::accumulateKillingCultistsBlackGoat, 
+        EdgeTreeFunctions::killTwoCultistsBlackGoat, EdgeCreatorTreeChecker::always);
     }
 
     CommandTree(Core core) {
@@ -377,6 +384,11 @@ class EdgeNameTreeFunctions {
                 + core.map.locations.get(data.get(1)).name;
     }
 
+    static String killCultistsName(ArrayList<Integer> data, Core core) {
+        return "From " + core.getCurFact().getEntitySetByName("Cultist").positions.get(data.get(0)).name + 
+        ", from " + core.getCurFact().getEntitySetByName("Cultist").positions.get(data.get(1)).name ;
+    }
+
     static String spawnEntityName(ArrayList<Integer> data, Core core) {
         return core.getCurFact().entitySetsList.get(data.get(0)).name + " for "
                 + core.getCurFact().entitySetsList.get(data.get(0)).costFunc.activate(core) + " energy";
@@ -438,6 +450,11 @@ class AccumulatorTreeFunctions {
     static void accumulateCapture(ArrayList<Integer> data, Core core) {
         core.var.chosenEntity = core.factionBase.factList.get(data.get(1)).entitySetsList.get(data.get(2));
         core.var.chosenLocation = core.map.locations.get(data.get(0));
+    }
+
+    static void accumulateKillingCultistsBlackGoat(ArrayList<Integer> data, Core core) {
+        core.var.firstCultistToKillByBlackGoat= data.get(0);
+        core.var.secondCultistToKillByBlackGoat = data.get(1);
     }
 }
 
@@ -564,6 +581,16 @@ class EdgeTreeFunctions {
         core.var.chosenEntity.getCaptured(core.var.chosenLocation);
         --core.getCurFact().energy;
         core.var.action = PerformableAction.Capture;
+    }
+
+    static void killTwoCultistsBlackGoat(Core core) {
+        EntitySet entities = core.getCurFact().getEntitySetByName("Cultist");
+        Location locFirstCultist = entities.positions.get(core.var.firstCultistToKillByBlackGoat);
+        Location locSecondCultist = entities.positions.get(core.var.secondCultistToKillByBlackGoat);
+        entities.kill(locFirstCultist);
+        entities.kill(locSecondCultist);
+        core.var.action = PerformableAction.Extra;
+        core.var.didBlackGoatKillTwoCultists = true;
     }
 }
 
@@ -699,6 +726,17 @@ class DataGeneratorTreeFunctions {
     static ArrayList<ArrayList<Integer>> entitiesToCapture(Core core) {
         return core.getCurFact().getEntitiesToBeCaptured();
     }
+
+    static ArrayList<ArrayList<Integer>> generatePairOfCultistToKill(Core core) {
+        ArrayList<ArrayList<Integer>> pairOfCultist = new ArrayList<>();
+        int numberOfCultists = core.getCurFact().getEntitySetByName("Cultist").positions.size();
+        for(int i = 0; i < numberOfCultists; i ++){
+            for(int j = i + 1; j < numberOfCultists; j ++){
+                pairOfCultist.add(new ArrayList<Integer>(Arrays.asList(i, j)));
+            }
+        }
+        return pairOfCultist;
+    }
 }
 
 class EdgeCreatorTreeChecker {
@@ -751,5 +789,9 @@ class EdgeCreatorTreeChecker {
 
     static boolean canCapture(Core core) {
         return core.getCurFact().getEntitiesToBeCaptured().size() > 0;
+    }
+
+    static boolean canBlackGoatKill(Core core) {
+        return core.getCurFact().faction == FactionType.BlackGoat && !core.getCurFact().isBookOpened(3);
     }
 }

@@ -35,4 +35,38 @@ class BlackGoat extends Faction {
         books.add(new Book(4, FactionType.BlackGoat, "The Red Sign"));
         books.add(new Book(5, FactionType.BlackGoat, "The Thousand Young"));
     }
+
+    @Override
+    boolean isQuestCompleted(int questNum) {
+        if(questNum <= 2){
+            int count = 0;
+            for(Location location: super.core.map.locations){
+                if(getEntitiesInLocation(location).size() != 0) count ++;
+            }
+            if(questNum == 0 && count >= 4) return true;
+            if(questNum == 1 && count >= 6) return true;
+            if(questNum == 2 && count >= 8) return true;
+        }
+        if(questNum == 3){
+            return core.var.didBlackGoatKillTwoCultists;
+        }
+        if(questNum == 4){
+            ArrayList<FactionType> factions = core.var.factionsList;
+            for(FactionType faction : factions){
+                boolean ok = false;
+                if(faction != FactionType.BlackGoat){
+                    for(Location location: super.core.map.locations){
+                        if(core.factionBase.getFactionFromEnum(faction).getEntitiesInLocation(location).size() != 0
+                        && getEntitiesInLocation(location).size() != 0) ok = true;
+                    }
+                }
+                if(!ok) return false;
+            }
+            return true;
+        }
+        if(questNum == 5){
+            return(getEntitySetByName("Shub-Niggurath").positions.size() != 0);
+        }
+        return false;
+    }
 }
