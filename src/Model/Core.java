@@ -199,11 +199,19 @@ public class Core {
     }
 
     public ArrayList<Integer> getOpenedBookList(FactionType faction) {
-        return factionBase.getFactionFromEnum(faction).openedBooks;
+        ArrayList<Integer> openBooks = new ArrayList<>();
+        for(Book book : factionBase.getFactionFromEnum(faction).books){
+            openBooks.add(book.openBook);
+        }
+        return openBooks;
     }
 
     public ArrayList<Image> getBookImageList(FactionType faction) {
-        return factionBase.getFactionFromEnum(faction).bookImages;
+        ArrayList<Image> icons = new ArrayList<>();
+        for(Book book : factionBase.getFactionFromEnum(faction).books){
+            icons.add(book.icon);
+        }
+        return icons;
     }
 
     public ArrayList<Coordinates> getLeftBookCoordinates() {

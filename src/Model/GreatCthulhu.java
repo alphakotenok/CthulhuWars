@@ -19,4 +19,14 @@ class GreatCthulhu extends Faction {
         entitySetsList.add(new EntitySet(core, "Cthulhu", Category.GOO, faction, entityIcons.get(4), 1));
         getEntitySetByName("Cultist").iconOnGate = Core.getImage("images/Entities/Gates with Acolyte (green).png");
     }
+
+    @Override
+    void fillBooks() {
+       books.add(new Book(0, FactionType.GreatCthulhu, "Absorb"));
+       books.add(new Book(1, FactionType.GreatCthulhu, "Devolve"));
+       books.add(new Book(2, FactionType.GreatCthulhu, "Dreams"));
+       books.add(new Book(3, FactionType.GreatCthulhu, "Regenerate"));
+       books.add(new Book(4, FactionType.GreatCthulhu, "Submerge"));
+       books.add(new Book(5, FactionType.GreatCthulhu, "Y'ha Nthlei"));
+    }
 }

@@ -353,7 +353,7 @@ class EdgeNameTreeFunctions {
     }
 
     static String bookToOpenName(ArrayList<Integer> data, Core core) {
-        return core.factionBase.getFactionFromEnum(core.var.bookReceiver).bookNames.get(data.get(0));
+        return core.factionBase.getFactionFromEnum(core.var.bookReceiver).books.get(data.get(0)).name;
     }
 
     static String factionName(ArrayList<Integer> data, Core core) {
@@ -476,7 +476,7 @@ class EdgeTreeFunctions {
     }
 
     static void openBook(Core core) {
-        core.factionBase.getFactionFromEnum(core.var.bookReceiver).openedBooks.set(core.var.bookSlot, core.var.bookNum);
+        core.factionBase.getFactionFromEnum(core.var.bookReceiver).books.get(core.var.bookSlot).openBook = core.var.bookNum;
         core.var.bookReceiver = null;
     }
 

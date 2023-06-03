@@ -18,24 +18,14 @@ class Faction {
     FactionType faction;
     int victoryPoints;
     ArrayList<Integer> elderSignList = new ArrayList<>();
-
-    // will be better
-    ArrayList<Integer> openedBooks = new ArrayList<>();
-    ArrayList<Image> bookImages = new ArrayList<>();
-    ArrayList<String> bookNames = new ArrayList<>();
+    
+    ArrayList<Book> books = new ArrayList<>();
 
     boolean isRitualPerformed;
 
     ArrayList<EntitySet> entitySetsList = new ArrayList<>();
 
-    void fillBookNames() {
-        bookNames.add("Aboba");
-        bookNames.add("Aboba");
-        bookNames.add("Aboba");
-        bookNames.add("Aboba");
-        bookNames.add("Aboba");
-        bookNames.add("Aboba");
-    }
+    void fillBooks() {}
 
     Faction(String name, FactionType faction, Core core) {
         this.core = core;
@@ -46,23 +36,14 @@ class Faction {
         victoryPoints = 0;
         skip = false;
         isRitualPerformed = false;
-        for (int i = 0; i < 6; ++i) {
-            openedBooks.add(-1);
-        }
-        loadBooksImages();
-        fillBookNames();
+        getElderSign();
+        fillBooks();
     }
 
-    void loadBooksImages() {
-        for (int i = 0; i < 6; ++i) {
-            String path = "images/Spellbooks/" + name + "/" + i + ".png";
-            bookImages.add(Core.getImage(path));
-        }
-    }
 
     boolean isBookOpened(int bookNum) {
-        for (int i : openedBooks) {
-            if (i == bookNum) {
+        for (Book book : books) {
+            if (book.openBook == bookNum) {
                 return true;
             }
         }
@@ -70,7 +51,7 @@ class Faction {
     }
 
     boolean isQuestCompletedEarlier(int questNum) {
-        return ((int) openedBooks.get(questNum)) != -1;
+        return ((int) books.get(questNum).openBook) != -1;
     }
 
     boolean isQuestCompleted(int questNum) {
