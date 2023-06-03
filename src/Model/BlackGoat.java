@@ -25,4 +25,14 @@ class BlackGoat extends Faction {
         return core.factionBase.getFactionFromEnum(FactionType.BlackGoat).getEntitySetByName("Cultist").positions.size()
                 + core.gates.getNumOfControlledGates(FactionType.BlackGoat);
     }
+
+    @Override
+    void fillBooks() {
+       books.add(new Book(0, FactionType.BlackGoat, "Blood Sacrifice"));
+       books.add(new Book(1, FactionType.BlackGoat, "Blood Sacrifice"));
+       books.add(new Book(2, FactionType.BlackGoat, "Blood Sacrifice"));
+       books.add(new Book(3, FactionType.BlackGoat, "Blood Sacrifice"));
+       books.add(new Book(4, FactionType.BlackGoat, "Blood Sacrifice"));
+       books.add(new Book(5, FactionType.BlackGoat, "Blood Sacrifice"));
+    }
 }
