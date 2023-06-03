@@ -187,23 +187,24 @@ class CommandTree {
         }
 
         void prepareNode() {
-
-            if (!bookNode) {
-                for (int i = 0; i < core.var.numOfPlayers; ++i) {
-                    Faction fact = core.factionBase.getFactionFromEnum(core.var.factionsList.get(i));
-                    for (int j = 0; j < 6; ++j) {
-                        if (!fact.isQuestCompletedEarlier(j) && fact.isQuestCompleted(j)) {
-                            core.var.bookReceiver = fact.faction;
-                            core.var.bookSlot = j;
-                            phantommedNode = this;
-                            openBookNode.prepareNode();
-                            return;
+            if (this != startNode) {
+                if (!bookNode) {
+                    for (int i = 0; i < core.var.numOfPlayers; ++i) {
+                        Faction fact = core.factionBase.getFactionFromEnum(core.var.factionsList.get(i));
+                        for (int j = 0; j < 6; ++j) {
+                            if (!fact.isQuestCompletedEarlier(j) && fact.isQuestCompleted(j)) {
+                                core.var.bookReceiver = fact.faction;
+                                core.var.bookSlot = j;
+                                phantommedNode = this;
+                                openBookNode.prepareNode();
+                                return;
+                            }
                         }
                     }
-                }
-            } else {
-                for (EdgeCreator ec : edgeCreators) {
-                    ec.to = phantommedNode;
+                } else {
+                    for (EdgeCreator ec : edgeCreators) {
+                        ec.to = phantommedNode;
+                    }
                 }
             }
             name = nameFunction.activate(core);
@@ -493,7 +494,8 @@ class EdgeTreeFunctions {
     }
 
     static void openBook(Core core) {
-        core.factionBase.getFactionFromEnum(core.var.bookReceiver).books.get(core.var.bookSlot).openBook = core.var.bookNum;
+        core.factionBase.getFactionFromEnum(core.var.bookReceiver).books
+                .get(core.var.bookSlot).openBook = core.var.bookNum;
         core.var.bookReceiver = null;
     }
 
