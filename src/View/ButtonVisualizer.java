@@ -176,7 +176,7 @@ public class ButtonVisualizer {
         label.setLayoutX(Variables.SCREEN_WIDTH - 300);
         label.setAlignment(Pos.CENTER);
         label.setWrapText(true);
-        label.setFont(Font.font("Arial", 16));
+        label.setFont(Font.font("Arial", 25));
         ActionsMisc.display(label);
 
         Button[] commandButton = new Button[commands.size()];
@@ -188,6 +188,7 @@ public class ButtonVisualizer {
             commandButton[commandID].setLayoutY((commandID + 1) * thisHeight);
             commandButton[commandID].setPrefWidth(Variables.SCREEN_WIDTH * (1 - Variables.PROCENT));
             commandButton[commandID].setLayoutX(Variables.SCREEN_WIDTH - 300);
+            commandButton[commandID].setFont(Font.font("Arial", 25));
             commandButton[commandID].setOnAction(new CommandButton(commandID));
 
             ActionsMisc.display(commandButton[commandID]);

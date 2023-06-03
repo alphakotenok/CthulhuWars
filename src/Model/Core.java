@@ -200,7 +200,7 @@ public class Core {
 
     public ArrayList<Integer> getOpenedBookList(FactionType faction) {
         ArrayList<Integer> openBooks = new ArrayList<>();
-        for(Book book : factionBase.getFactionFromEnum(faction).books){
+        for (Book book : factionBase.getFactionFromEnum(faction).books) {
             openBooks.add(book.openBook);
         }
         return openBooks;
@@ -208,7 +208,7 @@ public class Core {
 
     public ArrayList<Image> getBookImageList(FactionType faction) {
         ArrayList<Image> icons = new ArrayList<>();
-        for(Book book : factionBase.getFactionFromEnum(faction).books){
+        for (Book book : factionBase.getFactionFromEnum(faction).books) {
             icons.add(book.icon);
         }
         return icons;

@@ -19,4 +19,14 @@ class Sleeper extends Faction {
         entitySetsList.add(new EntitySet(core, "Tsathoggua", Category.GOO, faction, entityIcons.get(4), 1));
         getEntitySetByName("Cultist").iconOnGate = Core.getImage("images/Entities/Gates with Acolyte (orange).png");
     }
+
+    @Override
+    void fillBooks() {
+        books.add(new Book(0, FactionType.Sleeper, "Ancient Sorcery"));
+        books.add(new Book(1, FactionType.Sleeper, "Burrow"));
+        books.add(new Book(2, FactionType.Sleeper, "Capture Monster"));
+        books.add(new Book(3, FactionType.Sleeper, "Cursed Slumber"));
+        books.add(new Book(4, FactionType.Sleeper, "Demand Sacrifice"));
+        books.add(new Book(5, FactionType.Sleeper, "Energy Nexus"));
+    }
 }
