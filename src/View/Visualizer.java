@@ -103,10 +103,11 @@ public class Visualizer {
         double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
         displayLabel("Power", Variables.core.getPowerList(), (Variables.SCREEN_HEIGHT - height) / 2, 350, 125,
                 (Variables.SCREEN_HEIGHT - height) / 2 + height);
-        displayLabel("Doom", Variables.core.getDoomList(), (Variables.SCREEN_HEIGHT - height) / 2, 350, 500,
+        displayLabel("Doom", Variables.core.getDoomList(), (Variables.SCREEN_HEIGHT - height) / 2, 350,
+                +Variables.SCREEN_WIDTH * Variables.PROCENT / 2 - 200,
                 (Variables.SCREEN_HEIGHT - height) / 2 + height);
         displayLabel("ElderSign", Variables.core.getElderSignList(), (Variables.SCREEN_HEIGHT - height) / 2, 350,
-                875, (Variables.SCREEN_HEIGHT - height) / 2 + height);
+                Variables.SCREEN_WIDTH * Variables.PROCENT - 350, (Variables.SCREEN_HEIGHT - height) / 2 + height);
         return;
     }
 
