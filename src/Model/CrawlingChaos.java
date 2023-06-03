@@ -23,11 +23,11 @@ class CrawlingChaos extends Faction {
 
     @Override
     void fillBooks() {
-       books.add(new Book(0, FactionType.BlackGoat, "Blood Sacrifice"));
-       books.add(new Book(1, FactionType.BlackGoat, "Blood Sacrifice"));
-       books.add(new Book(2, FactionType.BlackGoat, "Blood Sacrifice"));
-       books.add(new Book(3, FactionType.BlackGoat, "Blood Sacrifice"));
-       books.add(new Book(4, FactionType.BlackGoat, "Blood Sacrifice"));
-       books.add(new Book(5, FactionType.BlackGoat, "Blood Sacrifice"));
+       books.add(new Book(0, FactionType.CrawlingChaos, "Abduct"));
+       books.add(new Book(1, FactionType.CrawlingChaos, "Emissary of the Outer Gods"));
+       books.add(new Book(2, FactionType.CrawlingChaos, "Invisibility"));
+       books.add(new Book(3, FactionType.CrawlingChaos, "Madness"));
+       books.add(new Book(4, FactionType.CrawlingChaos, "Seek and Destroy"));
+       books.add(new Book(5, FactionType.CrawlingChaos, "The Thousand Forms"));
     }
 }
