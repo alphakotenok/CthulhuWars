@@ -18,14 +18,15 @@ class Faction {
     FactionType faction;
     int victoryPoints;
     ArrayList<Integer> elderSignList = new ArrayList<>();
-    
+
     ArrayList<Book> books = new ArrayList<>();
 
     boolean isRitualPerformed;
 
     ArrayList<EntitySet> entitySetsList = new ArrayList<>();
 
-    void fillBooks() {}
+    void fillBooks() {
+    }
 
     Faction(String name, FactionType faction, Core core) {
         this.core = core;
@@ -39,7 +40,6 @@ class Faction {
         getElderSign();
         fillBooks();
     }
-
 
     boolean isBookOpened(int bookNum) {
         for (Book book : books) {
