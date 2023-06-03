@@ -60,7 +60,7 @@ class Faction {
     }
 
     boolean isQuestCompleted(int questNum) {
-        return false;
+        return true;
     }
 
     void getElderSign() {
