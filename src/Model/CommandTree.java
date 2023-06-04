@@ -912,7 +912,7 @@ class EdgeCreatorTreeChecker {
     }
 
     static boolean canBlackGoatKill(Core core) {
-        return core.getCurFact().faction == FactionType.BlackGoat && !core.getCurFact().isBookOpened(3);
+        return core.getCurFact().faction == FactionType.BlackGoat && !core.getCurFact().isQuestCompletedEarlier(3);
     }
 
     static boolean canLoseEnergy4(Core core) {
