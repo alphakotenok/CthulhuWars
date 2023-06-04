@@ -694,7 +694,8 @@ class EdgeTreeFunctions {
         ArrayList<FactionType> factions = core.var.factionsList;
         for (FactionType faction : factions) {
             if (faction != core.getCurFact().faction) {
-                core.factionBase.getFactionFromEnum(faction).energy--;
+                if (core.factionBase.getFactionFromEnum(faction).energy != 0)
+                    core.factionBase.getFactionFromEnum(faction).energy--;
             }
         }
         core.var.action = PerformableAction.Extra;
