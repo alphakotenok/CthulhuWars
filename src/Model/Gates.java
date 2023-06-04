@@ -89,7 +89,8 @@ class Gates {
         ArrayList<Location> ans = new ArrayList<>();
         Faction fact = core.getCurFact();
         for (Gate g : gateList) {
-            if (g.controlledBy.faction == fact.faction) {
+
+            if (g.controlledBy != null && g.controlledBy.faction == fact.faction) {
                 ans.add(g.location);
             }
         }

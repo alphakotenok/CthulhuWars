@@ -537,7 +537,6 @@ class EdgeTreeFunctions {
     }
 
     static void openBook(Core core) {
-        System.out.println("Aoba");
         core.factionBase.getFactionFromEnum(core.var.bookReceiver).books
                 .get(core.var.bookNum).openBook = core.var.bookSlot;
         core.var.bookReceiver = null;
@@ -627,7 +626,8 @@ class EdgeTreeFunctions {
         core.var.chosenEntity.getCaptured(core.var.chosenLocation);
         --core.getCurFact().energy;
         core.var.action = PerformableAction.Capture;
-        if (core.getCurFact().faction == FactionType.CrawlingChaos && core.var.chosenEntity.name == "Cultist") {
+        if (core.getCurFact().faction == FactionType.CrawlingChaos &&
+                core.var.chosenEntity.name == "Cultist") {
             core.var.didCrawlingChaosCaptureCultist = true;
         }
     }
