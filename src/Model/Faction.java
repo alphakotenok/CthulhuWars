@@ -43,24 +43,25 @@ class Faction {
 
     boolean isBookOpened(int bookNum) {
         return books.get(bookNum).openBook != -1;
-     //   for (Book book : books) {
-       //     if (book.openBook == bookNum) {
-         //       return true;
-     //       }
-    //    }
-    //    return false;
+        // for (Book book : books) {
+        // if (book.openBook == bookNum) {
+        // return true;
+        // }
+        // }
+        // return false;
     }
 
     boolean isQuestCompletedEarlier(int questNum) {
-        for(Book book : books)
-        if(book.openBook == questNum) return true;
+        for (Book book : books)
+            if (book.openBook == questNum)
+                return true;
 
         return false;
-       // return ((int) books.get(questNum).openBook) != -1;
+        // return ((int) books.get(questNum).openBook) != -1;
     }
 
     boolean isQuestCompleted(int questNum) {
-        return true;
+        return false;
     }
 
     void getElderSign() {
