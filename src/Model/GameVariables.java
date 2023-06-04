@@ -26,7 +26,14 @@ class GameVariables {
     int signToReveal;
     int firstCultistToKillByBlackGoat;
     int secondCultistToKillByBlackGoat;
+    int chosenFaction;
     boolean didBlackGoatKillTwoCultists;
+    boolean loseEnergy4, loseEnergy6;
+    boolean didRitualSleeper;
+    boolean did3EnergyLoseAnd1EnergyForOthersGet;
+    boolean did3EnergyLoseAnd3EnergyPresent;
+    boolean did3EnergyAnd1EnergyForOthersLose;
+    boolean didCrawlingChaosCaptureCultist;
 
     enum PerformableAction {
         None, Move, Spawn, GateBuilding, Capture, Extra

@@ -62,6 +62,7 @@ class CommandTree {
     Node chooseLocationToSpawnNode = new Node(NodeNameTreeFunctions.constName("Choose where to spawn"));
     Node captureNode = new Node(NodeNameTreeFunctions.constName("Choose Unit to capture"));
     Node blackGoatKillTwoCultistsNode = new Node(NodeNameTreeFunctions.constName("Choose two cultists to kill"));
+    Node sleeperPresentEnergyNode = new Node(NodeNameTreeFunctions.constName("Choose faction, who gets 3 power"));
 
     void prepareEdgeCreators() {
         openBookNode.addEdgeCreator(null, DataGeneratorTreeFunctions::booksToOpen,
@@ -86,8 +87,38 @@ class CommandTree {
                 .combine(EdgeCreatorTreeChecker::canSummon, EdgeCreatorTreeChecker.isFirstAction(0)));
         actionChooseNode.addMover(captureNode, "Capture", EdgeCreatorTreeChecker
                 .combine(EdgeCreatorTreeChecker::canCapture, EdgeCreatorTreeChecker.isFirstAction(1)));
-        actionChooseNode.addMover(blackGoatKillTwoCultistsNode, "Kill two cultists to get the spellbook", 
-        EdgeCreatorTreeChecker.combine(EdgeCreatorTreeChecker.isFirstAction(0), EdgeCreatorTreeChecker::canBlackGoatKill));
+        actionChooseNode.addMover(blackGoatKillTwoCultistsNode, "Kill two cultists to get the spellbook",
+                EdgeCreatorTreeChecker.combine(EdgeCreatorTreeChecker.isFirstAction(0),
+                        EdgeCreatorTreeChecker::canBlackGoatKill));
+        actionChooseNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::justOne,
+                EdgeNameTreeFunctions.constName("Spend 4 power to get the spellbook"), AccumulatorTreeFunctions::none,
+                EdgeTreeFunctions::loseEnergy4, EdgeCreatorTreeChecker.combine(EdgeCreatorTreeChecker.isFirstAction(4),
+                        EdgeCreatorTreeChecker::canLoseEnergy4));
+        actionChooseNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::justOne,
+                EdgeNameTreeFunctions.constName("Spend 6 power to get the spellbook"), AccumulatorTreeFunctions::none,
+                EdgeTreeFunctions::loseEnergy6, EdgeCreatorTreeChecker.combine(EdgeCreatorTreeChecker.isFirstAction(6),
+                        EdgeCreatorTreeChecker::canLoseEnergy6));
+        actionChooseNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::justOne,
+                EdgeNameTreeFunctions.constName("Spend 10 power to get two spellbooks"), AccumulatorTreeFunctions::none,
+                EdgeTreeFunctions::loseEnergy10,
+                EdgeCreatorTreeChecker.combine(EdgeCreatorTreeChecker.isFirstAction(10),
+                        EdgeCreatorTreeChecker::canLoseEnergy10));
+        actionChooseNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::justOne,
+                EdgeNameTreeFunctions.constName("Spend 3 power to get the spellbook(other players get 1 power)"),
+                AccumulatorTreeFunctions::none,
+                EdgeTreeFunctions::lose3EnergyAndGet1EnergyForOthers,
+                EdgeCreatorTreeChecker.combine(EdgeCreatorTreeChecker.isFirstAction(3),
+                        EdgeCreatorTreeChecker::canLose3EnergyAndGet1EnergyForOthers));
+        actionChooseNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::justOne,
+                EdgeNameTreeFunctions.constName("Spend 3 power to get the spellbook(other players spend 1 power)"),
+                AccumulatorTreeFunctions::none,
+                EdgeTreeFunctions::lose3EnergyAnd1EnergyForOthers,
+                EdgeCreatorTreeChecker.combine(EdgeCreatorTreeChecker.isFirstAction(3),
+                        EdgeCreatorTreeChecker::canLose3EnergyAnd1EnergyForOthers));
+        actionChooseNode.addMover(sleeperPresentEnergyNode,
+                "Spend 3 power to get the spellbook(one player gets 3 power)", EdgeCreatorTreeChecker
+                        .combine(EdgeCreatorTreeChecker::canSpend3EnergySleeper,
+                                EdgeCreatorTreeChecker.isFirstAction(3)));
         actionChooseNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::justOne,
                 EdgeNameTreeFunctions.constName("Pass and lose remaining energy"), AccumulatorTreeFunctions::none,
                 EdgeTreeFunctions::passTurn,
@@ -159,9 +190,16 @@ class CommandTree {
                 EdgeNameTreeFunctions::mulitFactionalFullEntityName, AccumulatorTreeFunctions::accumulateCapture,
                 EdgeTreeFunctions::captureEntity, EdgeCreatorTreeChecker::always);
         blackGoatKillTwoCultistsNode.addMover(actionChooseNode, "Cancel", EdgeCreatorTreeChecker::always);
-        blackGoatKillTwoCultistsNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::generatePairOfCultistToKill, 
-        EdgeNameTreeFunctions::killCultistsName, AccumulatorTreeFunctions::accumulateKillingCultistsBlackGoat, 
-        EdgeTreeFunctions::killTwoCultistsBlackGoat, EdgeCreatorTreeChecker::always);
+        blackGoatKillTwoCultistsNode.addEdgeCreator(actionChooseNode,
+                DataGeneratorTreeFunctions::generatePairOfCultistToKill,
+                EdgeNameTreeFunctions::killCultistsName, AccumulatorTreeFunctions::accumulateKillingCultistsBlackGoat,
+                EdgeTreeFunctions::killTwoCultistsBlackGoat, EdgeCreatorTreeChecker::always);
+        sleeperPresentEnergyNode.addMover(actionChooseNode, "Cancel", EdgeCreatorTreeChecker::always);
+        sleeperPresentEnergyNode.addEdgeCreator(actionChooseNode,
+                DataGeneratorTreeFunctions::generateFaction,
+                EdgeNameTreeFunctions::factionName,
+                AccumulatorTreeFunctions::accumulateFaction,
+                EdgeTreeFunctions::sleeperSpendAndGetEnergy, EdgeCreatorTreeChecker::always);
     }
 
     CommandTree(Core core) {
@@ -385,8 +423,8 @@ class EdgeNameTreeFunctions {
     }
 
     static String killCultistsName(ArrayList<Integer> data, Core core) {
-        return "From " + core.getCurFact().getEntitySetByName("Cultist").positions.get(data.get(0)).name + 
-        ", from " + core.getCurFact().getEntitySetByName("Cultist").positions.get(data.get(1)).name ;
+        return "From " + core.getCurFact().getEntitySetByName("Cultist").positions.get(data.get(0)).name +
+                ", from " + core.getCurFact().getEntitySetByName("Cultist").positions.get(data.get(1)).name;
     }
 
     static String spawnEntityName(ArrayList<Integer> data, Core core) {
@@ -398,6 +436,7 @@ class EdgeNameTreeFunctions {
         return core.factionBase.factList.get(data.get(1)).entitySetsList.get(data.get(2)).name + " from "
                 + core.map.locations.get(data.get(0)).name;
     }
+
 }
 
 class AccumulatorTreeFunctions {
@@ -453,8 +492,12 @@ class AccumulatorTreeFunctions {
     }
 
     static void accumulateKillingCultistsBlackGoat(ArrayList<Integer> data, Core core) {
-        core.var.firstCultistToKillByBlackGoat= data.get(0);
+        core.var.firstCultistToKillByBlackGoat = data.get(0);
         core.var.secondCultistToKillByBlackGoat = data.get(1);
+    }
+
+    static void accumulateFaction(ArrayList<Integer> data, Core core) {
+        core.var.chosenFaction = data.get(0);
     }
 }
 
@@ -554,6 +597,8 @@ class EdgeTreeFunctions {
 
     static void performRitual(Core core) {
         core.ritual.performRitual(core.var.factionsList.get(core.var.turn));
+        if (core.getCurFact().faction == FactionType.Sleeper)
+            core.var.didRitualSleeper = true;
     }
 
     static void revealElderSign(Core core) {
@@ -581,6 +626,9 @@ class EdgeTreeFunctions {
         core.var.chosenEntity.getCaptured(core.var.chosenLocation);
         --core.getCurFact().energy;
         core.var.action = PerformableAction.Capture;
+        if (core.getCurFact().faction == FactionType.CrawlingChaos && core.var.chosenEntity.name == "Cultist") {
+            core.var.didCrawlingChaosCaptureCultist = true;
+        }
     }
 
     static void killTwoCultistsBlackGoat(Core core) {
@@ -591,6 +639,65 @@ class EdgeTreeFunctions {
         entities.kill(locSecondCultist);
         core.var.action = PerformableAction.Extra;
         core.var.didBlackGoatKillTwoCultists = true;
+    }
+
+    static void loseEnergy4(Core core) {
+        core.getCurFact().energy -= 4;
+        core.var.action = PerformableAction.Extra;
+        core.var.loseEnergy4 = true;
+    }
+
+    static void loseEnergy6(Core core) {
+        core.getCurFact().energy -= 6;
+        core.var.action = PerformableAction.Extra;
+        core.var.loseEnergy6 = true;
+    }
+
+    static void loseEnergy10(Core core) {
+        core.getCurFact().energy -= 10;
+        core.var.action = PerformableAction.Extra;
+        core.var.loseEnergy4 = true;
+        core.var.loseEnergy6 = true;
+    }
+
+    static void lose3EnergyAndGet1EnergyForOthers(Core core) {
+        core.getCurFact().energy -= 3;
+        ArrayList<FactionType> factions = core.var.factionsList;
+        for (FactionType faction : factions) {
+            if (faction != core.getCurFact().faction) {
+                core.factionBase.getFactionFromEnum(faction).energy++;
+                if (core.factionBase.getFactionFromEnum(faction).skip == true) {
+                    core.factionBase.getFactionFromEnum(faction).skip = false;
+                    core.var.totalSkip--;
+                }
+            }
+        }
+        core.var.action = PerformableAction.Extra;
+        core.var.did3EnergyLoseAnd1EnergyForOthersGet = true;
+    }
+
+    static void sleeperSpendAndGetEnergy(Core core) {
+        core.getCurFact().energy -= 3;
+        Faction faction = core.factionBase.getFactionFromEnum(core.var.factionsList.get(core.var.chosenFaction));
+        faction.energy += 3;
+        if (faction.skip == true) {
+            faction.skip = false;
+            core.var.totalSkip--;
+        }
+        core.var.action = PerformableAction.Extra;
+        core.var.did3EnergyLoseAnd3EnergyPresent = true;
+    }
+
+    static void lose3EnergyAnd1EnergyForOthers(Core core) {
+        core.getCurFact().energy -= 3;
+        ArrayList<FactionType> factions = core.var.factionsList;
+        for (FactionType faction : factions) {
+            if (faction != core.getCurFact().faction) {
+                core.factionBase.getFactionFromEnum(faction).energy--;
+            }
+        }
+        core.var.action = PerformableAction.Extra;
+        core.var.did3EnergyAnd1EnergyForOthersLose = true;
     }
 }
 
@@ -730,12 +837,24 @@ class DataGeneratorTreeFunctions {
     static ArrayList<ArrayList<Integer>> generatePairOfCultistToKill(Core core) {
         ArrayList<ArrayList<Integer>> pairOfCultist = new ArrayList<>();
         int numberOfCultists = core.getCurFact().getEntitySetByName("Cultist").positions.size();
-        for(int i = 0; i < numberOfCultists; i ++){
-            for(int j = i + 1; j < numberOfCultists; j ++){
+        for (int i = 0; i < numberOfCultists; i++) {
+            for (int j = i + 1; j < numberOfCultists; j++) {
                 pairOfCultist.add(new ArrayList<Integer>(Arrays.asList(i, j)));
             }
         }
         return pairOfCultist;
+    }
+
+    static ArrayList<ArrayList<Integer>> generateFaction(Core core) {
+        ArrayList<ArrayList<Integer>> factionToGenerate = new ArrayList<>();
+        ArrayList<FactionType> factions = core.var.factionsList;
+        for (int i = 0; i < factions.size(); i++) {
+            if (core.factionBase.getFactionFromEnum(factions.get(i)) != core.getCurFact()) {
+                factionToGenerate.add(new ArrayList<Integer>(Arrays.asList(i)));
+            }
+        }
+
+        return factionToGenerate;
     }
 }
 
@@ -793,5 +912,30 @@ class EdgeCreatorTreeChecker {
 
     static boolean canBlackGoatKill(Core core) {
         return core.getCurFact().faction == FactionType.BlackGoat && !core.getCurFact().isQuestCompletedEarlier(3);
+    }
+
+    static boolean canLoseEnergy4(Core core) {
+        return core.getCurFact().faction == FactionType.CrawlingChaos && !core.getCurFact().isQuestCompletedEarlier(0);
+    }
+
+    static boolean canLoseEnergy6(Core core) {
+        return core.getCurFact().faction == FactionType.CrawlingChaos && !core.getCurFact().isQuestCompletedEarlier(1);
+    }
+
+    static boolean canLoseEnergy10(Core core) {
+        return core.getCurFact().faction == FactionType.CrawlingChaos && !core.getCurFact().isQuestCompletedEarlier(0)
+                && !core.getCurFact().isQuestCompletedEarlier(1);
+    }
+
+    static boolean canLose3EnergyAndGet1EnergyForOthers(Core core) {
+        return core.getCurFact().faction == FactionType.Sleeper && !core.getCurFact().isQuestCompletedEarlier(1);
+    }
+
+    static boolean canSpend3EnergySleeper(Core core) {
+        return core.getCurFact().faction == FactionType.Sleeper && !core.getCurFact().isQuestCompletedEarlier(0);
+    }
+
+    static boolean canLose3EnergyAnd1EnergyForOthers(Core core) {
+        return core.getCurFact().faction == FactionType.Sleeper && !core.getCurFact().isQuestCompletedEarlier(2);
     }
 }

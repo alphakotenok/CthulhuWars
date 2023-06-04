@@ -7,7 +7,6 @@ import Model.EntitySet.Category;
 import Model.FactionEnum.FactionType;
 import javafx.scene.image.Image;
 
-
 class CrawlingChaos extends Faction {
     CrawlingChaos(String name, FactionType faction, Core core) {
         super(name, faction, core);
@@ -23,11 +22,39 @@ class CrawlingChaos extends Faction {
 
     @Override
     void fillBooks() {
-       books.add(new Book(0, FactionType.CrawlingChaos, "Abduct"));
-       books.add(new Book(1, FactionType.CrawlingChaos, "Emissary of the Outer Gods"));
-       books.add(new Book(2, FactionType.CrawlingChaos, "Invisibility"));
-       books.add(new Book(3, FactionType.CrawlingChaos, "Madness"));
-       books.add(new Book(4, FactionType.CrawlingChaos, "Seek and Destroy"));
-       books.add(new Book(5, FactionType.CrawlingChaos, "The Thousand Forms"));
+        books.add(new Book(0, FactionType.CrawlingChaos, "Abduct"));
+        books.add(new Book(1, FactionType.CrawlingChaos, "Emissary of the Outer Gods"));
+        books.add(new Book(2, FactionType.CrawlingChaos, "Invisibility"));
+        books.add(new Book(3, FactionType.CrawlingChaos, "Madness"));
+        books.add(new Book(4, FactionType.CrawlingChaos, "Seek and Destroy"));
+        books.add(new Book(5, FactionType.CrawlingChaos, "The Thousand Forms"));
+    }
+
+    @Override
+    boolean isQuestCompleted(int questNum) {
+        if (questNum == 0) {
+            return core.var.loseEnergy4;
+        }
+
+        if (questNum == 1) {
+            return core.var.loseEnergy6;
+        }
+
+        if (questNum == 2) {
+            return core.gates.getControlledGates().size() >= 3 || super.energy >= 12;
+        }
+
+        if (questNum == 3) {
+            return core.gates.getControlledGates().size() >= 4 || super.energy >= 15;
+        }
+
+        if (questNum == 4) {
+            return core.var.didCrawlingChaosCaptureCultist;
+        }
+
+        if (questNum == 5) {
+            return (getEntitySetByName("Nyarlathotep").positions.size() != 0);
+        }
+        return false;
     }
 }
