@@ -12,12 +12,33 @@ class OpenerOfTheWay extends Faction {
         super(name, faction, core);
         ArrayList<Image> entityIcons = Faction.getEntityImages(new ArrayList<>(
                 Arrays.asList("Acolyte (purple)", "Mutant", "Abomination", "Spawn of Yog-Sothoth", "Yog-Sothoth")));
-        entitySetsList.add(new EntitySet(core, "Cultist", Category.Cultist, faction, entityIcons.get(0), 6, EntitySet.constFunc(0), EntitySet.constFunc(0)));
-        entitySetsList.add(new EntitySet(core, "Mutant", Category.Monster, faction, entityIcons.get(1), 4, EntitySet.constFunc(0), EntitySet.constFunc(0)));
-        entitySetsList.add(new EntitySet(core, "Abomination", Category.Monster, faction, entityIcons.get(2), 3, EntitySet.constFunc(0), EntitySet.constFunc(0)));
-        entitySetsList.add(new EntitySet(core, "Spawn of Yog-Sothoth", Category.Monster, faction, entityIcons.get(3), 2, EntitySet.constFunc(0), EntitySet.constFunc(0)));
-        entitySetsList.add(new EntitySet(core, "Yog-Sothoth", Category.GOO, faction, entityIcons.get(4), 1, EntitySet.constFunc(0), EntitySet.constFunc(0)));
+        entitySetsList.add(new EntitySet(core, "Cultist", Category.Cultist, faction, entityIcons.get(0), 6,
+                EntitySet.constFunc(1), EntitySet.constFunc(0)));
+        entitySetsList.add(new EntitySet(core, "Mutant", Category.Monster, faction, entityIcons.get(1), 4,
+                EntitySet.constFunc(2), EntitySet.constFunc(1)));
+        entitySetsList.add(new EntitySet(core, "Abomination", Category.Monster, faction, entityIcons.get(2), 3,
+                EntitySet.constFunc(3), EntitySet.constFunc(2)));
+        entitySetsList.add(new EntitySet(core, "Spawn of Yog-Sothoth", Category.Monster, faction, entityIcons.get(3), 2,
+                EntitySet.constFunc(4), EntitySet.constFunc(3)));
+        entitySetsList.add(new EntitySet(core, "Yog-Sothoth", Category.GOO, faction, entityIcons.get(4), 1,
+                EntitySet.constFunc(6), OpenerOfTheWay::getCombatYogSothoth));
         getEntitySetByName("Cultist").iconOnGate = Core.getImage("images/Entities/Gates with Acolyte (purple).png");
+    }
+
+    static int getCombatYogSothoth(Core core) {
+        int combat = 0;
+        ArrayList<FactionType> factions = core.var.factionsList;
+        for (FactionType faction : factions) {
+            if (faction != FactionType.OpenerOfTheWay) {
+                for (EntitySet entity : core.factionBase.getFactionFromEnum(faction).entitySetsList) {
+                    if (entity.category == Category.GOO) {
+                        combat++;
+                    }
+                }
+            }
+        }
+
+        return combat * 2;
     }
 
     @Override

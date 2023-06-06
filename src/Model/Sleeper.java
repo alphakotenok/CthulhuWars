@@ -12,12 +12,28 @@ class Sleeper extends Faction {
         super(name, faction, core);
         ArrayList<Image> entityIcons = Faction.getEntityImages(new ArrayList<>(
                 Arrays.asList("Acolyte (orange)", "Wizard", "Serpent Man", "Formless Spawn", "Tsathoggua")));
-        entitySetsList.add(new EntitySet(core, "Cultist", Category.Cultist, faction, entityIcons.get(0), 6, EntitySet.constFunc(0), EntitySet.constFunc(0)));
-        entitySetsList.add(new EntitySet(core, "Wizard", Category.Monster, faction, entityIcons.get(1), 2, EntitySet.constFunc(0), EntitySet.constFunc(0)));
-        entitySetsList.add(new EntitySet(core, "Serpent Man", Category.Monster, faction, entityIcons.get(2), 3, EntitySet.constFunc(0), EntitySet.constFunc(0)));
-        entitySetsList.add(new EntitySet(core, "Formless Spawn", Category.Monster, faction, entityIcons.get(3), 4, EntitySet.constFunc(0), EntitySet.constFunc(0)));
-        entitySetsList.add(new EntitySet(core, "Tsathoggua", Category.GOO, faction, entityIcons.get(4), 1, EntitySet.constFunc(0), EntitySet.constFunc(0)));
+        entitySetsList.add(new EntitySet(core, "Cultist", Category.Cultist, faction, entityIcons.get(0), 6,
+                EntitySet.constFunc(1), EntitySet.constFunc(0)));
+        entitySetsList.add(new EntitySet(core, "Wizard", Category.Monster, faction, entityIcons.get(1), 2,
+                EntitySet.constFunc(1), EntitySet.constFunc(0)));
+        entitySetsList.add(new EntitySet(core, "Serpent Man", Category.Monster, faction, entityIcons.get(2), 3,
+                EntitySet.constFunc(2), EntitySet.constFunc(1)));
+        entitySetsList.add(new EntitySet(core, "Formless Spawn", Category.Monster, faction, entityIcons.get(3), 4,
+                EntitySet.constFunc(3), Sleeper::getCombatSpawn));
+        entitySetsList.add(new EntitySet(core, "Tsathoggua", Category.GOO, faction, entityIcons.get(4), 1,
+                EntitySet.constFunc(8), Sleeper::getCombatTsathoggua));
         getEntitySetByName("Cultist").iconOnGate = Core.getImage("images/Entities/Gates with Acolyte (orange).png");
+    }
+
+    static int getCombatSpawn(Core core) {
+        return core.factionBase.getFactionFromEnum(FactionType.BlackGoat).getEntitySetByName("Formless Spawn").positions
+                .size()
+                + core.factionBase.getFactionFromEnum(FactionType.BlackGoat).getEntitySetByName("Tsathoggua").positions
+                        .size();
+    }
+
+    static int getCombatTsathoggua(Core core) {
+        return 0;
     }
 
     @Override
