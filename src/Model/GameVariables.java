@@ -27,6 +27,8 @@ class GameVariables {
     int firstCultistToKillByBlackGoat = 0;
     int secondCultistToKillByBlackGoat = 0;
     int chosenFaction = 0;
+    int numOfCtulhuAwakes = 0;
+    Location battleLocation;
     boolean didBlackGoatKillTwoCultists = false;
     boolean loseEnergy4 = false, loseEnergy6 = false;
     boolean didRitualSleeper = false;
