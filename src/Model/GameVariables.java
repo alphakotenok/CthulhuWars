@@ -24,9 +24,16 @@ class GameVariables {
     int bookNum;
     ArrayList<Integer> firstPlayerCandidates;
     int signToReveal;
-    int firstCultistToKillByBlackGoat;
-    int secondCultistToKillByBlackGoat;
-    boolean didBlackGoatKillTwoCultists;
+    int firstCultistToKillByBlackGoat = 0;
+    int secondCultistToKillByBlackGoat = 0;
+    int chosenFaction = 0;
+    boolean didBlackGoatKillTwoCultists = false;
+    boolean loseEnergy4 = false, loseEnergy6 = false;
+    boolean didRitualSleeper = false;
+    boolean did3EnergyLoseAnd1EnergyForOthersGet = false;
+    boolean did3EnergyLoseAnd3EnergyPresent = false;
+    boolean did3EnergyAnd1EnergyForOthersLose = false;
+    boolean didCrawlingChaosCaptureCultist = false;
 
     enum PerformableAction {
         None, Move, Spawn, GateBuilding, Capture, Extra

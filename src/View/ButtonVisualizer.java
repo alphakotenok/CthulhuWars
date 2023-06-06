@@ -187,7 +187,7 @@ public class ButtonVisualizer {
             commandButton[commandID].setPrefHeight(thisHeight);
             commandButton[commandID].setLayoutY((commandID + 1) * thisHeight);
             commandButton[commandID].setPrefWidth(Variables.SCREEN_WIDTH * (1 - Variables.PROCENT));
-            commandButton[commandID].setLayoutX(Variables.SCREEN_WIDTH - 300);
+            commandButton[commandID].setLayoutX(Variables.SCREEN_WIDTH * Variables.PROCENT);
             commandButton[commandID].setFont(Font.font("Arial", 25));
             commandButton[commandID].setWrapText(true);
             commandButton[commandID].setOnAction(new CommandButton(commandID));

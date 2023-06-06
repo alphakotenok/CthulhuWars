@@ -29,4 +29,32 @@ class Sleeper extends Faction {
         books.add(new Book(4, FactionType.Sleeper, "Demand Sacrifice"));
         books.add(new Book(5, FactionType.Sleeper, "Energy Nexus"));
     }
+
+    @Override
+    boolean isQuestCompleted(int questNum) {
+        if (questNum == 0) {
+            return core.var.did3EnergyLoseAnd3EnergyPresent;
+        }
+
+        if (questNum == 1) {
+            return core.var.did3EnergyLoseAnd1EnergyForOthersGet;
+        }
+
+        if (questNum == 2) {
+            return core.var.did3EnergyAnd1EnergyForOthersLose;
+        }
+
+        if (questNum == 3) {
+
+        }
+
+        if (questNum == 4) {
+            return core.var.didRitualSleeper;
+        }
+
+        if (questNum == 5) {
+            return (getEntitySetByName("Tsathoggua").positions.size() != 0);
+        }
+        return false;
+    }
 }

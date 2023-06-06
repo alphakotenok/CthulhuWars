@@ -46,13 +46,14 @@ class Faction {
     }
 
     boolean isQuestCompletedEarlier(int questNum) {
-        for(Book book : books)
-        if(book.openBook == questNum) return true;
+        for (Book book : books)
+            if (book.openBook == questNum)
+                return true;
         return false;
     }
 
     boolean isQuestCompleted(int questNum) {
-        return true;
+        return false;
     }
 
     void getElderSign() {

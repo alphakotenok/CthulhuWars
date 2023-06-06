@@ -29,4 +29,69 @@ class OpenerOfTheWay extends Faction {
         books.add(new Book(4, FactionType.OpenerOfTheWay, "The Million Favored Ones"));
         books.add(new Book(5, FactionType.OpenerOfTheWay, "They Break Through"));
     }
+
+    @Override
+    boolean isQuestCompleted(int questNum) {
+        if (questNum < 2) {
+            int count = 0;
+            for (Location location : core.map.locations) {
+                if (core.gates.isGateControlled(location) == true) {
+                    count++;
+                }
+            }
+            if (getEntitySetByName("Yog-Sothoth").positions.size() != 0)
+                count++;
+            if (questNum == 0 && count >= 8)
+                return true;
+            if (questNum == 1 && count >= 12)
+                return true;
+
+        }
+
+        if (questNum == 2) {
+            int count = 0;
+            for (Location location : core.map.locations) {
+                if (core.gates.isGateControlled(location) == true
+                        && core.gates.getGateController(location).faction != FactionType.OpenerOfTheWay
+                        && getEntitiesInLocation(location).size() != 0) {
+                    count++;
+                }
+            }
+            if (count >= 2) {
+                return true;
+            }
+        }
+
+        if (questNum == 3) {
+
+        }
+
+        if (questNum == 4) {
+            ArrayList<FactionType> factions = core.var.factionsList;
+            for (FactionType faction : factions) {
+                for (EntitySet entityOpenerOfTheWay : entitySetsList) {
+                    if (entityOpenerOfTheWay.category == Category.GOO) {
+                        for (Location locationOpenerOfTheWay : entityOpenerOfTheWay.positions) {
+                            if (faction != FactionType.OpenerOfTheWay) {
+                                for (EntitySet entity : core.factionBase.getFactionFromEnum(faction).entitySetsList) {
+                                    if (entity.category == Category.GOO) {
+                                        for (Location location : entity.positions) {
+                                            if (location == locationOpenerOfTheWay)
+                                                return true;
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (questNum == 5) {
+            return (getEntitySetByName("Yog-Sothoth").positions.size() != 0);
+        }
+        return false;
+    }
 }
