@@ -144,6 +144,15 @@ class Faction {
         return ans;
     }
 
+    int totalCombat(){
+        ArrayList<EntitySet> entities = getEntitiesInLocation(core.var.battleLocation);
+        int combat = 0;
+        for(EntitySet entity: entities){
+            combat += entity.combatFunc.activate(core);
+        }
+        return combat;
+    }
+
     boolean canSummonGOO() {
         return true;
     }
