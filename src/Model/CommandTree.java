@@ -57,7 +57,7 @@ class CommandTree {
     Node chooseEntityToMoveNode = new Node(NodeNameTreeFunctions.constName("Choose Unit to move for 1 enegry"));
     Node chooseLocationToMoveNode = new Node(NodeNameTreeFunctions.constName("Choose destination"));
     Node chooseLocationToBuildGate = new Node(
-            NodeNameTreeFunctions.constName("Choose where to build a Gate for 3 energy"));
+            NodeNameTreeFunctions.constName("Choose where to build a Gate for 3 power"));
     Node chooseEntityToSpawnNode = new Node(NodeNameTreeFunctions.constName("Choose Unit to spawn"));
     Node chooseLocationToSpawnNode = new Node(NodeNameTreeFunctions.constName("Choose where to spawn"));
     Node captureNode = new Node(NodeNameTreeFunctions.constName("Choose Unit to capture"));
@@ -120,13 +120,13 @@ class CommandTree {
                         .combine(EdgeCreatorTreeChecker::canSpend3EnergySleeper,
                                 EdgeCreatorTreeChecker.isFirstAction(3)));
         actionChooseNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::justOne,
-                EdgeNameTreeFunctions.constName("Pass and lose remaining energy"), AccumulatorTreeFunctions::none,
+                EdgeNameTreeFunctions.constName("Pass and lose remaining power"), AccumulatorTreeFunctions::none,
                 EdgeTreeFunctions::passTurn,
                 EdgeCreatorTreeChecker.combine(
                         EdgeCreatorTreeChecker.opposite(EdgeCreatorTreeChecker::isLastPlayerDoing),
                         EdgeCreatorTreeChecker.opposite(EdgeCreatorTreeChecker::isActionPerformed)));
         actionChooseNode.addEdgeCreator(firstPlayerSelectionNode, DataGeneratorTreeFunctions::justOne,
-                EdgeNameTreeFunctions.constName("Pass and lose remaining energy"), AccumulatorTreeFunctions::none,
+                EdgeNameTreeFunctions.constName("Pass and lose remaining power"), AccumulatorTreeFunctions::none,
                 EdgeTreeFunctions::lastPassTurn,
                 EdgeCreatorTreeChecker.combine(EdgeCreatorTreeChecker::isLastPlayerDoing,
                         EdgeCreatorTreeChecker.opposite(EdgeCreatorTreeChecker::isActionPerformed)));
@@ -429,7 +429,7 @@ class EdgeNameTreeFunctions {
 
     static String spawnEntityName(ArrayList<Integer> data, Core core) {
         return core.getCurFact().entitySetsList.get(data.get(0)).name + " for "
-                + core.getCurFact().entitySetsList.get(data.get(0)).costFunc.activate(core) + " energy";
+                + core.getCurFact().entitySetsList.get(data.get(0)).costFunc.activate(core) + " power";
     }
 
     static String mulitFactionalFullEntityName(ArrayList<Integer> data, Core core) {
