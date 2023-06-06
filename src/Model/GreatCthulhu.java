@@ -17,11 +17,11 @@ class GreatCthulhu extends Faction {
         entitySetsList.add(new EntitySet(core, "Deep One", Category.Monster, faction, entityIcons.get(1), 4, EntitySet.constFunc(1), EntitySet.constFunc(1)));
         entitySetsList.add(new EntitySet(core, "Shoggoth", Category.Monster, faction, entityIcons.get(2), 4, EntitySet.constFunc(2), EntitySet.constFunc(2)));
         entitySetsList.add(new EntitySet(core, "Star Spawn", Category.Monster, faction, entityIcons.get(3), 2, EntitySet.constFunc(3), EntitySet.constFunc(3)));
-        entitySetsList.add(new EntitySet(core, "Cthulhu", Category.GOO, faction, entityIcons.get(4), 1, EntitySet.constFunc(0), GreatCthulhu::getCombatCtulhu));
+        entitySetsList.add(new EntitySet(core, "Cthulhu", Category.GOO, faction, entityIcons.get(4), 1, GreatCthulhu::getCostCtulhu, EntitySet.constFunc(6)));
         getEntitySetByName("Cultist").iconOnGate = Core.getImage("images/Entities/Gates with Acolyte (green).png");
     }
 
-    static int getCombatCtulhu(Core core) {
+    static int getCostCtulhu(Core core) {
         if(core.var.numOfCtulhuAwakes == 0){
             core.var.numOfCtulhuAwakes ++;
             return 10;
