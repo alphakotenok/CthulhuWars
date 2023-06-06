@@ -39,17 +39,18 @@ class EntitySet {
     }
 
     FactionType faction;
-
     Image icon;
     Image iconOnGate;
 
-    EntitySet(Core core, String name, Category category, FactionType faction, Image icon, int limit) {
+    EntitySet(Core core, String name, Category category, FactionType faction, Image icon, int limit, IntFunctionContainer costFunc, IntFunctionContainer combatFunc) {
         this.name = name;
         this.category = category;
         this.faction = faction;
         this.icon = icon;
         this.limit = limit;
         this.core = core;
+        this.costFunc = costFunc;
+        this.combatFunc = combatFunc;
     }
 
     void move(Location from, Location to) {

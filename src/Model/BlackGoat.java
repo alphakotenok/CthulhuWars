@@ -12,18 +12,41 @@ class BlackGoat extends Faction {
         super(name, faction, core);
         ArrayList<Image> entityIcons = Faction.getEntityImages(new ArrayList<>(
                 Arrays.asList("Acolyte (red)", "Ghoul", "Fungi from Yuggoth", "Dark Young", "Shub-Niggurath")));
-        entitySetsList.add(new EntitySet(core, "Cultist", Category.Cultist, faction, entityIcons.get(0), 6));
-        entitySetsList.add(new EntitySet(core, "Ghoul", Category.Monster, faction, entityIcons.get(1), 2));
-        entitySetsList.add(new EntitySet(core, "Fungi from Yuggoth", Category.Monster, faction, entityIcons.get(2), 4));
-        entitySetsList.add(new EntitySet(core, "Dark Young", Category.Monster, faction, entityIcons.get(3), 3));
-        entitySetsList.add(new EntitySet(core, "Shub-Niggurath", Category.GOO, faction, entityIcons.get(4), 1));
+        entitySetsList.add(new EntitySet(core, "Cultist", Category.Cultist, faction, entityIcons.get(0), 6, EntitySet.constFunc(1), BlackGoat::getCombatCultist));
+        entitySetsList.add(new EntitySet(core, "Ghoul", Category.Monster, faction, entityIcons.get(1), 2, BlackGoat::getCostGhoul, EntitySet.constFunc(0)));
+        entitySetsList.add(new EntitySet(core, "Fungi from Yuggoth", Category.Monster, faction, entityIcons.get(2), 4, BlackGoat::getCostFungi, EntitySet.constFunc(1)));
+        entitySetsList.add(new EntitySet(core, "Dark Young", Category.Monster, faction, entityIcons.get(3), 3, BlackGoat::getCostDark, EntitySet.constFunc(2)));
+        entitySetsList.add(new EntitySet(core, "Shub-Niggurath", Category.GOO, faction, entityIcons.get(4), 1, EntitySet.constFunc(8), BlackGoat::getCombatShubNiggurath));
         getEntitySetByName("Cultist").iconOnGate = Core.getImage("images/Entities/Gates with Acolyte (red).png");
         getEntitySetByName("Dark Young").iconOnGate = Core.getImage("images/Entities/Gates with Dark Young.png");
     }
 
     static int getCombatShubNiggurath(Core core) {
-        return core.factionBase.getFactionFromEnum(FactionType.BlackGoat).getEntitySetByName("Cultist").positions.size()
+        int combat = core.factionBase.getFactionFromEnum(FactionType.BlackGoat).getEntitySetByName("Cultist").positions.size()
                 + core.gates.getNumOfControlledGates(FactionType.BlackGoat);
+        if(core.factionBase.getFactionFromEnum(FactionType.BlackGoat).isBookOpened(4)) 
+            combat += core.factionBase.getFactionFromEnum(FactionType.BlackGoat).getEntitySetByName("Dark Young").positions.size();
+        return combat;
+    }
+
+    static int getCombatCultist(Core core){
+        if(core.factionBase.getFactionFromEnum(FactionType.BlackGoat).isBookOpened(1)) return 1;
+        return 0;
+    }
+
+    static int getCostGhoul(Core core){
+        if(core.factionBase.getFactionFromEnum(FactionType.BlackGoat).isBookOpened(5)) return 0;
+        return 1;
+    }
+
+    static int getCostFungi(Core core){
+        if(core.factionBase.getFactionFromEnum(FactionType.BlackGoat).isBookOpened(5)) return 1;
+        return 2;
+    }
+
+    static int getCostDark(Core core){
+        if(core.factionBase.getFactionFromEnum(FactionType.BlackGoat).isBookOpened(5)) return 2;
+        return 3;
     }
 
     @Override
