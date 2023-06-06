@@ -97,10 +97,9 @@ class CommandTree {
                 EdgeCreatorTreeChecker.combine(EdgeCreatorTreeChecker.isFirstAction(0),
                         EdgeCreatorTreeChecker::canBlackGoatKill));
 
-
         actionChooseNode.addMover(attackLocationNode, "Attack",
                 EdgeCreatorTreeChecker::canAttack);
-        
+
         actionChooseNode.addEdgeCreator(actionChooseNode, DataGeneratorTreeFunctions::justOne,
                 EdgeNameTreeFunctions.constName("Spend 4 power to get the spellbook"), AccumulatorTreeFunctions::none,
                 EdgeTreeFunctions::loseEnergy4, EdgeCreatorTreeChecker.combine(EdgeCreatorTreeChecker.isFirstAction(4),
@@ -201,22 +200,19 @@ class CommandTree {
                 EdgeNameTreeFunctions::mulitFactionalFullEntityName, AccumulatorTreeFunctions::accumulateCapture,
                 EdgeTreeFunctions::captureEntity, EdgeCreatorTreeChecker::always);
 
-
         attackLocationNode.addEdgeCreator(attackFactionNode, DataGeneratorTreeFunctions::generateLocationsToAttack,
                 EdgeNameTreeFunctions::possibleLocationName, AccumulatorTreeFunctions::accumulateBattleLocation,
-                EdgeTreeFunctions::none, EdgeCreatorTreeChecker::always); 
-                
-        attackFactionNode.addEdgeCreator(firstAttackPreNode, DataGeneratorTreeFunctions::generateFactionsToAttack, EdgeNameTreeFunctions::factionName, 
-        AccumulatorTreeFunctions::accumulateFaction, EdgeTreeFunctions::none, EdgeCreatorTreeChecker::always);
+                EdgeTreeFunctions::none, EdgeCreatorTreeChecker::always);
+
+        attackFactionNode.addEdgeCreator(firstAttackPreNode, DataGeneratorTreeFunctions::generateFactionsToAttack,
+                EdgeNameTreeFunctions::factionName,
+                AccumulatorTreeFunctions::accumulateFaction, EdgeTreeFunctions::none, EdgeCreatorTreeChecker::always);
         firstAttackPreNode.addMover(secondAttackPreNode, "Done", EdgeCreatorTreeChecker::always);
         secondAttackPreNode.addMover(firstThrowsDiceNode, "Done", EdgeCreatorTreeChecker::always);
 
         attackLocationNode.addMover(actionChooseNode, "Cancel", EdgeCreatorTreeChecker::always);
 
         attackFactionNode.addMover(attackLocationNode, "Cancel", EdgeCreatorTreeChecker::always);
-
-
-
 
         blackGoatKillTwoCultistsNode.addMover(actionChooseNode, "Cancel", EdgeCreatorTreeChecker::always);
         blackGoatKillTwoCultistsNode.addEdgeCreator(actionChooseNode,
@@ -409,23 +405,27 @@ class NodeNameTreeFunctions {
         return core.getCurFact().name + " Elder Signs";
     }
 
-    static String firstPlayerAttackText(Core core){
+    static String firstPlayerAttackText(Core core) {
         return core.getCurFact().name + " does special pre attack actions";
     }
 
-    static String secondPlayerAttackText(Core core){
+    static String secondPlayerAttackText(Core core) {
         return core.var.factionsList.get(core.var.chosenFaction).name() + " does special pre attack actions";
     }
 
-    static String firstPlayerThrowsDiceText(Core core){
-        String s = core.getCurFact().name + " throws " + core.getCurFact().totalCombat()+ " dice";
-        if(core.getCurFact().totalCombat() > 1) s += "s";
+    static String firstPlayerThrowsDiceText(Core core) {
+        String s = core.getCurFact().name + " throws " + core.getCurFact().totalCombat() + " dice";
+        if (core.getCurFact().totalCombat() > 1)
+            s += "s";
         return s;
     }
-    static String secondPlayerThrowsDiceText(Core core){
-        String s = core.var.factionsList.get(core.var.chosenFaction).name() + " throws " + 
-        core.factionBase.getFactionFromEnum(core.var.factionsList.get(core.var.chosenFaction)).totalCombat()+ " dice";
-        if(core.factionBase.getFactionFromEnum(core.var.factionsList.get(core.var.chosenFaction)).totalCombat() > 1) s += "s";
+
+    static String secondPlayerThrowsDiceText(Core core) {
+        String s = core.var.factionsList.get(core.var.chosenFaction).name() + " throws " +
+                core.factionBase.getFactionFromEnum(core.var.factionsList.get(core.var.chosenFaction)).totalCombat()
+                + " dice";
+        if (core.factionBase.getFactionFromEnum(core.var.factionsList.get(core.var.chosenFaction)).totalCombat() > 1)
+            s += "s";
         return s;
     }
 }
@@ -562,7 +562,7 @@ class EdgeTreeFunctions {
 
     static void nextPlayerMovePreparation(Core core) {
         core.var.locationPossibleToAttack.clear();
-        for(Location loc: core.map.locations){
+        for (Location loc : core.map.locations) {
             core.var.locationPossibleToAttack.add(loc);
         }
         core.var.action = PerformableAction.None;
@@ -922,29 +922,31 @@ class DataGeneratorTreeFunctions {
         ArrayList<ArrayList<Integer>> locationsToAttack = new ArrayList<>();
         ArrayList<FactionType> factions = core.var.factionsList;
         int ind = 0;
-        for(Location loc: core.var.locationPossibleToAttack){
-            if(core.getCurFact().getEntitiesInLocation(loc).size() != 0) {
-                for(FactionType faction: factions){
-                    if(faction != core.getCurFact().faction && core.factionBase.getFactionFromEnum(faction).getEntitiesInLocation(loc).size() != 0){
+        for (Location loc : core.var.locationPossibleToAttack) {
+            if (core.getCurFact().getEntitiesInLocation(loc).size() != 0) {
+                for (FactionType faction : factions) {
+                    if (faction != core.getCurFact().faction
+                            && core.factionBase.getFactionFromEnum(faction).getEntitiesInLocation(loc).size() != 0) {
                         locationsToAttack.add(new ArrayList<>(Arrays.asList(ind)));
                         break;
                     }
                 }
             }
-            ind ++;
+            ind++;
         }
         return locationsToAttack;
     }
 
-    static ArrayList<ArrayList<Integer>> generateFactionsToAttack(Core core){
+    static ArrayList<ArrayList<Integer>> generateFactionsToAttack(Core core) {
         ArrayList<ArrayList<Integer>> factionsToAttack = new ArrayList<>();
         ArrayList<FactionType> factions = core.var.factionsList;
         int ind = 0;
-        for(FactionType faction: factions){
-            if(faction != core.getCurFact().faction && core.factionBase.getFactionFromEnum(faction).getEntitiesInLocation(core.var.battleLocation).size() != 0){
+        for (FactionType faction : factions) {
+            if (faction != core.getCurFact().faction && core.factionBase.getFactionFromEnum(faction)
+                    .getEntitiesInLocation(core.var.battleLocation).size() != 0) {
                 factionsToAttack.add(new ArrayList<>(Arrays.asList(ind)));
             }
-            ind ++;
+            ind++;
         }
         return factionsToAttack;
     }
@@ -1033,11 +1035,12 @@ class EdgeCreatorTreeChecker {
 
     static boolean canAttack(Core core) {
         boolean allBooksOpened = true;
-        for(int i = 0; i < 6; i ++){
-            if(!core.getCurFact().isBookOpened(i)) allBooksOpened = false;
+        for (int i = 0; i < 6; i++) {
+            if (!core.getCurFact().isBookOpened(i))
+                allBooksOpened = false;
         }
         ArrayList<ArrayList<Integer>> loc = DataGeneratorTreeFunctions.generateLocationsToAttack(core);
-        return ((core.var.action == PerformableAction.None && core.getCurFact().energy >= 1) || allBooksOpened) && 
-        loc.size() > 0;
+        return (core.var.action == PerformableAction.None || allBooksOpened) && core.getCurFact().energy >= 1 &&
+                loc.size() > 0;
     }
 }

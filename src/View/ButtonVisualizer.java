@@ -77,6 +77,7 @@ public class ButtonVisualizer {
         for (int countOfPlayers = Variables.MIN_COUNT_OF_PLAYERS; countOfPlayers <= Variables.MAX_COUNT_OF_PLAYERS; countOfPlayers++) {
             btnCountOfPlyers[countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS] = new Button();
             btnCountOfPlyers[countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS].setText(countOfPlayers + " players");
+            btnCountOfPlyers[countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS].setFont(Font.font("Arial", 32));
             btnCountOfPlyers[countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS].setPrefHeight(thisHeight);
             btnCountOfPlyers[countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS]
                     .setLayoutY((countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS) * thisHeight);
