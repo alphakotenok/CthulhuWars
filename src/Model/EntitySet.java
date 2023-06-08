@@ -71,6 +71,12 @@ class EntitySet {
         core.var.action = PerformableAction.Move;
     }
 
+    void performMovementInjured(Location from, Location to) {
+        move(from, to);
+        moved.add(to);
+
+    }
+
     int countInLocation(Location loc) {
         int ans = 0;
         for (Location l : positions) {
