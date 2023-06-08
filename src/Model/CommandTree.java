@@ -69,6 +69,13 @@ class CommandTree {
     Node secondAttackPreNode = new Node(NodeNameTreeFunctions::secondPlayerAttackText);
     Node firstThrowsDiceNode = new Node(NodeNameTreeFunctions::firstPlayerThrowsDiceText);
     Node secondThrowsDiceNode = new Node(NodeNameTreeFunctions::secondPlayerThrowsDiceText);
+    Node resultThrowingDiceNode = new Node(NodeNameTreeFunctions::resultThrowsText);
+    Node firstPlayerKillEntityNode = new Node(NodeNameTreeFunctions::firstPlayerKillEntityText);
+    Node secondPlayerKillEntityNode = new Node(NodeNameTreeFunctions::secondPlayerKillEntityText);
+    Node firstPlayerInjureEntityNode = new Node(NodeNameTreeFunctions::firstPlayerInjureEntityText);
+    Node secondPlayerInjureEntityNode = new Node(NodeNameTreeFunctions::secondPlayerInjureEntityText);
+    Node firstPlayerInjurePositionNode = new Node(NodeNameTreeFunctions.constName("Choose position to move"));
+    Node secondPlayerInjurePositionNode = new Node(NodeNameTreeFunctions.constName("Choose position to move"));
 
     void prepareEdgeCreators() {
         openBookNode.addEdgeCreator(null, DataGeneratorTreeFunctions::booksToOpen,
@@ -209,6 +216,37 @@ class CommandTree {
                 AccumulatorTreeFunctions::accumulateFaction, EdgeTreeFunctions::none, EdgeCreatorTreeChecker::always);
         firstAttackPreNode.addMover(secondAttackPreNode, "Done", EdgeCreatorTreeChecker::always);
         secondAttackPreNode.addMover(firstThrowsDiceNode, "Done", EdgeCreatorTreeChecker::always);
+
+        firstThrowsDiceNode.addMover(secondThrowsDiceNode, "Throw", EdgeCreatorTreeChecker::always);
+        secondThrowsDiceNode.addMover(resultThrowingDiceNode, "Throw", EdgeCreatorTreeChecker::always);
+        resultThrowingDiceNode.addMover(firstPlayerKillEntityNode, "Next", EdgeCreatorTreeChecker::always);
+
+        firstPlayerKillEntityNode.addEdgeCreator(firstPlayerKillEntityNode,
+                DataGeneratorTreeFunctions::generateEntitiesFirstPlayer,
+                EdgeNameTreeFunctions::entityToKillFirstPlayerName, AccumulatorTreeFunctions::accumulateEntityToKill,
+                EdgeTreeFunctions::entityToKillFirstPlayer, EdgeCreatorTreeChecker::canKillEntityFirstPlayer);
+        firstPlayerKillEntityNode.addMover(secondPlayerKillEntityNode, "Done",
+                EdgeCreatorTreeChecker.opposite(EdgeCreatorTreeChecker::canKillEntityFirstPlayer));
+
+        secondPlayerKillEntityNode.addEdgeCreator(secondPlayerKillEntityNode,
+                DataGeneratorTreeFunctions::generateEntitiesSecondPlayer,
+                EdgeNameTreeFunctions::entityToKillSecondPlayerName, AccumulatorTreeFunctions::accumulateEntityToKill,
+                EdgeTreeFunctions::entityToKillSecondPlayer, EdgeCreatorTreeChecker::canKillEntitySecondPlayer);
+        secondPlayerKillEntityNode.addMover(firstPlayerInjureEntityNode, "Done",
+                EdgeCreatorTreeChecker.opposite(EdgeCreatorTreeChecker::canKillEntitySecondPlayer));
+
+        firstPlayerInjureEntityNode.addEdgeCreator(firstPlayerInjurePositionNode,
+                DataGeneratorTreeFunctions::generateEntitiesFirstPlayer,
+                EdgeNameTreeFunctions::entityToKillFirstPlayerName, AccumulatorTreeFunctions::accumulateEntityToKill,
+                EdgeTreeFunctions::none, EdgeCreatorTreeChecker::canInjureEntityFirstPlayer);
+        firstPlayerInjureEntityNode.addMover(secondPlayerInjureEntityNode, "Done",
+                EdgeCreatorTreeChecker.opposite(EdgeCreatorTreeChecker::canInjureEntityFirstPlayer));
+
+        firstPlayerInjurePositionNode.addEdgeCreator(firstPlayerInjureEntityNode,
+                DataGeneratorTreeFunctions::generatePositionsFirstPlayer,
+                EdgeNameTreeFunctions::PositionToInjureFirstPlayerName,
+                AccumulatorTreeFunctions::accumulateDestinationFirstPlayer,
+                EdgeTreeFunctions::performMoveInjureFirstPlayer, EdgeCreatorTreeChecker::canInjurePositionFirstPlayer);
 
         attackLocationNode.addMover(actionChooseNode, "Cancel", EdgeCreatorTreeChecker::always);
 
@@ -428,6 +466,40 @@ class NodeNameTreeFunctions {
             s += "s";
         return s;
     }
+
+    static String resultThrowsText(Core core) {
+        int amountFirst = core.getCurFact().totalCombat();
+        int amountSecond = core.factionBase.getFactionFromEnum(core.var.factionsList.get(core.var.chosenFaction))
+                .totalCombat();
+        core.var.throwDice(1, amountFirst);
+        core.var.throwDice(2, amountSecond);
+        String s = core.getCurFact().name + " kills " + core.var.firstPlayerKill + ", injures "
+                + core.var.firstPlayerInjure + ", misses " + core.var.firstPlayerNothing
+                + "; " + core.var.factionsList.get(core.var.chosenFaction).name() + " kills "
+                + core.var.secondPlayerKill
+                + ", injures " + core.var.secondPlayerInjure + ", misses " + core.var.secondPlayerNothing;
+        return s;
+    }
+
+    static String firstPlayerKillEntityText(Core core) {
+        String s = core.getCurFact().name + " kills his entity";
+        return s;
+    }
+
+    static String secondPlayerKillEntityText(Core core) {
+        String s = core.var.factionsList.get(core.var.chosenFaction).name() + " kills his entity";
+        return s;
+    }
+
+    static String firstPlayerInjureEntityText(Core core) {
+        String s = core.getCurFact().name + " injures his entity";
+        return s;
+    }
+
+    static String secondPlayerInjureEntityText(Core core) {
+        String s = core.var.factionsList.get(core.var.chosenFaction).name() + " injures his entity";
+        return s;
+    }
 }
 
 class EdgeNameTreeFunctions {
@@ -490,6 +562,18 @@ class EdgeNameTreeFunctions {
                 + core.map.locations.get(data.get(0)).name;
     }
 
+    static String entityToKillFirstPlayerName(ArrayList<Integer> data, Core core) {
+        return core.getCurFact().getEntitiesInLocation(core.var.battleLocation).get(data.get(0)).name;
+    }
+
+    static String entityToKillSecondPlayerName(ArrayList<Integer> data, Core core) {
+        return core.factionBase.getFactionFromEnum(core.var.factionsList.get(core.var.chosenFaction))
+                .getEntitiesInLocation(core.var.battleLocation).get(data.get(0)).name;
+    }
+
+    static String PositionToInjureFirstPlayerName(ArrayList<Integer> data, Core core) {
+        return core.var.battleLocation.adj.get(data.get(0)).name;
+    }
 }
 
 class AccumulatorTreeFunctions {
@@ -553,8 +637,16 @@ class AccumulatorTreeFunctions {
         core.var.secondCultistToKillByBlackGoat = data.get(1);
     }
 
+    static void accumulateEntityToKill(ArrayList<Integer> data, Core core) {
+        core.var.entityToKill = data.get(0);
+    }
+
     static void accumulateFaction(ArrayList<Integer> data, Core core) {
         core.var.chosenFaction = data.get(0);
+    }
+
+    static void accumulateDestinationFirstPlayer(ArrayList<Integer> data, Core core) {
+        core.var.chosenDestination = core.var.battleLocation.adj.get(data.get(0));
     }
 }
 
@@ -761,6 +853,29 @@ class EdgeTreeFunctions {
         core.var.action = PerformableAction.Extra;
         core.var.did3EnergyAnd1EnergyForOthersLose = true;
     }
+
+    static void entityToKillFirstPlayer(Core core) {
+        EntitySet entity = core.getCurFact().getEntitiesInLocation(core.var.battleLocation).get(core.var.entityToKill);
+        entity.kill(core.var.battleLocation);
+        core.var.firstPlayerKill--;
+    }
+
+    static void entityToKillSecondPlayer(Core core) {
+        EntitySet entity = core.factionBase.getFactionFromEnum(core.var.factionsList.get(core.var.chosenFaction))
+                .getEntitiesInLocation(core.var.battleLocation).get(core.var.entityToKill);
+        entity.kill(core.var.battleLocation);
+        core.var.secondPlayerKill--;
+    }
+
+    static void performMoveInjureFirstPlayer(Core core) {
+        core.var.chosenEntity.performMovement(core.var.battleLocation, core.var.chosenDestination);
+        core.var.firstPlayerInjure--;
+    }
+
+    static void performMoveInjureSecondPlayer(Core core) {
+        core.var.chosenEntity.performMovement(core.var.battleLocation, core.var.chosenDestination);
+        core.var.secondPlayerInjure--;
+    }
 }
 
 class DataGeneratorTreeFunctions {
@@ -950,6 +1065,36 @@ class DataGeneratorTreeFunctions {
         }
         return factionsToAttack;
     }
+
+    static ArrayList<ArrayList<Integer>> generateEntitiesFirstPlayer(Core core) {
+        ArrayList<ArrayList<Integer>> entityToKill = new ArrayList<>();
+        for (int i = 0; i < core.getCurFact().getEntitiesInLocation(core.var.battleLocation).size(); i++) {
+            entityToKill.add(new ArrayList<>(Arrays.asList(i)));
+        }
+        return entityToKill;
+    }
+
+    static ArrayList<ArrayList<Integer>> generateEntitiesSecondPlayer(Core core) {
+        ArrayList<ArrayList<Integer>> entityToKill = new ArrayList<>();
+        for (int i = 0; i < core.factionBase.getFactionFromEnum(core.var.factionsList.get(core.var.chosenFaction))
+                .getEntitiesInLocation(core.var.battleLocation).size(); i++) {
+            entityToKill.add(new ArrayList<>(Arrays.asList(i)));
+        }
+        return entityToKill;
+    }
+
+    static ArrayList<ArrayList<Integer>> generatePositionsFirstPlayer(Core core) {
+        ArrayList<ArrayList<Integer>> positionsToMove = new ArrayList<>();
+        int ind = 0;
+        for (Location location : core.var.battleLocation.adj) {
+            if (core.factionBase.getFactionFromEnum(core.var.factionsList.get(core.var.chosenFaction))
+                    .getEntitiesInLocation(location).size() == 0)
+                positionsToMove.add(new ArrayList<>(Arrays.asList(ind)));
+
+            ind++;
+        }
+        return positionsToMove;
+    }
 }
 
 class EdgeCreatorTreeChecker {
@@ -1042,5 +1187,31 @@ class EdgeCreatorTreeChecker {
         ArrayList<ArrayList<Integer>> loc = DataGeneratorTreeFunctions.generateLocationsToAttack(core);
         return (core.var.action == PerformableAction.None || allBooksOpened) && core.getCurFact().energy >= 1 &&
                 loc.size() > 0;
+    }
+
+    static boolean canKillEntityFirstPlayer(Core core) {
+        return core.getCurFact().getEntitiesInLocation(core.var.battleLocation).size() > 0
+                && core.var.firstPlayerKill > 0;
+    }
+
+    static boolean canInjureEntityFirstPlayer(Core core) {
+        return core.getCurFact().getEntitiesInLocation(core.var.battleLocation).size() > 0
+                && core.var.firstPlayerInjure > 0;
+    }
+
+    static boolean canInjureEntitySecondPlayer(Core core) {
+        return core.factionBase.getFactionFromEnum(core.var.factionsList.get(core.var.chosenFaction))
+                .getEntitiesInLocation(core.var.battleLocation).size() > 0
+                && core.var.secondPlayerInjure > 0;
+    }
+
+    static boolean canKillEntitySecondPlayer(Core core) {
+        return core.factionBase.getFactionFromEnum(core.var.factionsList.get(core.var.chosenFaction))
+                .getEntitiesInLocation(core.var.battleLocation).size() > 0
+                && core.var.secondPlayerKill > 0;
+    }
+
+    static boolean canInjurePositionFirstPlayer(Core core) {
+        return DataGeneratorTreeFunctions.generatePositionsFirstPlayer(core).size() > 0;
     }
 }
