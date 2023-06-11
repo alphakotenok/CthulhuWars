@@ -10,41 +10,7 @@ This is an implementation of the Cthulhu Wars board game.
 4. Create launch.json file in .vscode folder with the following text:
 ```
 {
-    "version": "0.1.0",
     "configurations": [
-        {
-            "name": "Java",
-            "type": "java",
-            "request": "launch",
-            "stopOnEntry": true,
-            "jdkPath": "${env:JAVA_HOME}/bin",
-            "cwd": "${fileDirname}",
-            "startupClass": "${fileBasenameNoExtension}",
-            "classpath": [
-                ".",
-                "${fileDirname}"
-            ]
-        },
-        {
-            "name": "Java Console App",
-            "type": "java",
-            "request": "launch",
-            "stopOnEntry": true,
-            "jdkPath": "${env:JAVA_HOME}/bin",
-            "cwd": "${fileDirname}",
-            "startupClass": "${fileBasenameNoExtension}",
-            "classpath": [
-                ".",
-                "${fileDirname}"
-            ],
-            "externalConsole": true
-        },
-        {
-            "type": "java",
-            "name": "Current File",
-            "request": "launch",
-            "mainClass": "${file}"
-        },
         {
             "type": "java",
             "name": "App",
