@@ -80,4 +80,4 @@ Be sure to put the correct path to the javafx-sdk
 Be sure to put the correct path to the javafx-sdk
 
 6. Dowload the default java pack in VS code
-7. Run the project
+7. Run the project in the "App" configuration
