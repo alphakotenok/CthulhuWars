@@ -4,7 +4,7 @@ This is an implementation of the Cthulhu Wars board game.
 
 ## How to compile using Visual Studio Code
 
-1. Download javaFX library
+1. Download javaFX SDK library from https://gluonhq.com/products/javafx/
 2. Copy the project from the repository
 3. Add .vscode folder to the local project folder
 4. Create launch.json file in .vscode folder with the following text:
