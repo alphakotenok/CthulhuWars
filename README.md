@@ -8,7 +8,7 @@ This is an implementation of the Cthulhu Wars board game.
 2. Copy the project from the repository
 3. Add .vscode folder to the local project folder
 4. Create launch.json file in .vscode folder with the following text:
-
+```
 {
     "version": "0.1.0",
     "configurations": [
@@ -54,11 +54,12 @@ This is an implementation of the Cthulhu Wars board game.
         }
     ]
 }
+```
 
 Be sure to put the correct path to the javafx-sdk
 
 5. Create settings.json file in .vscode folder with the following text:
-
+```
 {
     "java.project.sourcePaths": ["src"],
     "java.project.outputPath": "bin",
@@ -75,7 +76,7 @@ Be sure to put the correct path to the javafx-sdk
     ],
     "git.ignoreLimitWarning": true
 }
-
+```
 Be sure to put the correct path to the javafx-sdk
 
 6. Dowload the default java pack in VS code
