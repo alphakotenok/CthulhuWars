@@ -6,7 +6,7 @@ import Model.FactionEnum.FactionType;
 import Model.GameVariables.PerformableAction;
 import javafx.scene.image.Image;
 
-class EntitySet {
+public class EntitySet {
 
     @FunctionalInterface
     static interface IntFunctionContainer {
@@ -69,6 +69,12 @@ class EntitySet {
         move(from, to);
         moved.add(to);
         core.var.action = PerformableAction.Move;
+    }
+
+    void performMovementInjured(Location from, Location to) {
+        move(from, to);
+        moved.add(to);
+
     }
 
     int countInLocation(Location loc) {

@@ -44,4 +44,9 @@ class Windwalker extends Faction {
         books.add(new Book(4, FactionType.Windwalker, "Howl"));
         books.add(new Book(5, FactionType.Windwalker, "Ice Age"));
     }
+
+    @Override
+    boolean isQuestCompleted(int questNum) {
+        return false;
+    }
 }

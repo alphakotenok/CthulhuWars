@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 import Model.EntitySet.Category;
 import Model.FactionEnum.FactionType;
 
-class Faction {
+public abstract class Faction {
 
     String name;
     int energy;
@@ -25,8 +25,9 @@ class Faction {
 
     ArrayList<EntitySet> entitySetsList = new ArrayList<>();
 
-    void fillBooks() {
-    }
+    abstract void fillBooks();
+
+    abstract boolean isQuestCompleted(int questNum);
 
     Faction(String name, FactionType faction, Core core) {
         this.core = core;
@@ -49,10 +50,6 @@ class Faction {
         for (Book book : books)
             if (book.openBook == questNum)
                 return true;
-        return false;
-    }
-
-    boolean isQuestCompleted(int questNum) {
         return false;
     }
 

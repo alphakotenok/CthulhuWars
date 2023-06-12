@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import Model.Core.Coordinates;
 
-class Location {
+public class Location {
     String name;
     ArrayList<Location> adj = new ArrayList<>();
     ArrayList<Segment> segments = new ArrayList<>();

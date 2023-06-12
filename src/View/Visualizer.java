@@ -134,7 +134,6 @@ public class Visualizer {
         Label label = new Label();
         label.setId(partName + " label");
         label.setGraphic(textFlow);
-
         label.setPrefHeight(h);
         label.setLayoutY(y);
         label.setPrefWidth(w);

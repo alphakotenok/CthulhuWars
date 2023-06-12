@@ -60,4 +60,9 @@ class YellowSign extends Faction {
         books.add(new Book(4, FactionType.YellowSign, "The Third Eye"));
         books.add(new Book(5, FactionType.YellowSign, "Zingaya"));
     }
+
+    @Override
+    boolean isQuestCompleted(int questNum) {
+        return false;
+    }
 }

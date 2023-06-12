@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import Model.FactionEnum.FactionType;
 import java.util.concurrent.ThreadLocalRandom;
 
-class GameVariables {
+public class GameVariables {
     int numOfPlayers;
     static int minNumOfPlayers = 2;
     static int maxNumOfPlayers = 6;
@@ -46,7 +46,7 @@ class GameVariables {
     boolean didCrawlingChaosCaptureCultist = false;
     int entityToKill = 0;
 
-    enum PerformableAction {
+    public enum PerformableAction {
         None, Move, Spawn, GateBuilding, Capture, Extra
     }
 

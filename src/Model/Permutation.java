@@ -2,7 +2,7 @@ package Model;
 
 import java.util.ArrayList;
 
-class Permutation {
+public class Permutation {
     public static void swap(ArrayList<Integer> data, int left, int right) {
         Integer temp = data.get(left);
         data.set(left, data.get(right));
