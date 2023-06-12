@@ -14,6 +14,8 @@ import Controler.MiscFunctions;
 import Controler.CommandButton;
 import Model.Variables;
 import Model.FactionEnum.FactionType;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -26,6 +28,18 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 
 public class ButtonVisualizer {
+    public static <T extends EventHandler<ActionEvent>> Button buildButton(double h, double w, double x, double y, String text, T eventHandler) {
+        Button b = new Button();
+        b.setLayoutX(x);
+        b.setLayoutY(y);
+        b.setPrefHeight(h);
+        b.setPrefWidth(w);
+        b.setText(text);
+        b.setOnAction(eventHandler);
+        return b;
+    }
+
+
     public static void rebuildFactionPickButtons(int choosenFaction) {
         int playerID = FactionPickButton.playerID;
         double thisHeight = Variables.SCREEN_HEIGHT / (Variables.NUMBER_OF_FACTIONS + 1);
@@ -52,19 +66,16 @@ public class ButtonVisualizer {
         Button[] gameButton = new Button[countOfPlayers];
         double weight = Variables.SCREEN_WIDTH * Variables.PROCENT / countOfPlayers;
         double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
+        double th = (Variables.SCREEN_HEIGHT - height) / 2;
 
         ArrayList<FactionType> orderFactions = Variables.core.getFactions();
         for (int i = 0; i < countOfPlayers; i++) {
-            gameButton[i] = new Button();
-            gameButton[i].setPrefHeight((Variables.SCREEN_HEIGHT - height) / 2);
-            gameButton[i].setLayoutX(i * weight);
-            gameButton[i].setPrefWidth(weight);
+            gameButton[i] = buildButton(th, weight, i * weight, 0, null, new FactionSheetButton(orderFactions.get(i).ordinal()));
             Image logo = ImageMisc.getFactionLogoImage(orderFactions.get(i));
             ImageView logoView = new ImageView(logo);
-            logoView.setFitHeight((Variables.SCREEN_HEIGHT - height) / 2);
-            logoView.setFitWidth((Variables.SCREEN_HEIGHT - height) / 2);
+            logoView.setFitHeight(th);
+            logoView.setFitWidth(th);
             gameButton[i].setGraphic(logoView);
-            gameButton[i].setOnAction(new FactionSheetButton(orderFactions.get(i).ordinal()));
 
             ActionsMisc.display(gameButton[i]);
         }
@@ -75,16 +86,10 @@ public class ButtonVisualizer {
         double thisHeight = Variables.SCREEN_HEIGHT
                 / (Variables.MAX_COUNT_OF_PLAYERS - Variables.MIN_COUNT_OF_PLAYERS + 1);
         for (int countOfPlayers = Variables.MIN_COUNT_OF_PLAYERS; countOfPlayers <= Variables.MAX_COUNT_OF_PLAYERS; countOfPlayers++) {
-            btnCountOfPlyers[countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS] = new Button();
-            btnCountOfPlyers[countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS].setText(countOfPlayers + " players");
-            btnCountOfPlyers[countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS].setFont(Font.font("Arial", 32));
-            btnCountOfPlyers[countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS].setPrefHeight(thisHeight);
-            btnCountOfPlyers[countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS]
-                    .setLayoutY((countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS) * thisHeight);
-            btnCountOfPlyers[countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS].setPrefWidth(Variables.SCREEN_WIDTH);
-            btnCountOfPlyers[countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS]
-                    .setOnAction(new MenuButton(countOfPlayers));
-
+            int id = countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS;
+            btnCountOfPlyers[id] = buildButton(thisHeight, Variables.SCREEN_WIDTH, 0, 
+                (countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS) * thisHeight, countOfPlayers + " players", new MenuButton(countOfPlayers));
+            btnCountOfPlyers[id].setFont(Font.font("Arial", 32));
             ActionsMisc.display(btnCountOfPlyers[countOfPlayers - Variables.MIN_COUNT_OF_PLAYERS]);
         }
     }
@@ -108,15 +113,10 @@ public class ButtonVisualizer {
         for (int factionId = 0; factionId < Variables.NUMBER_OF_FACTIONS; factionId++) {
             if (FactionPickButton.factionList.contains(MiscFunctions.getFactionByID(factionId)))
                 continue;
-            factionPickButtons[factionId] = new Button();
+            factionPickButtons[factionId] = buildButton(thisHeight, Variables.SCREEN_WIDTH, 0, (id + 1) * thisHeight, 
+                Variables.NAME_OF_FACTIONS[factionId], new FactionPickButton(factionId));
             factionPickButtons[factionId].setTextFill(Variables.COLOR_OF_FACTIONS[factionId]);
-            factionPickButtons[factionId].setText(Variables.NAME_OF_FACTIONS[factionId]);
             factionPickButtons[factionId].setFont(Font.font("Arial", 40));
-            factionPickButtons[factionId].setPrefHeight(thisHeight);
-            factionPickButtons[factionId].setLayoutY((id + 1) * thisHeight);
-            factionPickButtons[factionId].setPrefWidth(Variables.SCREEN_WIDTH);
-            factionPickButtons[factionId]
-                    .setOnAction(new FactionPickButton(factionId));
             id++;
             ActionsMisc.display(factionPickButtons[factionId]);
         }
@@ -141,9 +141,12 @@ public class ButtonVisualizer {
         Button[] commandButton = new Button[countOfCommands];
         for (int idx = 0; idx < countOfCommands; idx++) {
             int orderID = indexes.get(idx);
-            commandButton[idx] = new Button();
+            commandButton[idx] = buildButton(thisHeight, Variables.SCREEN_WIDTH, 0, (idx + 1) * thisHeight, 
+                null, new OrderChooseButton(orderID));
+            
+            ActionsMisc.display(commandButton[idx]);
             TextFlow textFlowFaction = new TextFlow();
-
+            
             for (int faction = 0; faction < orders.get(orderID).length(); faction++) {
                 int factionID = orders.get(orderID).charAt(faction) - '0';
                 Text textEntity1 = new Text(Variables.NAME_OF_FACTIONS[factionID]);
@@ -154,17 +157,12 @@ public class ButtonVisualizer {
                 textEntity2.setFont(Font.font("Arial", 32));
                 textFlowFaction.getChildren().add(textEntity1);
                 if (faction != orders.get(orderID).length() - 1)
-                    textFlowFaction.getChildren().add(textEntity2);
+                textFlowFaction.getChildren().add(textEntity2);
             }
-            textFlowFaction.setTextAlignment(TextAlignment.CENTER);
 
             commandButton[idx].setGraphic(textFlowFaction);
-            commandButton[idx].setPrefHeight(thisHeight);
-            commandButton[idx].setLayoutY((idx + 1) * thisHeight);
-            commandButton[idx].setPrefWidth(Variables.SCREEN_WIDTH);
-            commandButton[idx].setOnAction(new OrderChooseButton(orderID));
+            textFlowFaction.setTextAlignment(TextAlignment.CENTER);
 
-            ActionsMisc.display(commandButton[idx]);
         }
     }
 
@@ -182,16 +180,11 @@ public class ButtonVisualizer {
 
         Button[] commandButton = new Button[commands.size()];
         for (int commandID = 0; commandID < commands.size(); commandID++) {
-            commandButton[commandID] = new Button();
+            commandButton[commandID] = buildButton(thisHeight, Variables.SCREEN_WIDTH * (1 - Variables.PROCENT),
+                Variables.SCREEN_WIDTH * Variables.PROCENT, (commandID + 1) * thisHeight, commands.get(commandID), new CommandButton(commandID));
 
-            commandButton[commandID].setText(commands.get(commandID));
-            commandButton[commandID].setPrefHeight(thisHeight);
-            commandButton[commandID].setLayoutY((commandID + 1) * thisHeight);
-            commandButton[commandID].setPrefWidth(Variables.SCREEN_WIDTH * (1 - Variables.PROCENT));
-            commandButton[commandID].setLayoutX(Variables.SCREEN_WIDTH * Variables.PROCENT);
             commandButton[commandID].setFont(Font.font("Arial", 25));
             commandButton[commandID].setWrapText(true);
-            commandButton[commandID].setOnAction(new CommandButton(commandID));
 
             ActionsMisc.display(commandButton[commandID]);
         }
@@ -200,15 +193,9 @@ public class ButtonVisualizer {
     public static void spellBookButton(int factionID) {
         double width = Variables.SCREEN_WIDTH * Variables.PROCENT;
         double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
-        Button spellBookButton = new Button();
-        spellBookButton.setText("About spellbooks");
+        Button spellBookButton = buildButton(100 * Variables.PROCENT, 300 * Variables.PROCENT, width / 2 + 160 * Variables.PROCENT,
+            (Variables.SCREEN_HEIGHT - height) / 2 + 20 * Variables.PROCENT, "About spellbooks", new SpellBookButton(factionID));
         spellBookButton.setFont(Font.font("Arial", 25));
-        spellBookButton.setPrefHeight(100 * Variables.PROCENT);
-        spellBookButton.setLayoutY((Variables.SCREEN_HEIGHT - height) / 2 + 20 * Variables.PROCENT);
-        spellBookButton.setPrefWidth(300 * Variables.PROCENT);
-        spellBookButton.setLayoutX(width / 2 + 160 * Variables.PROCENT);
-        spellBookButton.setOnAction(new SpellBookButton(factionID));
-
         ActionsMisc.display(spellBookButton);
     }
 }
