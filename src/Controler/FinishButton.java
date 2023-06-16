@@ -1,14 +1,12 @@
 package Controler;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 
-public class FinishButton implements EventHandler<ActionEvent> {
+public class FinishButton extends Button {
     public FinishButton(){
-
-    }
-    @Override
-    public void handle(ActionEvent event) {
-        Game.startGame();
+        setText("Finish game");
+        setOnAction(action -> {
+            Game.startGame();
+        });
     }
 }

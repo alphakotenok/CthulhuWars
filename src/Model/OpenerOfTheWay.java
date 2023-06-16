@@ -7,7 +7,7 @@ import Model.EntitySet.Category;
 import Model.FactionEnum.FactionType;
 import javafx.scene.image.Image;
 
-class OpenerOfTheWay extends Faction {
+non-sealed class OpenerOfTheWay extends Faction {
     OpenerOfTheWay(String name, FactionType faction, Core core) {
         super(name, faction, core);
         ArrayList<Image> entityIcons = Faction.getEntityImages(new ArrayList<>(

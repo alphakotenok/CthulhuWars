@@ -7,7 +7,7 @@ import Model.EntitySet.Category;
 import Model.FactionEnum.FactionType;
 import javafx.scene.image.Image;
 
-class BlackGoat extends Faction {
+non-sealed class BlackGoat extends Faction {
     BlackGoat(String name, FactionType faction, Core core) {
         super(name, faction, core);
         ArrayList<Image> entityIcons = Faction.getEntityImages(new ArrayList<>(

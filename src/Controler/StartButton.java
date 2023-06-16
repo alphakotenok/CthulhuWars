@@ -2,17 +2,21 @@ package Controler;
 
 import View.ActionsMisc;
 import View.ButtonVisualizer;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.scene.control.Button;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
-public class StartButton implements EventHandler<ActionEvent> {
+public class StartButton extends Button {
 
     public StartButton(){
-        
-    }
-    @Override
-    public void handle(ActionEvent arg0) {
-        ActionsMisc.clearScreen();
-        ButtonVisualizer.displayCountOfPlayersButtons();
+        setStyle("-fx-background-color: grey");
+        setTextFill(Color.SILVER);
+        setFont(Font.font("Arial", 40));
+        setText("Start game");
+
+        setOnAction(action -> {
+            ActionsMisc.clearScreen();
+            ButtonVisualizer.displayCountOfPlayersButtons();
+        });
     }
 }

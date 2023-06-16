@@ -7,7 +7,7 @@ import Model.EntitySet.Category;
 import Model.FactionEnum.FactionType;
 import javafx.scene.image.Image;
 
-class GreatCthulhu extends Faction {
+non-sealed class GreatCthulhu extends Faction {
 
     GreatCthulhu(String name, FactionType faction, Core core) {
         super(name, faction, core);

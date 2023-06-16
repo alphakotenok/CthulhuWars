@@ -1,20 +1,18 @@
 package Controler;
 
 import View.ActionsMisc;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.scene.control.Button;
+import javafx.scene.text.Font;
 
-public class MenuButton implements EventHandler<ActionEvent> {
-    private int numberOfPlayers;
-
-    public MenuButton(int value) {
-        numberOfPlayers = value;
+public class MenuButton extends Button {
+    
+    public MenuButton(int numberOfPlayers) {
+        setFont(Font.font("Arial", 32));
+        setOnAction(action -> {
+            ActionsMisc.removeButtons(MenuButton.class);
+            FactionPickButton.playerID = 0;
+            View.ButtonVisualizer.displayFactionPickButtons(numberOfPlayers);
+        });
     }
 
-    @Override
-    public void handle(ActionEvent event) {
-        ActionsMisc.removeButtons(MenuButton.class);
-        FactionPickButton.playerID = 0;
-        View.ButtonVisualizer.displayFactionPickButtons(numberOfPlayers);
-    }
 }

@@ -1,6 +1,5 @@
 package View;
 
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,39 +12,28 @@ import java.util.function.Predicate;
 
 import Model.Variables;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 
 public class ActionsMisc {
-    public static <T extends EventHandler<ActionEvent>> void removeButtons(Class<T> c) {
+    public static <T extends Button> void removeButtons(Class<T> c) {
         Variables.root.getChildren().removeIf(node -> {
-            if (node instanceof Button) {
-                EventHandler<ActionEvent> onAction = ((Button) node).getOnAction();
-                return onAction != null && c.isInstance(onAction);
-            }
-            return false;
+            return c.isInstance(node);
         });
         return;
     }
 
-    public static <T extends EventHandler<ActionEvent>> void disableButtons(Class<T> c) {
+    public static <T extends Button> void disableButtons(Class<T> c) {
         Variables.root.getChildren().forEach(node -> {
-            if (node instanceof Button) {
-                EventHandler<ActionEvent> onAction = ((Button) node).getOnAction();
-                if (onAction != null && c.isInstance(onAction)) {
-                    node.setDisable(true);
-                }
+            if (c.isInstance(node)) {
+                node.setDisable(true);
             }
         });
         return;
     }
 
-    public static <T extends EventHandler<ActionEvent>> void enableButtons(Class<T> c) {
+    public static <T extends Button> void enableButtons(Class<T> c) {
         Variables.root.getChildren().forEach(node -> {
-            if (node instanceof Button) {
-                EventHandler<ActionEvent> onAction = ((Button) node).getOnAction();
-                if (onAction != null && c.isInstance(onAction)) {
-                    node.setDisable(false);
-                }
+            if (c.isInstance(node)) {
+                node.setDisable(false);
             }
         });
         return;
@@ -73,13 +61,9 @@ public class ActionsMisc {
         return Variables.root.getChildren();
     }
 
-    public static <T extends EventHandler<ActionEvent>> void removeButton(T curEventHandler) {
+    public static <T extends Button> void removeButton(T button) {
         Variables.root.getChildren().removeIf(node -> {
-            if (node instanceof Button) {
-                Object onAction = ((Button) node).getOnAction();
-                return onAction != null && onAction.equals(curEventHandler);
-            }
-            return false;
+            return node.equals(button);
         });
         return;
     }

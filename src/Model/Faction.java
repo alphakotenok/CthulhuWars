@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 import Model.EntitySet.Category;
 import Model.FactionEnum.FactionType;
 
-public abstract class Faction {
+public sealed abstract class Faction permits BlackGoat, CrawlingChaos, GreatCthulhu, OpenerOfTheWay, Sleeper, Windwalker, YellowSign {
 
     String name;
     int energy;

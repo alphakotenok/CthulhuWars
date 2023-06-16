@@ -9,7 +9,6 @@ import Controler.StartButton;
 import Model.Variables;
 import Model.FactionEnum.FactionType;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -44,28 +43,20 @@ public class Visualizer {
             e.printStackTrace();
         }
 
-        Button startButton = new Button();
-        startButton.setText("Start game");
+        StartButton startButton = new StartButton();
         startButton.setPrefHeight(100);
         startButton.setLayoutX(Variables.SCREEN_WIDTH - 300);
         startButton.setPrefWidth(300);
-        startButton.setTextFill(Color.SILVER);
-        startButton.setStyle("-fx-background-color: grey");
-
-        startButton.setFont(Font.font("Arial", 40));
-        startButton.setOnAction(new StartButton());
         ActionsMisc.display(startButton);
     }
 
     public static void displayFinishGameButton() {
-        Button finishButton = new Button();
+        FinishButton finishButton = new FinishButton();
         double height = Variables.SCREEN_WIDTH * Variables.PROCENT / Variables.mapRatio;
-        finishButton.setText("Finish game");
         finishButton.setPrefHeight((Variables.SCREEN_HEIGHT - height) / 2);
         finishButton.setLayoutY((Variables.SCREEN_HEIGHT - height) / 2 + height);
         finishButton.setPrefWidth(100);
 
-        finishButton.setOnAction(new FinishButton());
         ActionsMisc.display(finishButton);
     }
 
